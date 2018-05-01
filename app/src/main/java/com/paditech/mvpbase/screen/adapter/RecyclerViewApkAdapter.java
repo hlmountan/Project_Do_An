@@ -1,8 +1,11 @@
 package com.paditech.mvpbase.screen.adapter;
 
 import android.app.Activity;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.media.Image;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +14,8 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.paditech.mvpbase.R;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -21,10 +26,26 @@ import butterknife.ButterKnife;
 
 public class RecyclerViewApkAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
         Activity act;
+    List<ApplicationInfo> packages;
 
+    public List<ApplicationInfo> getPackages() {
+        return packages;
+    }
 
+    public void setPackages(List<ApplicationInfo> packages) {
+        this.packages = packages;
+        notifyDataSetChanged();
+    }
 
-        @Override
+    public Activity getAct() {
+        return act;
+    }
+
+    public void setAct(Activity act) {
+        this.act = act;
+    }
+
+    @Override
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_apk, parent, false);
             return new com.paditech.mvpbase.screen.adapter.RecyclerViewApkAdapter.RecyclerHolder(view);
@@ -33,17 +54,19 @@ public class RecyclerViewApkAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         @Override
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
             com.paditech.mvpbase.screen.adapter.RecyclerViewApkAdapter.RecyclerHolder recyclerHolder = (com.paditech.mvpbase.screen.adapter.RecyclerViewApkAdapter.RecyclerHolder) holder;
-        }
+            recyclerHolder.setData(position);
+    }
 
         @Override
         public int getItemCount() {
-            return 20;
-//        if (mList1 != null) {
-//            return mList1.size();
-//        } else {
-//            return 0;
-//        }
+
+            if (packages != null) {
+                return packages.size();
+            } else {
+                return 0;
+            }
         }
+
 
         public class RecyclerHolder extends RecyclerView.ViewHolder {
 
@@ -56,6 +79,13 @@ public class RecyclerViewApkAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
                 super(itemView);
                 ButterKnife.bind(this, itemView);
+
+
+            }
+
+            public void setData(int pos){
+                tv_title.setText(itemView.getContext().getPackageManager().getApplicationLabel(packages.get(pos)));
+                img_avar.setImageDrawable(itemView.getContext().getPackageManager().getApplicationIcon(packages.get(pos)));
             }
 
         }

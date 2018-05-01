@@ -62,25 +62,18 @@ public class ApkFragment extends MVPFragment<ApkContact.PresenterViewOps> implem
 
     @Override
     protected void initView(View view) {
-//        final PackageManager pm = getActivity().getPackageManager();
-//get a list of installed apps.
-//        List<ApplicationInfo> packages =  pm.getInstalledApplications(PackageManager.GET_META_DATA);
-//
-//        for (ApplicationInfo packageInfo : packages) {
-//            Log.d(TAG, "Installed package :" + packageInfo.packageName);
-//            Log.d(TAG, "Apk file path:" + packageInfo.sourceDir);
-//            Log.d(TAG, "Apk file path:" + packageInfo.toString());
-//        }
         btn_profile.setOnClickListener(this);
 
         SimpleDividerItemDecoration simpleDividerItemDecoration = new SimpleDividerItemDecoration(act, ContextCompat.getColor(act, R.color.gray_line), 120, 20);
         simpleDividerItemDecoration.setHasLastLine(false);
 
         mRecyclerViewApkAdapter = new RecyclerViewApkAdapter();
+        mRecyclerViewApkAdapter.setAct(act);
         snapHelperCmt.attachToRecyclerView(recycler_view_apk);
         recycler_view_apk.setLayoutManager(new LinearLayoutManager(view.getContext(), LinearLayoutManager.VERTICAL, false));
         recycler_view_apk.setAdapter(mRecyclerViewApkAdapter);
         recycler_view_apk.addItemDecoration(simpleDividerItemDecoration);
+        getPresenter().getApkInfo();
     }
 
     @Override
@@ -101,5 +94,10 @@ public class ApkFragment extends MVPFragment<ApkContact.PresenterViewOps> implem
                 this.startActivity(new Intent(act, UserActivity.class));
                 break;
         }
+    }
+
+    @Override
+    public void loadApk(List<ApplicationInfo> packages) {
+        mRecyclerViewApkAdapter.setPackages(packages);
     }
 }
