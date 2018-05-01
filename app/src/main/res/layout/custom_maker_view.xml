@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/img_boder"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/main_green"
+        android:gravity="center"
+        android:padding="@dimen/padding_super_tiny"
+        android:textColor="@color/white_transfer"
+        android:textSize="@dimen/text_size_tiny" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:padding="@dimen/padding_super_tiny"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/margin_small"
+            android:paddingLeft="@dimen/padding_small"
+            android:text="Google Play price:"
+            android:textColor="@color/main_green_dark"
+            android:textSize="@dimen/text_size_small" />
+
+        <TextView
+            android:id="@+id/tv_ggplay_price"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:paddingRight="@dimen/padding_small"
+            android:singleLine="true"
+            android:text="0$"
+            android:textSize="@dimen/text_size_tiny" />
+
+    </LinearLayout>
+
+
+</LinearLayout>

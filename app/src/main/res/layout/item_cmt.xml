@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/margin_default"
+    android:padding="@dimen/padding_default"
+    android:background="@drawable/border_gray_ligh_background">
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/text_size_default"
+        android:textColor="@color/black"
+        android:text="Nice app"/>
+
+    <RatingBar
+        android:id="@+id/ratingbar"
+        style="@android:style/Widget.DeviceDefault.RatingBar.Small"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:rating="2.0"
+        android:stepSize=".5"
+        android:layout_below="@id/tv_title"
+        android:paddingTop="@dimen/padding_super_tiny"
+        android:layout_marginBottom="@dimen/margin_default"/>
+    <TextView
+        android:id="@+id/tv_cmt_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="I love this app. Thanks you for "
+        android:layout_below="@id/ratingbar"
+        />
+    <TextView
+        android:id="@+id/tv_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/gray_detail"
+        android:layout_alignParentRight="true"
+        android:text="Sat"/>
+    <TextView
+        android:id="@+id/tv_user"
+        android:scrollbarThumbVertical="@color/gray_detail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_date"
+        android:layout_alignParentRight="true"
+        android:textColor="@color/gray_detail"
+        android:text="Simon"/>
+</RelativeLayout>

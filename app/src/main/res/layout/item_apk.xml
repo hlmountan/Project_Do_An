@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/padding_small">
+
+    <ImageView
+        android:id="@+id/img_avar"
+        android:layout_width="@dimen/cate_ima_size"
+        android:layout_height="@dimen/cate_ima_size" />
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/img_avar"
+        android:textColor="@color/black"
+        android:text="Lovely Penguin"
+        android:layout_marginLeft="@dimen/margin_tiny"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/tv_title"
+        android:layout_below="@+id/tv_title"
+android:textColor="@color/gray_middle"
+        android:text="20 MB - 2018/1/18"
+        android:textSize="@dimen/text_size_tiny" />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:minHeight="0dp"
+        android:minWidth="0dp"
+        android:layout_alignParentRight="true"
+        android:background="@drawable/border_btn_gray"
+        android:text="@string/updae"
+        android:textColor="@color/blue"
+        android:paddingLeft="@dimen/padding_default"
+        android:paddingRight="@dimen/padding_default"
+        android:paddingTop="@dimen/padding_super_so_tiny"
+        android:paddingBottom="@dimen/padding_super_so_tiny"
+        android:layout_centerVertical="true"/>
+</RelativeLayout>

@@ -1,0 +1,53 @@
+<resources>
+
+
+     <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowContentTransitions">true</item>
+    </style>
+
+    <style name="AppTheme.FullScreen">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+    </style>
+
+
+    <style name="TextViewDefault">
+        <item name="android:textSize">@dimen/text_size_default</item>
+        <item name="android:textColor">@color/text_color</item>
+    </style>
+
+    <style name="TextViewDefault.White" parent="TextViewDefault">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="TextViewSmall">
+        <item name="android:textSize">@dimen/text_size_small</item>
+        <item name="android:textColor">@color/text_color</item>
+    </style>
+
+    <style name="TextViewSmall.Blue" parent="TextViewSmall">
+        <item name="android:textColor">@color/blue</item>
+    </style>
+
+    <style name="ValueProgressBar" parent="android:Widget.ProgressBar.Horizontal">
+        <item name="android:indeterminateOnly">false</item>
+        <item name="android:progressDrawable">@drawable/value_progress_bar</item>
+        <item name="android:minHeight">2dip</item>
+        <item name="android:maxHeight">3dip</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="TabLayoutText">
+        <item name="android:textSize">@dimen/text_size_tiny</item>
+        <item name="android:textColor">@color/tab_color_selector</item>
+    </style>
+</resources>

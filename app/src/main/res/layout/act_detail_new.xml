@@ -1,0 +1,692 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <com.paditech.mvpbase.common.view.FadeToolbarScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:background="@color/white"
+        android:descendantFocusability="blocksDescendants">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_small"
+                android:layout_marginTop="@dimen/margin_large">
+
+                <android.support.v7.widget.CardView
+                    android:id="@+id/card_image"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/margin_small"
+                    app:cardBackgroundColor="@color/white"
+                    app:cardCornerRadius="@dimen/radius_big">
+
+                    <ImageView
+                        android:id="@+id/img_avar"
+                        android:layout_width="@dimen/app_img_size_detail"
+                        android:layout_height="@dimen/app_img_size_detail"
+                        android:scaleType="centerCrop"
+                        android:transitionName="avartar" />
+                </android.support.v7.widget.CardView>
+
+                <Button
+                    android:id="@+id/btn_more_option"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@id/card_image"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="@dimen/margin_default"
+                    android:background="@drawable/ic_more_all"
+                    android:minHeight="0dp"
+                    android:minWidth="0dp" />
+
+                <Button
+                    android:id="@+id/btn_add"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@id/card_image"
+                    android:layout_marginRight="@dimen/margin_default"
+                    android:layout_toLeftOf="@id/btn_more_option"
+                    android:background="@drawable/btn_add"
+                    android:minHeight="0dp"
+                    android:minWidth="0dp"
+                    android:visibility="gone" />
+
+                <Button
+                    android:id="@+id/btn_share"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@id/card_image"
+                    android:layout_marginRight="@dimen/margin_default"
+                    android:layout_toLeftOf="@id/btn_add"
+                    android:background="@drawable/share_all"
+                    android:minHeight="0dp"
+                    android:minWidth="0dp"
+                    android:visibility="gone" />
+
+
+                <TextView
+                    android:id="@+id/tv_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@id/card_image"
+                    android:layout_marginLeft="@dimen/margin_small"
+                    android:layout_toRightOf="@id/card_image"
+                    android:paddingRight="@dimen/padding_small"
+                    android:text="WWF Free River"
+                    android:textAllCaps="false"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_big"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_offerby"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@id/tv_title"
+                    android:layout_below="@id/tv_title"
+                    android:text="Somic co.tp"
+                    android:textAllCaps="false"
+                    android:textColor="@color/gray_detail"
+                    android:textSize="@dimen/text_size_small" />
+
+                <TextView
+                    android:id="@+id/tv_version"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@id/tv_title"
+                    android:layout_below="@id/tv_offerby"
+                    android:layout_marginTop="@dimen/margin_10"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/text_size_super_so_tiny"
+                    android:visibility="gone" />
+
+                <Button
+                    android:id="@+id/btn_install_app"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@id/card_image"
+                    android:layout_alignLeft="@id/tv_title"
+                    android:background="@drawable/install_border_all"
+                    android:minHeight="0dp"
+                    android:minWidth="0dp"
+                    android:paddingBottom="@dimen/padding_super_tiny"
+                    android:paddingLeft="@dimen/padding_default"
+                    android:paddingRight="@dimen/padding_default"
+                    android:paddingTop="@dimen/padding_super_tiny"
+                    android:text="nhận"
+                    android:textColor="@color/white_transfer_litter"
+                    android:textSize="@dimen/text_size_tiny" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignStart="@id/card_image"
+                    android:layout_below="@id/card_image"
+                    android:layout_marginBottom="@dimen/margin_small"
+                    android:layout_marginRight="@dimen/margin_default"
+                    android:layout_marginTop="@dimen/margin_small">
+
+                    <TextView
+                        android:id="@+id/tv_score"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="@dimen/margin_small"
+                        android:text="5.0"
+                        android:textSize="@dimen/text_size_big"
+                        android:textStyle="bold" />
+
+                    <RatingBar
+                        android:id="@+id/ratingbar"
+                        style="@android:style/Widget.DeviceDefault.RatingBar.Small"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignBottom="@id/tv_score"
+                        android:layout_toRightOf="@id/tv_score"
+                        android:paddingBottom="@dimen/padding_super_tiny"
+                        android:rating="2.0"
+                        android:stepSize=".5" />
+
+                    <TextView
+                        android:id="@+id/tv_numberrate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/tv_score"
+                        android:text="50 Xếp hạng"
+                        android:textColor="@color/gray_middle"
+                        android:textSize="@dimen/text_size_tiny" />
+
+                    <Button
+                        android:id="@+id/btn_report"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignTop="@id/ratingbar"
+                        android:background="@drawable/ic_flag"
+                        android:minHeight="0dp"
+                        android:minWidth="0dp" />
+
+                    <LinearLayout
+
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="@dimen/margin_super_large"
+                        android:layout_toLeftOf="@id/btn_report"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="#8"
+                            android:textSize="@dimen/text_size_big"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tv_category"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Action"
+                            android:textColor="@color/gray_middle"
+                            android:textSize="@dimen/text_size_tiny" />
+                    </LinearLayout>
+
+
+                </RelativeLayout>
+            </RelativeLayout>
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_small">
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/recycler_view_list_cate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true" />
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/line_size"
+                android:layout_marginLeft="@dimen/margin_recyclerview"
+                android:layout_marginRight="@dimen/margin_recyclerview"
+                android:layout_marginTop="@dimen/margin_default"
+                android:background="@color/gray_light" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler_view_screenshoot"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="@dimen/margin_default"></android.support.v7.widget.RecyclerView>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/margin_small"
+                android:layout_marginLeft="@dimen/margin_small"
+                android:layout_marginTop="@dimen/margin_small"
+                android:drawableLeft="@drawable/ic_iphone_1"
+                android:text=" Android"
+                android:textSize="@dimen/text_size_tiny" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/line_size"
+                android:layout_marginLeft="@dimen/margin_recyclerview"
+                android:layout_marginRight="@dimen/margin_recyclerview"
+                android:layout_marginTop="@dimen/padding_default"
+                android:background="@color/gray_light" />
+
+            <TextView
+                android:id="@+id/tv_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:alpha="0.8"
+                android:lines="@integer/text_line"
+                android:paddingBottom="@dimen/padding_default"
+                android:paddingLeft="@dimen/padding_default"
+                android:paddingRight="@dimen/padding_default"
+                android:paddingTop="@dimen/padding_10"
+                android:textSize="@dimen/text_size_super_so_tiny" />
+
+            <RelativeLayout
+                android:id="@+id/rlt_dev"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_default"
+                android:layout_marginRight="@dimen/margin_default">
+
+                <TextView
+                    android:id="@+id/tv_dev"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Spring Tech Co., Ltd"
+                    android:textAllCaps="false"
+                    android:textColor="@color/blue"
+                    android:textSize="@dimen/text_size_small" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tv_dev"
+                    android:text="Developer"
+                    android:textColor="@color/gray_detail"
+                    android:textSize="@dimen/text_size_super_tiny" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerHorizontal="true"
+                    android:background="@drawable/seemore"
+                    android:minHeight="0dp"
+                    android:minWidth="0dp" />
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/line_size"
+                android:layout_marginLeft="@dimen/margin_recyclerview"
+                android:layout_marginRight="@dimen/margin_recyclerview"
+                android:layout_marginTop="@dimen/margin_default"
+                android:background="@color/gray_light" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_default"
+                android:layout_marginRight="@dimen/margin_default"
+                android:layout_marginTop="@dimen/margin_small">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Ranking and Comment"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_big"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_show_cmt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:text="See All"
+                    android:textColor="@color/blue" />
+
+
+            </RelativeLayout>
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler_view_cmt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_small"></android.support.v7.widget.RecyclerView>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:layout_margin="@dimen/margin_default">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/rate_question"
+                    android:textColor="@color/black" />
+
+                <RatingBar
+                    android:id="@+id/ratingbar_your"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="@dimen/margin_small"
+                    android:rating="0.0"
+                    android:stepSize=".5" />
+
+                <TextView
+                    android:id="@+id/tv_score_your"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:gravity="center"
+                    android:hint=" Your score"
+                    android:textSize="@dimen/text_size_very_super_big"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+
+                    android:layout_marginTop="@dimen/margin_default"
+                    android:gravity="center"
+                    android:text="@string/share_cmt"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/margin_default" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_default"
+                    android:background="@drawable/border_cmt"
+                    android:orientation="vertical"
+                    android:padding="@dimen/padding_default">
+
+                    <Button
+                        android:id="@+id/btn_user_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@android:color/transparent"
+                        android:drawableLeft="@drawable/ic_user"
+                        android:text="@string/user_name"
+                        android:textAlignment="center"
+                        android:textAllCaps="false"
+                        android:textColor="@color/black"
+                        android:minHeight="@dimen/min_height"
+                        android:minWidth="@dimen/min_height"
+
+                        />
+
+                    <EditText
+                        android:id="@+id/et_cmt"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/height_edit_text"
+                        android:background="@android:color/transparent"
+                        android:hint="@string/cmt_hint" />
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <Button
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@android:color/transparent"
+                            android:drawableLeft="@drawable/ic_add_image"
+                            android:minHeight="@dimen/min_height"
+                            android:minWidth="@dimen/min_height"
+                            android:text=" Add a picture"
+                            android:textAllCaps="false"
+                            android:textColor="@color/gray_middle"
+                            android:textSize="@dimen/text_size_super_so_tiny"
+                            />
+
+                        <Button
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginRight="@dimen/margin_default"
+                            android:background="@android:color/transparent"
+                            android:text="Submit"
+                            android:textColor="@color/blue"
+                            android:minHeight="@dimen/min_height"
+                            android:minWidth="@dimen/min_height"
+                            android:textAllCaps="false"/>
+                    </RelativeLayout>
+
+                </LinearLayout>
+            </LinearLayout>
+
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/line_size"
+                android:layout_marginBottom="@dimen/padding_default"
+                android:layout_marginLeft="@dimen/margin_default"
+                android:layout_marginRight="@dimen/margin_default"
+                android:layout_marginTop="@dimen/padding_default"
+                android:background="@color/gray_light" />
+
+            <TextView
+                android:id="@+id/tv_price_history"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Price History"
+                android:textAlignment="center"
+                android:visibility="gone" />
+
+            <FrameLayout
+                android:id="@+id/fr_chart_and_pager"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/height_chart"
+                android:layout_below="@+id/tv_price_history"
+                android:visibility="gone">
+
+                <com.github.mikephil.charting.charts.LineChart
+                    android:id="@+id/lc_price_history"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="@dimen/margin_default" />
+
+                <ProgressBar
+                    android:id="@+id/progressBar_chart"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:visibility="gone" />
+            </FrameLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_default"
+                android:layout_marginRight="@dimen/margin_default">
+
+                <TextView
+                    android:id="@id/tv_mark"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Version History"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_big"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:id="@+id/btn_see_more_version"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="@dimen/margin_small"
+                    android:background="@drawable/seemore"
+                    android:minHeight="0dp"
+                    android:minWidth="0dp" />
+            </RelativeLayout>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler_view_versions"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:paddingBottom="@dimen/padding_small"></android.support.v7.widget.RecyclerView>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/line_size"
+                android:layout_marginLeft="@dimen/margin_default"
+                android:layout_marginRight="@dimen/margin_default"
+                android:layout_marginTop="@dimen/margin_default"
+                android:background="@color/gray_light" />
+
+            <RelativeLayout
+                android:id="@+id/view_detail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_default">
+
+                <TextView
+                    android:id="@+id/tv_mark_3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/margin_small"
+                    android:text="Infomation"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_big"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tv_mark_3"
+                    android:background="@color/white"
+                    android:lineSpacingExtra="@dimen/line_spacing_extra_bigger"
+                    android:text="Developer\nSize\nCategory\nRequires\nAge"
+                    android:textColor="@color/gray_detail"
+                    android:textSize="@dimen/text_size_default" />
+
+                <TextView
+                    android:id="@+id/gp_info"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_below="@id/tv_mark_3"
+                    android:background="@color/white"
+                    android:gravity="right"
+                    android:lineSpacingExtra="@dimen/line_spacing_extra_bigger"
+                    android:text="1\n0.5\n22\n0.99"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_default" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/policy"
+                    android:textColor="@color/blue"
+                    android:drawableRight="@drawable/ic_privacy"
+                    android:layout_below="@id/gp_info"
+                    android:layout_marginBottom="@dimen/margin_small"
+                    android:layout_marginTop="@dimen/margin_default"/>
+            </RelativeLayout>
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/gray_new"
+                android:padding="@dimen/padding_default">
+
+                <Button
+                    android:id="@+id/btn_see_more_app_relate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginTop="@dimen/margin_super_tiny"
+                    android:background="@android:color/transparent"
+                    android:minHeight="0dp"
+                    android:minWidth="0dp"
+                    android:text="See All "
+                    android:textAllCaps="false"
+                    android:textColor="@color/blue"
+                    android:textSize="@dimen/text_size_default" />
+
+                <TextView
+                    android:id="@+id/tv_mark_4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/margin_small"
+                    android:layout_toLeftOf="@id/btn_see_more_app_relate"
+                    android:text="Other App Related To WWF Free River"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_big"
+                    android:textStyle="bold" />
+
+
+                <FrameLayout
+                    android:id="@+id/relate_frame"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tv_mark_4"
+                    android:layout_marginBottom="@dimen/margin_small">
+
+                    <android.support.v7.widget.RecyclerView xmlns:app="http://schemas.android.com/apk/res-auto"
+                        android:id="@+id/recycler_view_relate_app"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                    <ProgressBar
+                        android:id="@+id/progressBar"
+                        android:layout_width="@dimen/loading_size"
+                        android:layout_height="@dimen/loading_size"
+                        android:layout_gravity="center" />
+                </FrameLayout>
+
+                <View
+                    android:id="@+id/mark_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/line_size"
+                    android:layout_below="@id/relate_frame"
+                    android:layout_margin="@dimen/margin_small"
+                    android:background="@color/gray_line" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/mark_view"
+                    android:layout_marginBottom="@dimen/margin_default"
+                    android:text="© The Mindnmate"
+                    android:textColor="@color/gray_detail"
+                    android:textSize="@dimen/text_size_tiny" />
+
+            </RelativeLayout>
+
+
+        </LinearLayout>
+
+    </com.paditech.mvpbase.common.view.FadeToolbarScrollView>
+
+
+    <FrameLayout
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/status_bar_height">
+
+
+        <TextView
+            android:id="@+id/tv_title_scroll"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/height_toolbar"
+            android:layout_gravity="center"
+            android:alpha="0"
+            android:background="?android:attr/selectableItemBackground"
+            android:gravity="center"
+            android:paddingLeft="@dimen/margin_title_scroll"
+            android:paddingRight="@dimen/margin_title_scroll"
+            android:singleLine="true"
+            android:textAlignment="center"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_size_big" />
+    </FrameLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/btn_back"
+        android:layout_width="@dimen/height_toolbar"
+        android:layout_height="@dimen/height_toolbar"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_margin="@dimen/margin_small"
+        android:padding="@dimen/margin_small"
+        android:scaleType="centerInside"
+        android:src="@drawable/icon_back_white_topbar"
+        android:visibility="gone"
+        app:elevation="5dp"
+        app:rippleColor="@color/main_green_dark" />
+</RelativeLayout>

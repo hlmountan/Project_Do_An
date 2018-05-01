@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/swipe_refresh_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.paditech.mvpbase.common.view.TranslationNestedScrollView
+        android:id="@+id/scrollView_show_more"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <android.support.v4.view.ViewPager
+                    android:id="@+id/view_pager_show_more"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/home_page_height"
+                    android:layout_alignParentTop="true" />
+
+                <me.relex.circleindicator.CircleIndicator
+                    android:id="@+id/indicator_show_more"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/indicator_height"
+                    android:layout_gravity="bottom|center_horizontal"
+                    android:layout_marginBottom="@dimen/margin_small" />
+
+                <ProgressBar
+                    android:id="@+id/vp_progress_bar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center" />
+            </FrameLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/recycler_view_list_cate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_small"
+                android:gravity="center"
+                android:paddingTop="@dimen/margin_super_tiny">
+
+                <TextView
+                    android:id="@+id/text_list_app_sm"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:singleLine="true"
+                    android:text="App"
+                    android:textColor="@color/main_green"
+                    android:textSize="@dimen/text_size_default" />
+
+
+                <TextView
+                    android:id="@+id/tv_list_end"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBaseline="@+id/text_list_app_sm"
+                    android:layout_alignBottom="@+id/text_list_app_sm"
+                    android:layout_toEndOf="@+id/text_list_app_sm"
+                    android:text=" Sale"
+                    android:textSize="@dimen/text_size_default" />
+
+            </RelativeLayout>
+
+
+            <View
+                android:layout_width="@dimen/width_small"
+                android:layout_height="@dimen/height_line_view_big"
+                android:layout_gravity="center"
+                android:layout_marginBottom="@dimen/margin_small"
+                android:layout_marginTop="@dimen/margin_super_tiny"
+                android:background="@color/main_green" />
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.paditech.mvpbase.common.view.LoadMoreRecyclerView
+                    android:id="@+id/recycler_show_more"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:paddingTop="@dimen/padding_default" />
+
+                <ProgressBar
+                    android:id="@+id/progressBar"
+                    android:layout_width="@dimen/loading_size"
+                    android:layout_height="@dimen/loading_size"
+                    android:layout_gravity="center" />
+
+
+            </FrameLayout>
+
+        </LinearLayout>
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/btn_back"
+            app:elevation="5dp"
+            app:rippleColor="@color/main_green_dark"
+            android:layout_width="@dimen/height_toolbar"
+            android:layout_height="@dimen/height_toolbar"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_margin="@dimen/margin_small"
+            android:padding="@dimen/margin_small"
+            android:scaleType="centerInside"
+            android:src="@drawable/icon_back_white_topbar" />
+    </com.paditech.mvpbase.common.view.TranslationNestedScrollView>
+</android.support.v4.widget.SwipeRefreshLayout>

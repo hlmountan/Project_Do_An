@@ -1,0 +1,97 @@
+<resources>
+    <string name="app_name">MVPBase</string>
+    <!--permission-->
+    <string name="mess_permission_storage">Bạn có muốn cho phép ứng dụng này sử dụng bộ nhớ không?</string>
+    <string name="mess_permission_camera">Bạn có muốn cho phép ứng dụng này sử dụng camera không?</string>
+    <string name="mess_permission_location">Bạn có muốn cho phép ứng dụng này truy cập vị trí của bạn không?</string>
+
+    <!--Action-->
+    <string name="refresh">Tải lại</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="see_more">See more</string>
+    <string name="register">Register</string>
+    <string name="login">Login</string>
+    <string name="login_g">Login With Google</string>
+    <string name="login_f">Login With Facebook</string>
+    <string name="apply">Apply</string>
+    <!--Select multi photos-->
+    <string name="select_multi_photo">Select photos</string>
+    <string name="select_image">Chọn ảnh</string>
+    <string name="pick_image">Chọn từ thư viện</string>
+    <string name="capture_image">Chụp ảnh</string>
+    <!--Direction-->
+    <string name="or">OR</string>
+    <string name="with">WITH</string>
+    <string name="enter_email">Enter your email</string>
+    <string name="enter_pass">Password</string>
+    <string name="signup">SIGN-UP</string>
+    <string name="setting">Setting</string>
+    <string name="notification">Notifications</string>
+    <string name="notification_context">Touch screen to allow or deny us notify you about an update or sale</string>
+    <string name="notification_op1">Run Notification whenever conected the internet</string>
+    <string name="notification_op2">Only Notification when runing App</string>
+    <string name="forgot_pass">Forgot password?</string>
+    <string name="create_account">Create Lenam Store account!</string>
+    <string name="storage">Storage</string>
+    <string name="storage_right">Touch screen to allow or deny us access your memory and SD card. </string>
+    <string name="language">Language</string>
+    <string name="policy_us">Policy</string>
+    <string name="privacy">Privacy</string>
+    <string name="privacy_content">When you use Lenam Store, you trust us with your information. This Privacy Policy is meant to help you understand what data we use, why we use it, and what we do with your permission . This is important; we hope you will take time to read it carefully</string>
+    <string name="aboutus">About Us</string>
+    <string name="aboutus_content">Lenam Store is the third product of Lenam company.The founder are full-stack dev who want to provide usability-optimized,premium content in a design-focused setting. The nearly 6 billions app were tested and optimized.</string>
+    <string name="feedback">Feefback</string>
+    <string name="feedback_content">appnaz.com@gmail.com</string>
+    <string name="lega_info">Legal Infomation</string>
+    <string name="lenam_store">Lenam Store</string>
+    <string name="feedback_title">Please, tell us what you thing!</string>
+    <!--Main-->
+    <string name="open">Open</string>
+    <string name="close">Close</string>
+
+
+    <!--Name -->
+    <string name="google">Google</string>
+    <string name="facebook">Facebook</string>
+    <string name="your_email">...@gmail.com</string>
+    <string name="password">********</string>
+    <!--Message -->
+    <string name="allow">Allow</string>
+    <string name="deny">Deny</string>
+
+
+    <string name="register_mes">Time to Explore</string>
+    <string name="mess_no_connect">Không có kết nối mạng.</string>
+    <string name="notice">Thông báo</string>
+    <string name="title_activity_home">HomeActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_category">Category</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="title_manage_apk">Apk</string>
+    <string name="title_search">Search</string>
+    <string name="title_activity_menu_navigation">ActivityMenuNavigation</string>
+    <string name="user_name">  User Name</string>
+    <string name="cmt_hint">Comment... (optional)</string>
+    <string name="policy">Policy and Privacy</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="share_cmt">Share your experience with our community!</string>
+    <string name="action_settings">Settings</string>
+    <string name="filter"> Filter </string>
+    <string name="manage_apk"> Manage Apk </string>
+    <string name="updae">Update</string>
+    <string name="rate_question">Have you tried this? Rate it!</string>
+    <string name="download_apk">Download Apk</string>
+    <string name="all_app_game">App and Game</string>
+    <string name="new_version">New Versions</string>
+    <string name="report_app">Report Inappropriate App</string>
+    <string name="desription_report">Please, Let us know if you think this app is spam or abuse and the reason why you find this content or app objectionable:</string>
+<string name="reason_report_1">Sexual content</string>
+    <string name="reason_report_2">Graphic violence</string>
+    <string name="reason_report_3">Hateful or abusive content</string>
+    <string name="reason_report_4">Improper content rating</string>
+    <string name="reason_report_5">Illegal prescription or other drug</string>
+    <string name="reason_report_6">Virus or other malware issues</string>
+    <string name="reason_report_7">IP Infringement</string>
+</resources>

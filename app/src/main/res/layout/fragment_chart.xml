@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/tv_des"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Description"
+        android:textAllCaps="false"
+        android:textAlignment="center"
+        android:textStyle="bold"
+        />
+
+    <TextView
+        android:id="@+id/tv_description"
+        android:layout_below="@id/tv_des"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:lines="3"
+        android:text="Hatchimals are magical creatures that live inside of eggs. Who's inside? It's a surprise! Each egg contains one of two interactive Hatchimals."
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:textSize="@dimen/text_size_super_so_tiny"
+        android:alpha="0.8"
+        android:paddingTop="10dp"
+        />
+
+    <RelativeLayout
+        android:layout_below="@id/tv_description"
+        android:id="@+id/rl_chart"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/padding_default"
+        android:paddingRight="@dimen/padding_default">
+
+        <TextView
+            android:id="@+id/tv_price_history"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:text="Price History" />
+
+        <com.github.mikephil.charting.charts.LineChart
+            android:id="@+id/lc_price_history"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_below="@+id/tv_price_history"
+            android:layout_marginTop="@dimen/margin_default"
+
+            ></com.github.mikephil.charting.charts.LineChart>
+
+
+    </RelativeLayout>
+</RelativeLayout>

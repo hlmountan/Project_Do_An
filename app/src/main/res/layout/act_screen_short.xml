@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/rl_screen_shot"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black">
+<FrameLayout
+    android:id="@+id/frame_screen_short"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <android.support.v4.view.ViewPager
+        android:id="@+id/view_pager"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"></android.support.v4.view.ViewPager>
+    <me.relex.circleindicator.CircleIndicator
+        android:id="@+id/indicator"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/indicator_height"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginBottom="@dimen/margin_small"
+        ></me.relex.circleindicator.CircleIndicator>
+
+</FrameLayout>
+   <android.support.design.widget.FloatingActionButton
+       android:id="@+id/btn_back"
+       android:layout_width="@dimen/height_toolbar"
+       android:layout_height="@dimen/height_toolbar"
+       android:layout_alignParentBottom="true"
+       android:layout_alignParentRight="true"
+       android:layout_margin="@dimen/margin_small"
+       android:padding="@dimen/margin_small"
+       android:scaleType="centerInside"
+       android:src="@drawable/icon_back_white_topbar"
+       app:elevation="5dp"
+       app:rippleColor="@color/main_green_dark"/>
+
+</RelativeLayout>

@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <array name="switch_button">Price,Detail,History</array>
+    <string-array name="category_name">
+        <item>Art and Design</item>
+        <item>Auto and Vehicles</item>
+        <item>Beauty</item>
+        <item>Books and
+            Reference
+        </item>
+        <item>Business</item>
+        <item>Comics</item>
+        <item>Communication</item>
+        <item>Dating</item>
+        <item>Education</item>
+        <item>Entertainment</item>
+        <item>Events</item>
+        <item>Finance</item>
+        <item>Food
+            and Drink
+        </item>
+        <item>Health and Fitness</item>
+        <item>House and Home</item>
+        <item>Libraries and Demo</item>
+        <item>Lifestyle</item>
+        <item>Maps and
+            Navigation
+        </item>
+        <item>Medical</item>
+        <item>Music and Audio</item>
+        <item>News and Magazines</item>
+        <item>Parenting</item>
+        <item>Personalization</item>
+        <item>Photography</item>
+        <item>Productivity</item>
+        <item>Shopping</item>
+        <item>Social</item>
+        <item>Sports</item>
+        <item>Tools</item>
+        <item>Travel and Local</item>
+        <item>Video Players and Editors</item>
+        <item>Weather</item>
+        <item>Educational</item>
+        <item>Creativity</item>
+        <item>Music and Video</item>
+        <item>Sports</item>
+        <item>Tools</item>
+        <item>Action</item>
+        <item>Adventure</item>
+        <item>Arcade</item>
+        <item>Board</item>
+        <item>Card</item>
+        <item>Casino</item>
+        <item>Casual</item>
+        <item>Puzzle</item>
+        <item>Racing</item>
+        <item>Role
+            Playing
+        </item>
+        <item>Simulation</item>
+        <item>Strategy</item>
+        <item>Trivia</item>
+        <item>Word</item>
+        <item>Action and Adventure</item>
+    </string-array>
+
+    <string-array name="cate_avar">
+        <item>
+            https://lh3.googleusercontent.com/Nca9TZrKmTIaP45ES0IXJwmiJw9M7f6t8EMkYbhiaQRfhXI-RsLB1wYHZGoF8EwB9Ls=w155
+        </item>
+        <item>
+            https://lh3.googleusercontent.com/GpmHDsXGIganDfv58hvv9TBbf_wSgFzFrfrSjBpIaQjrh420a-hHBTALcMEj8hd57g=w155
+        </item>
+        <item>
+            https://lh3.googleusercontent.com/5zTFq2EP1Kgm4G8rNNd-467l1ex4mIKaZYfMRT_1C4_4XiP-s-p2hDAqNYqJ87Jb8DQ=w155
+        </item>
+        <item>
+            https://lh6.ggpht.com/hjAK1uUNbm91dQgpGWK6znKw0XO8pNLz7fluhHAtsnCPZy5ff2R12WSkAwl2PS_WQh4=w155
+        </item>
+        <item>
+            https://lh3.googleusercontent.com/_c7SIbcTpySYbYobfhoeYClXLNdUhZhclzvD17w-GBACXAK9A3lbPTXPKEzKOtQJ3jky=w155
+        </item>
+        <item>
+            https://lh4.ggpht.com/KEgzwREN1m0CG4EumXt__lJ-SuH6136514e4JOMHLTSSvM8ENzH4Ttk94w4ESzbgwso=w155
+        </item>
+        <item>
+            https://lh5.ggpht.com/0VYAvZLR9YhosF-thqm8xl8EWsCfrEY_uk2og2f59K8IOx5TfPsXjFVwxaHVnUbuEjc=w155
+        </item>
+        <item>
+            https://lh3.googleusercontent.com/kC5jvUZ6UNdz2iMuW__QWs70M_zbU3gF2XJG51OrJjj8zurYRqGnocNTMj3HBOsOR3w=w155
+        </item>
+        <item>
+            https://lh3.googleusercontent.com/Yfps1k5jfeCC6j3ahm1s6dyUrSHusfk_1WDSTRjSNpZA49iYSKd_uljgs9UScBXgISOX=w155
+        </item>
+        <item>
+            https://lh3.googleusercontent.com/jcbqFma-5e91cY9MlEasA-fvCRJK493MxphrqbBd8oS74FtYg00IXeOAn0ahsLprxIA=w155
+        </item>
+        <item>
+            https://lh3.googleusercontent.com/54RnCZ7_vNdfmEeilSXTi08Nggrjwb0VMs_tvX6UHFW1j-j9A2vMeyLrMJLtlHomn9c=w155
+        </item>
+        <item>
+            https://lh3.googleusercontent.com/sKSY0Z1KoXrc2TiGp8L9-3oM5nL6tKq9FP_8rRZBw_NtnWbGqajh3vNavH2o8pFDbeA=w155
+        </item>
+        <item>
+            https://lh3.googleusercontent.com/_5apbgvT9zBMWSg63qHTnrKuS90DnupPwmGsskaCK9TgxBExIKx4kdgzASvLxhbTFA=w155
+        </item>
+        <item>
+            https://lh3.googleusercontent.com/DJXHxpkCV17bqEWMFOyIEXJImZ5KM702uj9GvEQfa2srDJEQA7983o7qu5rI6iwIEa4=w155
+        </item>
+        <item>
+            https://lh3.googleusercontent.com/aGHZSx4stxSgNSNEWS7-rNvRnWneqq90bnxDb14wgchXwN82iQO-Aiak2XWVng56PVU=w155
+        </item>
+        <item>
+            https://lh6.ggpht.com/Muc5V_Izhy6UXUjsgHqdx_bvnm8RMEVWcnLjhifJAM7nf4IFaD-lUduI3QlgeDZHX9M=w155
+        </item>
+        <item>
+            https://lh3.googleusercontent.com/4VCBFVmZZMyAOAQXih2A_91R9FxnqtijzR2R1n1b7OyUl5WaMlpUO3paY5hLYIkPgsbC=w155
+        </item>
+        <item>
+            https://lh6.ggpht.com/Ztj5jStiIZRUFgcTC7H43sG3NkyFKU5C3WSkySI53Cmxy9gtPrQwtOrb0xMWaOkJRQ=w155
+        </item>
+        <item>
+            https://lh3.googleusercontent.com/s4tnivrUVv2YIem3ujxfSXPmp8RLrxn72EgrrFrW0hRNvv66FAxlViXCUW6YRxVSX0A=w155
+        </item>
+        <item>
+            https://lh3.googleusercontent.com/PpRZCQ5aUPTukU5hgPbysLTl_30xfriDiE54Z_PZKWvXXL2hKjXhdnymoolUcTD-V_o=w155
+        </item>
+        <item>
+            https://lh3.googleusercontent.com/QveKqOx7ngJK4_7P6MwfZ9XAPHSZ5LG9DxYzNIFuJFVp2riUG7JDkljjlNRQW5vrvvc=w155
+        </item>
+        <item>
+            https://lh3.googleusercontent.com/-p2QQa3Y_75fBXbetPzrArYDJ0JWBowlDRtfeBiOokURFm9QiyGdsWjNuWJRTyiwrg=w155
+        </item>
+        <item>
+            https://lh3.googleusercontent.com/ClPrKjbMia3O6b-IFTy7aHDK4a61LgPb-qoWUtDi-mC6WZow9w82MCn5JPjipm8EpJw=w155
+        </item>
+        <item>
+            https://lh5.ggpht.com/tq3WqEUxtRyBn-d_0t3j6WKNHuJDrmLq-FE3GAYrsAMQFIaS7FIgRLfzzql2SvfvLqto=w155
+        </item>
+        <item>
+            https://lh3.googleusercontent.com/ZgCTrI6A99ZyCcJmo1IX0Jx7Hb5c82nFS7IbtTkOQ0Z27lUm-ZeHR1TgXRbJgq7TOs3f=w155
+        </item>
+        <item>
+            https://lh5.ggpht.com/TpxeOgptQworHjromT4yoo05oHk72dSE0pVQowPfb3u3rozTwLjYUHxTpEzIYMemomQ=w155
+        </item>
+        <item>
+            https://lh3.googleusercontent.com/aYbdIM1abwyVSUZLDKoE0CDZGRhlkpsaPOg9tNnBktUQYsXflwknnOn2Ge1Yr7rImGk=w155
+        </item>
+        <item>
+            https://lh3.googleusercontent.com/eqJA_7m2fNRxmEtNL-fBJIo_LbW-aU23EALaIuLUD_9WCpBE9H11uKieea_nr_LfqkWR=w155
+        </item>
+        <item>
+            https://lh3.ggpht.com/hx9UAWTinSn-R_CQleBveiMFoiW7XKxBl1gU0ev4zZ2v5OGxFZJ_k_370vwDzAJ4vho=w155
+        </item>
+        <item>
+            https://lh3.googleusercontent.com/DEPWvBMRiHJvBpMcZmpxO4Ja9z84TLNo8wdHgHgQb_Y66N-e_zz8vX30YKMtMMzT86Y=w155
+        </item>
+        <item>
+            https://lh5.ggpht.com/jZ8XCjpCQWWZ5GLhbjRAufsw3JXePHUJVfEvMH3D055ghq0dyiSP3YxfSc_czPhtCLSO=w155
+        </item>
+        <item>
+            https://lh3.googleusercontent.com/endIvnesDgK8p1Yeotk0v7EGmw3FCwwq1_AfvluJz4lwee13Yo7YnHvucGSL6nMQLWE=w155
+        </item>
+        <item>
+            https://lh3.googleusercontent.com/7X8jrMNUyu8X4hs7WFNpEOV77xNc7agNTUOAFd6Kx3sw1XrlX7ZicIQQvVt7SOCYTqQ=w155
+        </item>
+        <item>
+            https://lh3.googleusercontent.com/Iip-8Yn3PLAzecCMb4ZaHTvFObl3ETUWZmd5zLflhbB6BXKyNc5aM4hrGAA9NXSs7i0=w155
+        </item>
+        <item>
+            https://lh3.googleusercontent.com/KSeiNLsGsZvbPcU9hFqBFQg8p-XShbTMolAC-ZqgvrB-NiyspJmm7kHJYupsYp-DPw=w155
+        </item>
+        <item>
+            https://lh3.googleusercontent.com/mSMDSf85FMbNQY__MVf_9zb-AvRgC4XU2IknoozJtxW2xiKGMT2FGYcBUvucueFrQyrW=w155
+        </item>
+        <item>
+            https://lh3.ggpht.com/hx9UAWTinSn-R_CQleBveiMFoiW7XKxBl1gU0ev4zZ2v5OGxFZJ_k_370vwDzAJ4vho=w155
+        </item>
+        <item>
+            https://lh3.googleusercontent.com/TbOaqYG1zUTrUDwJ4PDzHcM7ZGegM6erPgrOXWQxJSsjCOS6KpKdGz1JLJZnUZm5Wb8=w155
+        </item>
+        <item>
+            https://lh3.googleusercontent.com/csv9NFFuhW3ot-sOMecLLx-SvovvljxdWXPpslz51gBoi3g-CZCm7l3ZYuuDoFvJo1Y=w155
+        </item>
+        <item>
+            https://lh3.googleusercontent.com/Ay1J3gIaqrdtV_4uYKynTKejVg8f8QBlycHcmD2h86aJmNBX_LGBMllWpfu_bpnt24E=w155
+        </item>
+        <item>
+            https://lh3.googleusercontent.com/5YInI_MbxlE_e9yTehCq0Fr3I91PVZfHpkOKO9_7qozcKbry_xfGNMBcZJPx-kMCRgc=w155
+        </item>
+        <item>
+            https://lh3.googleusercontent.com/J6Kw6c91qA9jbgoLAnlkij3jEacCK1YFBdQ0Xuh7rUiTtGb5rFxTTLOnMIPSf4c3xUo=w155
+        </item>
+        <item>
+            https://lh3.googleusercontent.com/pkliwiATTbgVPf0jo_ZQDUFen8ZMJ5BouQDrn8YOgHr5y_C51XaDLVQlLewYXCPGL3g=w155
+        </item>
+        <item>
+            https://lh3.googleusercontent.com/0V4GJtw91Qx4Z81vIoSAzckckXTHcqKMQR3jMgjYU3S5AuSCooxsNWB3Z_ZolH2enaw=w155
+        </item>
+        <item>
+            https://lh3.googleusercontent.com/FzMmR05CgPXf0OYzx_Jy1Hw5NwzZolWoC0xYbneI2uiX8qDptUlgBq1MZLDWp5wXfStk=w155
+        </item>
+        <item>
+            https://lh3.googleusercontent.com/2uvt_PusyJfd8sGyT5NvUx8UAkJim5wen-IVnEzR822xjIRWSkOYDQuHSRU7CbY6qQA=w155
+        </item>
+        <item>
+            https://lh3.googleusercontent.com/0elYZzY8v6SCvv6uflgJKcuGerjuUA5X_FY3pg0EuI2InNH8d1oqBG1TxM7Of6yl6L8=w155
+        </item>
+        <item>
+            https://lh3.googleusercontent.com/W1Te0QI7TsPFEMXpCY-BC62WwcGzAj5iawtuK7x2qrkGruIdXssRZQSaQNRF6rkXVA=w155
+        </item>
+        <item>
+            https://lh3.googleusercontent.com/K-MNjDiO2WwRNwJqPZu8Wd5eOmFEjLYkEEgjZlv35hTiua_VylRPb04Lig3YZXLERvI=w155
+        </item>
+        <item>
+            https://lh3.googleusercontent.com/ONE1_BLvzAP5-eA1AjzpjOOaHakjh6UwKqhw17YEZtn5nSvp95UB8vDgi1y89H1uT2E=w155
+        </item>
+        <item>
+            https://lh3.googleusercontent.com/LMur2GFr0ftI2YkKlf-SIqjdncQ3T1hm1AdJBFUXOKDQUrQY2m89pS9bpDoQdOQrHB4=w155
+        </item>
+        <item>
+            https://lh3.googleusercontent.com/4f47mbde4FyBSoIDKKpyfW17X29_93kD79qCXZvXtKRPYMJ9Su1FEMvegT_AI1X1zw=w155
+        </item>
+    </string-array>
+    <string-array name="language">
+        <item>English</item>
+        <item>ViewNam</item>
+        <item>India</item>
+        <item>China</item>
+        <item>Pakistan</item>
+    </string-array>
+</resources>
