@@ -43,6 +43,9 @@ public class MainViewPagerAdapter extends FragmentPagerAdapter {
             case 0:
                 fragment =HomeFragment.getInstance(getAct());
                 return (MVPFragment) fragment;
+            case 1:
+                fragment =SearchFragment.getInstance(getAct());
+                return (MVPFragment) fragment;
             default:
                  fragment = ApkFragment.getInstance(getAct());
                 return  fragment;
@@ -53,7 +56,7 @@ public class MainViewPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        return 2;
+        return 3;
     }
 
     @Nullable

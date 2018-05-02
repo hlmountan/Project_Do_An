@@ -26,6 +26,7 @@ import com.paditech.mvpbase.common.view.TranslationNestedScrollView;
 import com.paditech.mvpbase.screen.main.ScrollTopEvent;
 import com.paditech.mvpbase.screen.main.adapter.ChipCateAdapter;
 import com.paditech.mvpbase.screen.showMoreApp.ShowMoreActicity;
+import com.paditech.mvpbase.screen.user.UserActivity;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -41,7 +42,7 @@ import butterknife.BindView;
  * Created by hung on 1/2/2018.
  */
 
-public class HomeFragment extends MVPFragment<HomeContact.PresenterViewOsp> implements HomeContact.ViewOsp {
+public class HomeFragment extends MVPFragment<HomeContact.PresenterViewOsp> implements HomeContact.ViewOsp,View.OnClickListener {
 
     HomeRecyclerViewAdapter mHomeRecyclerViewAdapter;
     HomeRecyclerViewAdapter mHomeRecyclerViewAdapter2;
@@ -68,6 +69,12 @@ public class HomeFragment extends MVPFragment<HomeContact.PresenterViewOsp> impl
     TranslationNestedScrollView scrollView_home;
     @BindView(R.id.recycler_view_list_cate)
     RecyclerView recycler_view_list_cate;
+
+    @BindView(R.id.btn_profile)
+    Button btn_profile;
+    @BindView(R.id.btn_notification)
+    Button btn_notification;
+
     private boolean mRunned;
 
     SnapHelper snapHelper = new StartSnapHelper();
@@ -131,12 +138,9 @@ public class HomeFragment extends MVPFragment<HomeContact.PresenterViewOsp> impl
         setRecyclerViewCategory();
         getPresenter().getAppFromApi();
         setUpViewPager();
-        btn_see_more.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                btn_see_more.getContext().startActivity(new Intent(btn_see_more.getContext(), ShowMoreActicity.class));
-            }
-        });
+        btn_notification.setOnClickListener(this);
+        btn_profile.setOnClickListener(this);
+        btn_see_more.setOnClickListener(this);
         
     }
 
@@ -187,6 +191,22 @@ public class HomeFragment extends MVPFragment<HomeContact.PresenterViewOsp> impl
         recycler_view_topic.setLayoutManager(new LinearLayoutManager(act, LinearLayoutManager.HORIZONTAL, false));
         recycler_view_topic.setAdapter(mHomeRecyclerViewAdapter5);
     }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.btn_see_more:
+                btn_see_more.getContext().startActivity(new Intent(btn_see_more.getContext(), ShowMoreActicity.class));
+                break;
+            case R.id.btn_profile:
+                btn_profile.getContext().startActivity(new Intent(btn_see_more.getContext(), UserActivity.class));
+                break;
+            case R.id.btn_notification:
+                btn_see_more.getContext().startActivity(new Intent(btn_see_more.getContext(), ShowMoreActicity.class));
+                break;
+        }
+    }
+
     public class MyTimerTask extends TimerTask {
 
         @Override

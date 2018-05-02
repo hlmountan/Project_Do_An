@@ -46,6 +46,9 @@
     <string name="lega_info">Legal Infomation</string>
     <string name="lenam_store">Lenam Store</string>
     <string name="feedback_title">Please, tell us what you thing!</string>
+    <string name="home_title">What is new today?</string>
+    <string name="all_apk">All APK File In \nYour Device</string>
+    <string name="you_have_like">App You Have Like</string>
     <!--Main-->
     <string name="open">Open</string>
     <string name="close">Close</string>
@@ -56,6 +59,11 @@
     <string name="facebook">Facebook</string>
     <string name="your_email">...@gmail.com</string>
     <string name="password">********</string>
+    <string name="title_activity_home">HomeActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_category">Category</string>
+    <string name="title_search">Search</string>
+    <string name="policy">Policy and Privacy</string>
     <!--Message -->
     <string name="allow">Allow</string>
     <string name="deny">Deny</string>
@@ -64,16 +72,11 @@
     <string name="register_mes">Time to Explore</string>
     <string name="mess_no_connect">Không có kết nối mạng.</string>
     <string name="notice">Thông báo</string>
-    <string name="title_activity_home">HomeActivity</string>
-    <string name="title_home">Home</string>
-    <string name="title_category">Category</string>
     <string name="title_notifications">Notifications</string>
     <string name="title_manage_apk">Apk</string>
-    <string name="title_search">Search</string>
     <string name="title_activity_menu_navigation">ActivityMenuNavigation</string>
     <string name="user_name">  User Name</string>
     <string name="cmt_hint">Comment... (optional)</string>
-    <string name="policy">Policy and Privacy</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="share_cmt">Share your experience with our community!</string>

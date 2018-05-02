@@ -72,6 +72,9 @@ public class RecyclerViewApkAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
             @BindView(R.id.tv_title)
             TextView tv_title;
+            @BindView(R.id.tv_short_info)
+            TextView tv_short_info;
+
             @BindView(R.id.img_avar)
             ImageView img_avar;
 
@@ -86,6 +89,7 @@ public class RecyclerViewApkAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             public void setData(int pos){
                 tv_title.setText(itemView.getContext().getPackageManager().getApplicationLabel(packages.get(pos)));
                 img_avar.setImageDrawable(itemView.getContext().getPackageManager().getApplicationIcon(packages.get(pos)));
+
             }
 
         }
