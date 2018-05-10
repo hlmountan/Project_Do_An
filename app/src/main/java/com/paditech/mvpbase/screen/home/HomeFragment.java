@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.view.ViewPager;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,16 +14,17 @@ import android.widget.Button;
 
 import com.beloo.widget.chipslayoutmanager.ChipsLayoutManager;
 import com.beloo.widget.chipslayoutmanager.gravity.IChildGravityResolver;
+import com.google.firebase.auth.FirebaseAuth;
 import com.paditech.mvpbase.R;
 import com.paditech.mvpbase.common.model.AppModel;
-import com.paditech.mvpbase.common.model.Appsxyz;
 import com.paditech.mvpbase.common.mvp.fragment.FragmentPresenter;
 import com.paditech.mvpbase.common.mvp.fragment.MVPFragment;
 import com.paditech.mvpbase.common.utils.CommonUtil;
-import com.paditech.mvpbase.common.utils.crypto.Crypto;
 import com.paditech.mvpbase.common.view.TranslationNestedScrollView;
+import com.paditech.mvpbase.screen.adapter.RecyclerViewSliderHome;
 import com.paditech.mvpbase.screen.main.ScrollTopEvent;
 import com.paditech.mvpbase.screen.main.adapter.ChipCateAdapter;
+import com.paditech.mvpbase.screen.profile.ProfileActivity;
 import com.paditech.mvpbase.screen.showMoreApp.ShowMoreActicity;
 import com.paditech.mvpbase.screen.user.UserActivity;
 
@@ -33,8 +33,6 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import butterknife.BindView;
 
@@ -49,7 +47,8 @@ public class HomeFragment extends MVPFragment<HomeContact.PresenterViewOsp> impl
     HomeRecyclerViewAdapter mHomeRecyclerViewAdapter3;
     HomeRecyclerViewAdapter mHomeRecyclerViewAdapter4;
     HomeRecyclerViewAdapter mHomeRecyclerViewAdapter5;
-    HomeViewPagerAdapter mHomeViewPagerAdapter;
+
+    RecyclerViewSliderHome homeSlider;
     private ChipCateAdapter mChipCateAdapter;
     @BindView(R.id.recycler_view_recentely)
     RecyclerView recycler_view_recentely;
@@ -57,8 +56,8 @@ public class HomeFragment extends MVPFragment<HomeContact.PresenterViewOsp> impl
     RecyclerView recycler_view_on_sale;
     @BindView(R.id.btn_see_more)
     Button btn_see_more;
-    @BindView(R.id.vp_main)
-    ViewPager vp_main;
+    @BindView(R.id.recycler_view_slider)
+    RecyclerView recycler_view_slider;
     @BindView(R.id.recycler_view_top_download)
     RecyclerView recycler_view_top_download;
     @BindView(R.id.recycler_view_topic)
@@ -81,7 +80,9 @@ public class HomeFragment extends MVPFragment<HomeContact.PresenterViewOsp> impl
     SnapHelper snapHelper1 = new StartSnapHelper();
     SnapHelper snapHelper2 = new StartSnapHelper();
     SnapHelper snapHelper3 = new StartSnapHelper();
-    SnapHelper snapHelper4 = new StartSnapHelper();
+    SnapHelper snapHelperSlider = new StartSnapHelper();
+
+
     Activity act;
     private GridLayoutManager gridLayoutManager;
 
@@ -129,10 +130,11 @@ public class HomeFragment extends MVPFragment<HomeContact.PresenterViewOsp> impl
 
     @Override
     protected void initView(View view) {
-        if (!mRunned) {
-            Timer timer = new Timer();
-            timer.scheduleAtFixedRate(new MyTimerTask(), 2000, 4000);
-        }
+//        if (!mRunned) {
+//            Timer timer = new Timer();
+//            timer.scheduleAtFixedRate(new MyTimerTask(), 2000, 4000);
+//        }
+
         mRunned = true;
         setUpRecyclerView();
         setRecyclerViewCategory();
@@ -145,12 +147,15 @@ public class HomeFragment extends MVPFragment<HomeContact.PresenterViewOsp> impl
     }
 
     private void setUpRecyclerView(){
-        scrollView_home.setViewPager(vp_main,CommonUtil.getWidthScreen(getActivityReference())/2);
+        scrollView_home.setViewPager(recycler_view_slider,CommonUtil.getWidthScreen(getActivityReference())/2);
+
         snapHelper.attachToRecyclerView(recycler_view_recentely);
         snapHelper1.attachToRecyclerView(recycler_view_grossing);
         snapHelper2.attachToRecyclerView(recycler_view_on_sale);
         snapHelper3.attachToRecyclerView(recycler_view_top_download);
-        snapHelper3.attachToRecyclerView(recycler_view_topic);
+
+        snapHelperSlider.attachToRecyclerView(recycler_view_slider);
+
 
         mHomeRecyclerViewAdapter = new HomeRecyclerViewAdapter(act);
         mHomeRecyclerViewAdapter2 = new HomeRecyclerViewAdapter(act);
@@ -158,9 +163,9 @@ public class HomeFragment extends MVPFragment<HomeContact.PresenterViewOsp> impl
         mHomeRecyclerViewAdapter4 = new HomeRecyclerViewAdapter(act);
         mHomeRecyclerViewAdapter5 = new HomeRecyclerViewAdapter(act);
 
-        mHomeRecyclerViewAdapter.setItemId(R.layout.item_app_small);
-        mHomeRecyclerViewAdapter.setItemNumber(12);
-        gridLayoutManager = new GridLayoutManager(act, 2, LinearLayoutManager.HORIZONTAL, false);
+        mHomeRecyclerViewAdapter.setItemId(R.layout.item_app_horizontal_white_bg);
+        mHomeRecyclerViewAdapter.setItemNumber(15);
+        gridLayoutManager = new GridLayoutManager(act, 5, LinearLayoutManager.HORIZONTAL, false);
         recycler_view_recentely.setLayoutManager(gridLayoutManager);
         recycler_view_recentely.setAdapter(mHomeRecyclerViewAdapter);
 //        recycler_view_recentely.setNestedScrollingEnabled(false);
@@ -199,7 +204,12 @@ public class HomeFragment extends MVPFragment<HomeContact.PresenterViewOsp> impl
                 btn_see_more.getContext().startActivity(new Intent(btn_see_more.getContext(), ShowMoreActicity.class));
                 break;
             case R.id.btn_profile:
+                if ( FirebaseAuth.getInstance().getCurrentUser() == null)
                 btn_profile.getContext().startActivity(new Intent(btn_see_more.getContext(), UserActivity.class));
+                else {
+                    // profile
+                    btn_profile.getContext().startActivity(new Intent(btn_see_more.getContext(), ProfileActivity.class));
+                }
                 break;
             case R.id.btn_notification:
                 btn_see_more.getContext().startActivity(new Intent(btn_see_more.getContext(), ShowMoreActicity.class));
@@ -207,28 +217,28 @@ public class HomeFragment extends MVPFragment<HomeContact.PresenterViewOsp> impl
         }
     }
 
-    public class MyTimerTask extends TimerTask {
-
-        @Override
-
-        public void run() {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        if (vp_main.getCurrentItem() != (2))
-                            vp_main.setCurrentItem(vp_main.getCurrentItem() + 1);
-                        else
-                            vp_main.setCurrentItem(0);
-                    } catch (Exception e) {
-                        System.out.println(e);
-                    }
-
-                }
-            });
-
-        }
-    }
+//    public class MyTimerTask extends TimerTask {
+//
+//        @Override
+//
+//        public void run() {
+//            runOnUiThread(new Runnable() {
+//                @Override
+//                public void run() {
+//                    try {
+//                        if (recycler_view_slider.getCurrentItem() != (2))
+//                            recycler_view_slider.setCurrentItem(recycler_view_slider.getCurrentItem() + 1);
+//                        else
+//                            recycler_view_slider.setCurrentItem(0);
+//                    } catch (Exception e) {
+//                        System.out.println(e);
+//                    }
+//
+//                }
+//            });
+//
+//        }
+//    }
     @Override
     public void loadSlider() {
 
@@ -305,8 +315,9 @@ public class HomeFragment extends MVPFragment<HomeContact.PresenterViewOsp> impl
 
 
     private void setUpViewPager() {
-        mHomeViewPagerAdapter = new HomeViewPagerAdapter();
-        vp_main.setAdapter(mHomeViewPagerAdapter);
+        homeSlider = new RecyclerViewSliderHome(act);
+        recycler_view_slider.setLayoutManager(new LinearLayoutManager(act,LinearLayoutManager.HORIZONTAL,false));
+        recycler_view_slider.setAdapter(homeSlider);
     }
     private void setRecyclerViewCategory() {
         mChipCateAdapter = new ChipCateAdapter();

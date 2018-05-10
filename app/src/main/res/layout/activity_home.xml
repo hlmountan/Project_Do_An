@@ -77,6 +77,11 @@
         app:borderWidth="0dp"
         android:alpha="0.85"
         android:visibility="gone"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/line_size"
+        android:background="@color/gray_new"/>
     <android.support.design.widget.TabLayout
         android:id="@+id/tab_layout"
         android:layout_width="match_parent"
@@ -87,6 +92,7 @@
         app:tabTextColor="@color/gray"
         android:background="@color/white"
         app:tabIndicatorHeight="0dp"
+
         >
 
     </android.support.design.widget.TabLayout>

@@ -84,7 +84,19 @@ public class ImageUtil {
             imageView.setImageResource(R.color.gray_light);
         }
     }
-
+    public static void loadImageRounded(Context context, Object url, ImageView imageView, int placeHolder, int err,int radius) {
+        try {
+            Glide.with(context).load(url).apply(new RequestOptions()
+                    .placeholder(placeHolder)
+                    .error(err)
+                    .centerCrop()
+                    .transform(new RoundedCorners(radius)))
+                    .into(imageView);
+        } catch (Exception e) {
+            e.printStackTrace();
+            imageView.setImageResource(R.color.gray_light);
+        }
+    }
     public static String getImagePath(Uri uri, Context context) {
         if (context == null) return "";
         Cursor cursor = context.getContentResolver().query(uri, null, null, null, null);

@@ -126,7 +126,7 @@
                     android:paddingLeft="@dimen/padding_default"
                     android:paddingRight="@dimen/padding_default"
                     android:paddingTop="@dimen/padding_super_tiny"
-                    android:text="nhận"
+                    android:text=""
                     android:textColor="@color/white_transfer_litter"
                     android:textSize="@dimen/text_size_tiny" />
 
@@ -206,7 +206,26 @@
 
                 </RelativeLayout>
             </RelativeLayout>
+            <FrameLayout
+                android:id="@+id/fr_chart_and_pager"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/height_chart"
+                android:layout_below="@+id/tv_price_history"
+                android:visibility="gone">
 
+                <com.github.mikephil.charting.charts.LineChart
+                    android:id="@+id/lc_price_history"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="@dimen/margin_default" />
+
+                <ProgressBar
+                    android:id="@+id/progressBar_chart"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:visibility="gone" />
+            </FrameLayout>
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -455,34 +474,9 @@
                 android:layout_marginTop="@dimen/padding_default"
                 android:background="@color/gray_light" />
 
-            <TextView
-                android:id="@+id/tv_price_history"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Price History"
-                android:textAlignment="center"
-                android:visibility="gone" />
 
-            <FrameLayout
-                android:id="@+id/fr_chart_and_pager"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/height_chart"
-                android:layout_below="@+id/tv_price_history"
-                android:visibility="gone">
 
-                <com.github.mikephil.charting.charts.LineChart
-                    android:id="@+id/lc_price_history"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="@dimen/margin_default" />
 
-                <ProgressBar
-                    android:id="@+id/progressBar_chart"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:visibility="gone" />
-            </FrameLayout>
 
             <RelativeLayout
                 android:layout_width="match_parent"

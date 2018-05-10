@@ -2,20 +2,13 @@ package com.paditech.mvpbase.screen.detail;
 
 
 import android.Manifest;
-import android.animation.ArgbEvaluator;
-import android.animation.ValueAnimator;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.res.ColorStateList;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.DashPathEffect;
-
-import android.graphics.PorterDuff;
-import android.media.Image;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -25,13 +18,8 @@ import android.os.PowerManager;
 import android.os.StrictMode;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
-import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.view.ViewPager;
-import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.LinearSnapHelper;
@@ -39,8 +27,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SnapHelper;
 import android.text.Html;
 import android.transition.Explode;
-import android.transition.Transition;
-import android.transition.TransitionValues;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -51,11 +37,9 @@ import android.view.animation.Transformation;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -67,22 +51,12 @@ import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
-import com.github.mikephil.charting.formatter.IFillFormatter;
-import com.github.mikephil.charting.interfaces.dataprovider.LineDataProvider;
-import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
-import com.google.gson.Gson;
 import com.paditech.mvpbase.R;
-import com.paditech.mvpbase.common.base.BaseActivity;
 import com.paditech.mvpbase.common.base.BaseDialog;
 import com.paditech.mvpbase.common.dialog.MessageDialog;
 import com.paditech.mvpbase.common.model.AppModel;
-import com.paditech.mvpbase.common.model.AppPriceHistory;
-import com.paditech.mvpbase.common.model.Appsxyz;
 import com.paditech.mvpbase.common.mvp.activity.ActivityPresenter;
 import com.paditech.mvpbase.common.mvp.activity.MVPActivity;
-import com.paditech.mvpbase.common.service.APIClient;
-import com.paditech.mvpbase.common.service.ICallBack;
-import com.paditech.mvpbase.common.utils.BlurBuilder;
 import com.paditech.mvpbase.common.utils.CommonUtil;
 import com.paditech.mvpbase.common.utils.ImageUtil;
 import com.paditech.mvpbase.common.view.FadeToolbarScrollView;
@@ -92,9 +66,7 @@ import com.paditech.mvpbase.screen.adapter.RecyclerViewScreenShortAdapter;
 import com.paditech.mvpbase.screen.adapter.RecyclerViewVersionAdapter;
 import com.paditech.mvpbase.screen.cmt.CommentActivity;
 import com.paditech.mvpbase.screen.dev.DevActivity;
-import com.paditech.mvpbase.screen.home.HomeListAppAdapter;
 import com.paditech.mvpbase.screen.home.HomeRecyclerViewAdapter;
-import com.paditech.mvpbase.screen.home.HomeViewPagerAdapter;
 import com.paditech.mvpbase.screen.home.StartSnapHelper;
 import com.paditech.mvpbase.screen.main.adapter.ChipCateAdapter;
 import com.paditech.mvpbase.screen.report.ReportActivity;
@@ -108,20 +80,17 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.sql.SQLOutput;
 import java.sql.Timestamp;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
 import butterknife.BindView;
 
@@ -137,6 +106,15 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
     int watch = 0;
     ProgressDialog mProgressDialog;
     File file;
+
+    public ArrayList<ArrayList<String>> getPriceHistory() {
+        return priceHistory;
+    }
+
+    public void setPriceHistory(ArrayList<ArrayList<String>> priceHistory) {
+        this.priceHistory = priceHistory;
+    }
+
     ArrayList<ArrayList<String>> priceHistory = null;
     ArrayList<ArrayList<String>> priceHistory_trans_date = null;
     HomeRecyclerViewAdapter mHomeListAppAdapter = new HomeRecyclerViewAdapter(this);
@@ -145,6 +123,7 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
     ChipCateAdapter mListCateAdapte;
     private List<AppModel.SourceBean> mList = new ArrayList<>();
     String title;
+    String appid;
 
     @BindView(R.id.recycler_view_relate_app)
     RecyclerView recycler_view_relate_app;
@@ -187,8 +166,6 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
     Button btn_add;
     @BindView(R.id.tv_title_scroll)
     TextView tv_title_scroll;
-    @BindView(R.id.tv_price_history)
-    TextView tv_price_history;
     @BindView(R.id.scrollView)
     FadeToolbarScrollView scrollView;
     View infoLayout;
@@ -278,6 +255,7 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
         // be called  when click on viewpager
         SimpleDividerItemDecoration simpleDividerItemDecoration = new SimpleDividerItemDecoration(this, ContextCompat.getColor(this, R.color.gray_line), 120, 20);
         simpleDividerItemDecoration.setHasLastLine(false);
+
         snapHelper1.attachToRecyclerView(recycler_view_relate_app);
 
 
@@ -372,6 +350,11 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
             @Override
             public void onCancel(DialogInterface dialog) {
                 downloadTask.cancel(true);
+                String path = Environment.getExternalStorageDirectory().toString()+"/com.lenam.appstore/"+ appid +".apk";
+                System.out.println(path + " path cancel ");
+                Log.d("Files", "Path: " + path);
+                File directory = new File(path);
+                boolean d0 =directory.delete();
             }
         });
     }
@@ -380,21 +363,20 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
     public void onGetAppEvent(AppModel.SourceBean app) {
         title = app.getTitle();
         textView_title.setText(app.getTitle());
+        appid = app.getAppid();
         if (!getIntent().getBooleanExtra("is_cover", false))
             ImageUtil.loadImage(DetailActivity.this, app.getCover(), imgAvatar, R.drawable.events_placeholder, R.drawable.image_placeholder_500x500);
+        if ((app.getAll_price() == null)||(app.getAll_price().size()!=2)) {
 
-
-        if (app.getAll_price() != null) {
             isHistory = 0;
             getPresenter().cURLFromApi(app.getAppid(), 0);
-            fr_chart_and_pager.setVisibility(View.GONE);
-            tv_price_history.setVisibility(View.GONE);
         } else {
             isHistory = 1;
+
+            fr_chart_and_pager.setVisibility(View.VISIBLE);
             getPresenter().cURLFromApi(app.getAppid(), 1);
 
         }
-
         getPresenter().getRelateApp("http://appsxyz.com/api/apk/search_related/?q=" + URLEncoder.encode(app.getTitle()) + "&page=1&size=20");
     }
 
@@ -426,61 +408,6 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
             des_lines = 3;
     }
 
-    private void getAppHistory(String url) {
-        progressBar_chart.setVisibility(View.VISIBLE);
-        APIClient.getInstance().execGet(url, null, new ICallBack() {
-            @Override
-            public void onErrorToken() {
-
-            }
-
-            @Override
-            public void onFailed(IOException e) {
-            }
-
-            @Override
-            public void onResponse(String response, boolean isSuccessful) {
-                try {
-                    final AppPriceHistory appPriceHistory = new Gson().fromJson(response, AppPriceHistory.class);
-                    if (appPriceHistory != null) {
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                priceHistory = appPriceHistory.getPriceHistory();
-                                lineChartData();
-                            }
-                        });
-
-                    } else {
-                        checkPriceHistory = false;
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    // failed get data
-                    checkPriceHistory = false;
-                    System.out.println(e);
-                }
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (!checkPriceHistory) {
-                            chart.setVisibility(View.GONE);
-
-                            tv_price_history.setText("Android");
-                        } else {
-                            chart.setVisibility(View.VISIBLE);
-
-                            tv_price_history.setText("Price History");
-                        }
-                        progressBar_chart.setVisibility(View.GONE);
-                        tv_price_history.setVisibility(View.VISIBLE);
-                    }
-                });
-
-            }
-        });
-    }
-
     private void prepareData() {
         Integer count = 0;
         for (int i = priceHistory.size() - 1; i >= 0; i--) {
@@ -493,33 +420,33 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
     private void lineChartData() {
 
         prepareData();
-        chart.setDragEnabled(true);
-        chart.setScaleEnabled(true);
-        chart.setTouchEnabled(true);
-        chart.setScaleEnabled(true);
-        chart.setHighlightPerDragEnabled(true);
-        chart.setPinchZoom(true);
+//        chart.setDragEnabled(true);
+//        chart.setScaleEnabled(true);
+//        chart.setTouchEnabled(true);
+//        chart.setScaleEnabled(true);
+//        chart.setHighlightPerDragEnabled(true);
+//        chart.setPinchZoom(true);
 
 //        chart.setViewPortOffsets(0, 0, 0, 0);
         chart.setVisibleXRangeMaximum(20);
-        chart.setBackgroundColor(Color.rgb(104, 241, 175));
+        chart.setBackgroundColor(Color.WHITE);
         chart.setDrawGridBackground(false);
 //        chart.setMaxHighlightDistance(300);
         YAxis y = chart.getAxisLeft();
         y.setLabelCount(6, false);
-        y.setTextColor(Color.WHITE);
+        y.setTextColor(Color.BLUE);
         y.setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART);
-        y.setAxisLineColor(Color.WHITE);
+        y.setAxisLineColor(Color.BLUE);
 
         chart.getAxisRight().setEnabled(false);
 
         DateAxisValueFormatter formatter = new DateAxisValueFormatter(priceHistory);
         XAxis x = chart.getXAxis();
         x.setLabelCount(4, false);
-        x.setTextColor(Color.WHITE);
+        x.setTextColor(Color.BLUE);
         x.setPosition(XAxis.XAxisPosition.BOTTOM);
         x.setDrawGridLines(false);
-        x.setAxisLineColor(Color.WHITE);
+        x.setAxisLineColor(Color.BLUE);
         x.setValueFormatter(formatter);
         // set maker view
 
@@ -543,15 +470,14 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
 
             dataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
             dataSet.setCubicIntensity(0.2f);
-            dataSet.setFillColor(Color.WHITE);
             dataSet.setLineWidth(1.8f);
             dataSet.setCircleRadius(4f);
 //        dataSet.setCircleColor(Color.WHITE);
-            dataSet.setHighLightColor(Color.rgb(244, 117, 117));
-            dataSet.setColor(Color.WHITE);
-            dataSet.setFillColor(Color.WHITE);
-            dataSet.setFillAlpha(100);
-            dataSet.setDrawFilled(true);
+//            dataSet.setHighLightColor(Color.rgb(244, 117, 117));
+            dataSet.setColor(Color.BLUE);
+//            dataSet.setFillColor(Color.BLUE);
+//            dataSet.setFillAlpha(100);
+//            dataSet.setDrawFilled(true);
 
 
             dataSet.setFormLineWidth(1f);
@@ -559,18 +485,18 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
             dataSet.setFormSize(15.f);
 
 
-            dataSet.setDrawHorizontalHighlightIndicator(false);
-            dataSet.setFillFormatter(new IFillFormatter() {
-                @Override
-                public float getFillLinePosition(ILineDataSet dataSet, LineDataProvider dataProvider) {
-                    return -10;
-                }
-            });
+//            dataSet.setDrawHorizontalHighlightIndicator(false);
+//            dataSet.setFillFormatter(new IFillFormatter() {
+//                @Override
+//                public float getFillLinePosition(ILineDataSet dataSet, LineDataProvider dataProvider) {
+//                    return -10;
+//                }
+//            });
 
 
             LineData lineData = new LineData(dataSet);
-            lineData.setValueTextSize(9f);
-            lineData.setDrawValues(false);
+//            lineData.setValueTextSize(9f);
+//            lineData.setDrawValues(false);
             chart.setData(lineData);
 
         }
@@ -591,7 +517,9 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
                     if (isHistory != 0)
                         btn_install_app.setText("$" + app.getPrice());
                     else {
-//                        btn_install_app.setText("" + getResources().getString(R.string.download_apk));
+                        if (getPresenter().isInstall(appid)){
+                            btn_install_app.setText(R.string.open_app);
+                        }else btn_install_app.setText("" + getResources().getString(R.string.install));
                         setUrlInstall(app);
                     }
 
@@ -636,12 +564,18 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
     }
 
     @Override
-    public void setAppPriceHistory(ArrayList<ArrayList<String>> priceHistory) {
-        tv_price_history.setText("Price History");
-        this.priceHistory = priceHistory;
-        lineChartData();
-        chart.setVisibility(View.VISIBLE);
-        progressBar_chart.setVisibility(View.GONE);
+    public void setAppPriceHistory(final ArrayList<ArrayList<String>> priceHistory) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                setPriceHistory(priceHistory);
+//                System.out.println(this.priceHistory.size()+"size");
+                lineChartData();
+                chart.setVisibility(View.VISIBLE);
+                progressBar_chart.setVisibility(View.GONE);
+            }
+        });
+
     }
 
     @Override
@@ -656,14 +590,16 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
 
     }
 
-    @Override
-    public void setPriceHistory() {
-
-    }
 
     @Override
     public void setDevApp() {
 
+    }
+
+    @Override
+    public void setUrlDownload(String url) {
+        this.urlInstall = url;
+        System.out.println(" url day "+this.urlInstall);
     }
 
     @Override
@@ -703,8 +639,17 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
                 tv_description.startAnimation(animation);
                 break;
             case R.id.btn_install_app:
-                if (btn_install_app.getText().equals(getResources().getString(R.string.download_apk))) {
-                    downloadApkFile(getUrlInstall());
+                // check xem app co gia hay free
+                if (isHistory==0) {
+                    // heck xm trong may da co apk cua ap chua
+//                    if (getPresenter().checkIsApk(appid)){
+//                        //co roi thi chi install
+//                    }else{
+                        // chua co thi tai va install
+                        System.out.println(urlInstall);
+                        downloadApkFile(this.urlInstall);
+//                    }
+
                 } else {
                     Log.e("", "You need buy App first");
                 }
@@ -823,7 +768,7 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
 
                 // this will be useful to display download percentage
                 // might be -1: server did not report the length cái getcontentlenght
-//                long fileLength = 0;
+                long fileLength = 500000;
 //                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
 //                    fileLength = connection.getContentLengthLong();
 //                } else fileLength = connection.getContentLength();
@@ -831,6 +776,7 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
 
                 // download the file
                 File folder = new File(Environment.getExternalStorageDirectory(), context.getPackageName());
+                System.out.println(folder.getName()+" name");
                 if (!folder.exists() && !folder.mkdirs()) {
                     return "";
                 }
@@ -849,9 +795,10 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
                         return null;
                     }
                     total += count;
+                    System.out.println(total);
                     // publishing the progress....
-////                    if (fileLength > 0) // only if total length is known
-//                        publishProgress((int) (total * 100 / fileLength));
+                    if (fileLength > 0) // only if total length is known
+                        publishProgress((int) (total * 100 / fileLength));
                     output.write(data, 0, count);
                 }
             } catch (Exception e) {
@@ -888,9 +835,9 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
         protected void onProgressUpdate(Integer... progress) {
             super.onProgressUpdate(progress);
             // if we get here, length is known, now set indeterminate to false
-//            mProgressDialog.setIndeterminate(false);
-//            mProgressDialog.setMax(100);
-//            mProgressDialog.setProgress(progress[0]);
+            mProgressDialog.setIndeterminate(false);
+            mProgressDialog.setMax(100);
+            mProgressDialog.setProgress(progress[0]);
         }
 
         @Override
@@ -930,16 +877,23 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
             while (newHasd.length() < 32)
                 newHasd = "0" + newHasd;
             String titleUrl = app.getTitle() == null ? "" : app.getTitle().replace(" ", "-");
+
+            if (titleUrl.indexOf("(") >=0){
+                String trash = "";
+                trash = titleUrl.substring(titleUrl.indexOf("("),titleUrl.indexOf(")")+1);
+                titleUrl= titleUrl.replace(trash,"");
+            }
             String fieldId = app.getAppid() + "_appnaz.com_" + app.getVersion();
-            String field = "app=" + titleUrl + "&appid=" + fieldId + "&ds=" + newHasd + "&t=" + timestamp.getTime();
-            this.urlInstall = "http://downloadapk.appnaz.com/file/apk_file?" + field;
+            String field = "app=" + titleUrl + "&appid=" + fieldId + "&s=" + newHasd + "&t=" + timestamp.getTime();
+            System.out.println(field);
+            getPresenter().encodeDownloadUrl("http://choilieng.com/download?" + field);
+
         } else {
             this.urlInstall = "Tin Nguoi VCL!!!";
         }
     }
 
     private String getUrlInstall() {
-        System.out.println(this.urlInstall);
         return this.urlInstall;
 //       return "https://firebasestorage.googleapis.com/v0/b/fir-c26af.appspot.com/o/app-envReal-release.apk?alt=media&token=fce366de-fce6-4e84-9e8c-866ab2712211";
     }
@@ -947,11 +901,17 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
     private void installApk() {
         try {
             Uri uri = Uri.fromFile(file);
+            System.out.println(uri+" urlasasd ");
             Intent install = new Intent(Intent.ACTION_VIEW);
             install.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             install.setDataAndType(uri,
                     "application/vnd.android.package-archive");
             startActivity(install);
+            String path = Environment.getExternalStorageDirectory().toString()+"/com.lenam.appstore/"+ appid +".apk";
+            System.out.println(path + " path");
+            Log.d("Files", "Path: " + path);
+            File directory = new File(path);
+            boolean d0 =directory.delete();
         } catch (Exception e) {
             e.printStackTrace();
         }

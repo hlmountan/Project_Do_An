@@ -1,7 +1,5 @@
 package com.paditech.mvpbase.screen.home;
 
-import android.support.annotation.NonNull;
-
 import com.google.gson.Gson;
 import com.paditech.mvpbase.common.model.AppModel;
 import com.paditech.mvpbase.common.model.Appsxyz;
@@ -12,10 +10,7 @@ import com.paditech.mvpbase.common.service.ICallBack;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 
 /**
  * Created by hung on 4/13/2018.
@@ -25,7 +20,7 @@ public class HomePresenter extends FragmentPresenter<HomeContact.ViewOsp> implem
 
     @Override
     public void getAppFromApi() {
-        APIClient.getInstance().execGet("http://appsxyz.com/api/apk/lastes-sale/?page=1&size=12", null, new ICallBack() {
+        APIClient.getInstance().execGet("http://appsxyz.com/api/apk/googleplay-onsale/?page=1&size=6&installs=1000", null, new ICallBack() {
             @Override
             public void onErrorToken() {
 
@@ -100,7 +95,7 @@ public class HomePresenter extends FragmentPresenter<HomeContact.ViewOsp> implem
 
             }
         });
-        APIClient.getInstance().execGet("http://appsxyz.com/api/apk/gonefree/?page=1&size=12", null, new ICallBack() {
+        APIClient.getInstance().execGet("http://appsxyz.com/api/apk/lastes-sale/?page=1&size=12", null, new ICallBack() {
             @Override
             public void onErrorToken() {
 

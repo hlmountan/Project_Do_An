@@ -1,21 +1,15 @@
 package com.paditech.mvpbase.screen.main;
 
 import android.app.Activity;
-import android.app.Fragment;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.view.PagerAdapter;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.paditech.mvpbase.common.mvp.fragment.MVPFragment;
 import com.paditech.mvpbase.screen.apkManage.ApkFragment;
-import com.paditech.mvpbase.screen.category.CategoryFragment;
 import com.paditech.mvpbase.screen.home.HomeFragment;
 import com.paditech.mvpbase.screen.search.SearchFragment;
+import com.paditech.mvpbase.screen.uploadApk.UploadApkFragment;
 
 /**
  * Created by hung on 1/22/2018.
@@ -46,6 +40,9 @@ public class MainViewPagerAdapter extends FragmentPagerAdapter {
             case 1:
                 fragment =SearchFragment.getInstance(getAct());
                 return (MVPFragment) fragment;
+            case 2:
+                fragment = UploadApkFragment.getInstance(getAct());
+                return (MVPFragment) fragment;
             default:
                  fragment = ApkFragment.getInstance(getAct());
                 return  fragment;
@@ -56,7 +53,7 @@ public class MainViewPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        return 3;
+        return 4;
     }
 
     @Nullable

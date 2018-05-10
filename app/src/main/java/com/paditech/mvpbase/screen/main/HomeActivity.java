@@ -1,65 +1,26 @@
 package com.paditech.mvpbase.screen.main;
 
-import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.PersistableBundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v4.widget.NestedScrollView;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.RecyclerView.OnScrollListener;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.EventLog;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.Animation;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
-import android.widget.SearchView;
-import android.widget.TextView;
 
-import com.beloo.widget.chipslayoutmanager.ChipsLayoutManager;
-import com.beloo.widget.chipslayoutmanager.gravity.IChildGravityResolver;
 import com.paditech.mvpbase.R;
-import com.paditech.mvpbase.common.base.BaseActivity;
-import com.paditech.mvpbase.common.model.AppModel;
 import com.paditech.mvpbase.common.mvp.activity.ActivityPresenter;
 import com.paditech.mvpbase.common.mvp.activity.MVPActivity;
-import com.paditech.mvpbase.common.utils.CommonUtil;
-import com.paditech.mvpbase.common.view.LoadMoreRecyclerView;
-import com.paditech.mvpbase.screen.home.HomeListAppAdapter;
-import com.paditech.mvpbase.screen.main.adapter.ChipCateAdapter;
-import com.paditech.mvpbase.screen.showMoreApp.ShowMoreActicity;
-
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
-
-import java.util.List;
 
 import butterknife.BindView;
 
-public class HomeActivity extends MVPActivity<HomeActContact.PresenterViewOps> implements HomeActContact.ViewOps, ViewPager.OnPageChangeListener, View.OnClickListener
-{
+public class HomeActivity extends MVPActivity<HomeActContact.PresenterViewOps> implements HomeActContact.ViewOps, ViewPager.OnPageChangeListener, View.OnClickListener {
 
     @BindView(R.id.vp_tablayout)
     ViewPager viewPager_tab_layout;
@@ -75,17 +36,12 @@ public class HomeActivity extends MVPActivity<HomeActContact.PresenterViewOps> i
     @BindView(R.id.tab_layout)
     TabLayout tab_layout;
 
-    private int[] navLabels = {
-            R.string.title_home,
-            R.string.title_category,
-            R.string.title_search,
-    };
     private int[] navIcons = {
-            R.drawable.ic_iphone_1,
-            R.drawable.ic_category_18dp,
-            R.drawable.ic_search_18dp
+            R.drawable.ic_today_home_main,
+            R.drawable.ic_search_18dp,
+            R.drawable.ic_upload,
+            R.drawable.ic_category_18dp
     };
-
 
 
     @Override
@@ -99,7 +55,6 @@ public class HomeActivity extends MVPActivity<HomeActContact.PresenterViewOps> i
     }
 
 
-
     @Override
     protected int getContentView() {
         return R.layout.activity_home;
@@ -107,11 +62,10 @@ public class HomeActivity extends MVPActivity<HomeActContact.PresenterViewOps> i
 
     @Override
     protected void initView() {
+//    CommonUtil.setMiuiStatusBarDarkMode(this,true);
 
         setupViewPagerMain();
         setUpAdapter();
-
-
 
         btn_assivetouch.setOnClickListener(this);
         viewPager_tab_layout.addOnPageChangeListener(this);
@@ -126,7 +80,7 @@ public class HomeActivity extends MVPActivity<HomeActContact.PresenterViewOps> i
         MainViewPagerAdapter mMainViewPagerAdapter = new MainViewPagerAdapter(manager);
         mMainViewPagerAdapter.setAct(this);
         viewPager_tab_layout.setAdapter(mMainViewPagerAdapter);
-        viewPager_tab_layout.setOffscreenPageLimit(3);
+        viewPager_tab_layout.setOffscreenPageLimit(4);
         tab_layout.setupWithViewPager(viewPager_tab_layout);
         for (int i = 0; i < tab_layout.getTabCount(); i++) {
             // inflate the Parent LinearLayout Container for the tab
@@ -134,12 +88,10 @@ public class HomeActivity extends MVPActivity<HomeActContact.PresenterViewOps> i
             LinearLayout tab = (LinearLayout) LayoutInflater.from(this).inflate(R.layout.navigation_tablayout, null);
 
             // get child TextView and ImageView from this layout for the icon and label
-            TextView tab_label = (TextView) tab.findViewById(R.id.nav_label);
             ImageView tab_icon = (ImageView) tab.findViewById(R.id.nav_icon);
 
             // set the label text by getting the actual string value by its id
             // by getting the actual resource value `getResources().getString(string_id)`
-            tab_label.setText(getResources().getString(navLabels[i]));
             tab_icon.setImageResource(navIcons[i]);
 
             // finally publish this custom view to navigation tab
@@ -149,7 +101,6 @@ public class HomeActivity extends MVPActivity<HomeActContact.PresenterViewOps> i
         viewPager_tab_layout.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tab_layout));
 
     }
-
 
 
     @Override
@@ -183,9 +134,7 @@ public class HomeActivity extends MVPActivity<HomeActContact.PresenterViewOps> i
     }
 
 
-
-
-    private void setUpAdapter(){
+    private void setUpAdapter() {
 
         mNotificationRecycleViewAdapter = new NotificationRecycleViewAdapter();
         recycler_view_notification.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));

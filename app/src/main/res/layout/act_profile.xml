@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_super_large">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_super_large"
+                android:background="@drawable/bg_shadow"
+                android:orientation="vertical"
+                android:padding="@dimen/padding_default">
+
+                <TextView
+                    android:id="@+id/tv_user_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/margin_super_large"
+                    android:drawablePadding="@dimen/padding_default"
+                    android:drawableRight="@drawable/ic_check_circle"
+                    android:paddingTop="@dimen/padding_big"
+                    android:text="@string/user_default"
+                    android:textAlignment="center"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_very_super_big"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_user_gmail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/margin_small"
+                    android:text="@string/user_default_email" />
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="@dimen/margin_default"
+                    android:background="@drawable/ic_expand_more"
+                    android:minHeight="@dimen/min_height"
+                    android:minWidth="@dimen/min_height" />
+            </LinearLayout>
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/card_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_margin="@dimen/margin_small"
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="@dimen/radius_big">
+
+                <ImageView
+                    android:id="@+id/img_avar"
+                    android:layout_width="@dimen/app_img_size_detail"
+                    android:layout_height="@dimen/app_img_size_detail"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/ic_user_image"
+                    android:transitionName="avartar" />
+            </android.support.v7.widget.CardView>
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="@dimen/margin_big"
+                android:layout_marginTop="@dimen/margin_super_so_large"
+                android:background="@drawable/ic_edit"
+                android:minHeight="@dimen/min_height"
+                android:minWidth="@dimen/min_height" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_shadow"
+            android:orientation="vertical"
+            android:padding="@dimen/padding_default">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/margin_small"
+                android:text="@string/user_download_analysis"
+                android:textAlignment="textEnd"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_big" />
+
+            <FrameLayout
+                android:id="@+id/fr_chart_and_pager"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/height_chart">
+
+                <com.github.mikephil.charting.charts.LineChart
+                    android:id="@+id/lc_download_history"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="@dimen/margin_small" />
+
+                <ProgressBar
+                    android:id="@+id/progressBar_chart"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:visibility="gone" />
+            </FrameLayout>
+        </LinearLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_view_cmt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_small"
+            android:background="@drawable/bg_shadow"
+            android:padding="@dimen/padding_default"></android.support.v7.widget.RecyclerView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/bg_shadow"
+            android:padding="@dimen/padding_default">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/text_size_big"
+                android:textColor="@color/black"
+                android:text="@string/user_upload_apk"
+                android:textAlignment="textEnd"
+                android:layout_margin="@dimen/margin_small"/>
+            <FrameLayout
+                android:id="@+id/relate_frame"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tv_mark_4"
+                android:layout_marginBottom="@dimen/margin_small">
+
+                <android.support.v7.widget.RecyclerView xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/recycler_view_your_app"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <ProgressBar
+                    android:id="@+id/progressBar"
+                    android:layout_width="@dimen/loading_size"
+                    android:layout_height="@dimen/loading_size"
+                    android:layout_gravity="center" />
+            </FrameLayout>
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btn_logout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Logout" />
+    </LinearLayout>
+
+</android.support.v4.widget.NestedScrollView>

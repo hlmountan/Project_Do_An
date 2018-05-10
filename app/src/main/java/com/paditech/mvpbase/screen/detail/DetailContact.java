@@ -19,9 +19,9 @@ public interface DetailContact {
 
         void setRelateApp(List<AppModel> app);
 
-        void setPriceHistory();
 
         void setDevApp();
+        void setUrlDownload(String url);
 
     }
 
@@ -29,5 +29,10 @@ public interface DetailContact {
         void cURLFromApi(String appid, int isHistory);
 
         void getRelateApp(String url);
+
+        void encodeDownloadUrl(String href);
+        boolean checkIsApk(String appid);
+        void downloadTask(String url);
+        boolean isInstall(String appid);
     }
 }

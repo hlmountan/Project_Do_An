@@ -3,29 +3,24 @@ package com.paditech.mvpbase.screen.home;
 import android.app.Activity;
 import android.content.Intent;
 import android.support.v4.app.ActivityOptionsCompat;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.paditech.mvpbase.R;
 import com.paditech.mvpbase.common.model.AppModel;
+import com.paditech.mvpbase.common.utils.ImageUtil;
+import com.paditech.mvpbase.screen.detail.DetailActivity;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-
-import com.paditech.mvpbase.common.utils.ImageUtil;
-import com.paditech.mvpbase.screen.detail.DetailActivity;
-import com.paditech.mvpbase.screen.showMoreApp.ShowMoreActicity;
-
-import org.greenrobot.eventbus.EventBus;
 
 /**
  * Created by hung on 1/3/2018.
@@ -55,9 +50,10 @@ public class HomeRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
 
     Activity act;
 
-    public HomeRecyclerViewAdapter(Activity act){
+    public HomeRecyclerViewAdapter(Activity act) {
         this.act = act;
     }
+
     public void setmList1(List<AppModel> mList1) {
         this.mList1 = mList1;
         notifyDataSetChanged();
@@ -80,7 +76,7 @@ public class HomeRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
         if (mList1 != null) {
             return mList1.size();
         } else {
-            return 0 ;
+            return 0;
         }
     }
 
@@ -97,16 +93,20 @@ public class HomeRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
             super(itemView);
             ButterKnife.bind(this, itemView);
         }
-        private void setData(int pos){
+
+        private void setData(int pos) {
             final AppModel result = mList1.get(pos);
-            if(result.getSource() !=null) {
+            if (result.getSource() != null) {
                 AppModel.SourceBean sourceBean = result.getSource();
                 textView_title.setText(sourceBean.getTitle());
+                int radius = itemView.getResources().getDimensionPixelSize(R.dimen.radius_big);
+                if (sourceBean.getCover() == null) {
+                    ImageUtil.loadImageRounded(itemView.getContext(), sourceBean.getThumbnail(), imageView,
+                            R.drawable.events_placeholder, R.drawable.image_placeholder_500x500);
 
-                if (sourceBean.getCover() == null){
-                    ImageUtil.loadImageRounded(itemView.getContext(),sourceBean.getThumbnail(),imageView,R.drawable.events_placeholder,R.drawable.image_placeholder_500x500);
-                }else{
-                    ImageUtil.loadImageRounded(itemView.getContext(), sourceBean.getCover(), imageView,R.drawable.events_placeholder,R.drawable.image_placeholder_500x500);
+                } else {
+                    ImageUtil.loadImageRounded(itemView.getContext(), sourceBean.getCover(),
+                            imageView, R.drawable.events_placeholder, R.drawable.image_placeholder_500x500);
                 }
 
             } else {
@@ -121,9 +121,9 @@ public class HomeRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
                     EventBus.getDefault().postSticky(result.getSource());
 
                     Intent intent = new Intent(itemView.getContext(), DetailActivity.class);
-                    ActivityOptionsCompat optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(act,imageView,"image_avatar" );
+                    ActivityOptionsCompat optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(act, imageView, "image_avatar");
 
-                    itemView.getContext().startActivity(intent,optionsCompat.toBundle());
+                    itemView.getContext().startActivity(intent, optionsCompat.toBundle());
 
 
                 }

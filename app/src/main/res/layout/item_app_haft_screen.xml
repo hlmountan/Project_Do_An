@@ -8,10 +8,7 @@
     android:padding="@dimen/margin_small"
     app:cardCornerRadius="5dp"
     android:background="@android:color/white"
-    android:layout_marginLeft="@dimen/margin_10"
-    android:layout_marginRight="@dimen/margin_10"
-    android:layout_marginTop="@dimen/margin_super_tiny"
-    android:layout_marginBottom="@dimen/margin_super_tiny"
+    android:layout_margin="@dimen/margin_tiny"
     >
 
     <LinearLayout
@@ -25,7 +22,7 @@
         <ImageView
             android:id="@+id/img_avar"
             android:layout_width="match_parent"
-            android:layout_height="75dp"
+            android:layout_height="@dimen/height_topic_image"
             android:cropToPadding="true"
             android:scaleType="centerCrop"
             />

@@ -29,6 +29,8 @@ import android.widget.TextView;
 
 import com.paditech.mvpbase.R;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.List;
 
 import static android.content.Context.LOCATION_SERVICE;
@@ -116,9 +118,14 @@ public class CommonUtil {
     }
 
     public static int getWidthScreen(Activity activity) {
-        DisplayMetrics displaymetrics = new DisplayMetrics();
-        activity.getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
-        return displaymetrics.widthPixels;
+        try {
+            DisplayMetrics displaymetrics = new DisplayMetrics();
+            activity.getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+            return displaymetrics.widthPixels;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+       return 0;
     }
 
     public static int dpToPx(Context context, int dp) {
@@ -230,5 +237,21 @@ public class CommonUtil {
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         window.setStatusBarColor(color);
+    }
+
+    public static boolean setMiuiStatusBarDarkMode(Activity activity, boolean darkmode) {
+        Class<? extends Window> clazz = activity.getWindow().getClass();
+        try {
+            int darkModeFlag = 0;
+            Class<?> layoutParams = Class.forName("android.view.MiuiWindowManager$LayoutParams");
+            Field field = layoutParams.getField("EXTRA_FLAG_STATUS_BAR_DARK_MODE");
+            darkModeFlag = field.getInt(layoutParams);
+            Method extraFlagField = clazz.getMethod("setExtraFlags", int.class, int.class);
+            extraFlagField.invoke(activity.getWindow(), darkmode ? darkModeFlag : 0, darkModeFlag);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 }

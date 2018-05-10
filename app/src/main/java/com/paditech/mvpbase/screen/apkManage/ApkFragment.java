@@ -3,14 +3,13 @@ package com.paditech.mvpbase.screen.apkManage;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageManager;
+import android.os.Environment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.LinearSnapHelper;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SnapHelper;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -20,11 +19,10 @@ import com.paditech.mvpbase.common.mvp.fragment.FragmentPresenter;
 import com.paditech.mvpbase.common.mvp.fragment.MVPFragment;
 import com.paditech.mvpbase.common.view.SimpleDividerItemDecoration;
 import com.paditech.mvpbase.screen.adapter.RecyclerViewApkAdapter;
-import com.paditech.mvpbase.screen.adapter.RecyclerViewCmtAdapter;
-import com.paditech.mvpbase.screen.home.HomeFragment;
 import com.paditech.mvpbase.screen.home.HomeRecyclerViewAdapter;
 import com.paditech.mvpbase.screen.user.UserActivity;
 
+import java.io.File;
 import java.util.List;
 
 import butterknife.BindView;
@@ -78,16 +76,23 @@ public class ApkFragment extends MVPFragment<ApkContact.PresenterViewOps> implem
         mRecyclerViewApkAdapter.setAct(act);
         snapHelperCmt.attachToRecyclerView(recycler_view_apk);
         recycler_view_apk.setLayoutManager(new GridLayoutManager(view.getContext(),5,LinearLayoutManager.HORIZONTAL,false));
-        recycler_view_apk.setAdapter(mRecyclerViewApkAdapter);
         recycler_view_apk.addItemDecoration(simpleDividerItemDecoration);
+        recycler_view_apk.setAdapter(mRecyclerViewApkAdapter);
+
         getPresenter().getApkInfo();
+
+
+        SimpleDividerItemDecoration decoration = new SimpleDividerItemDecoration(act, ContextCompat.getColor(act, R.color.gray_line), 120, 20);
+        decoration.setHasLastLine(false);
 
         mLikeAppAdapter = new HomeRecyclerViewAdapter(act);
         mLikeAppAdapter.setItemId(R.layout.item_app_horizontal_white_bg);
         snapHelperLike.attachToRecyclerView(recycler_view_like_app);
         recycler_view_like_app.setLayoutManager(new GridLayoutManager(view.getContext(),2,LinearLayoutManager.HORIZONTAL,false));
+        recycler_view_like_app.addItemDecoration(decoration);
         recycler_view_like_app.setAdapter(mLikeAppAdapter);
-        recycler_view_like_app.addItemDecoration(simpleDividerItemDecoration);
+
+//        externalApk();
 
 
     }
@@ -126,5 +131,60 @@ public class ApkFragment extends MVPFragment<ApkContact.PresenterViewOps> implem
             }
         });
 
+    }
+    private void externalApk(){
+//        String path = Environment.getExternalStorageDirectory().toString()+"/com.paditech.mvpbase";
+//        System.out.println(path + " pathăđă");
+//        Log.d("Files", "Path ădă: " + path);
+//        File directory = new File(path);
+////        boolean d0 =directory.delete();
+////
+////        System.out.println("Delete Check File deleted: " + path + "/myFile " + d0);
+//
+//        File[] files = directory.listFiles();
+//        System.out.println("Size: "+ files.length);
+//        for (int i = 0; i < files.length; i++)
+//        {
+//
+//            Log.d("Files", "FileName:" + files[i].getName());
+//
+//            File file = new File(Environment.getExternalStorageDirectory().toString()+"/com.paditech.mvpbase/com_facebook_orca.apk");
+//            int file_size = Integer.parseInt(String.valueOf(file.length()/1024));
+//            System.out.println(file_size + " size day nay ");
+//
+//        }
+        String path = Environment.getExternalStorageDirectory().toString();
+        File directory = new File(path);
+
+        File[] files = directory.listFiles();
+        System.out.println("Size: "+ files.length);
+        for (int i = 0; i < files.length; i++)
+        {
+            String pathChild = path+"/"+files[i].getName();
+
+            System.out.println(pathChild);
+            File directoryChild = new File(pathChild);
+            File[] filesChild = directoryChild.listFiles();
+            System.out.println(files[i].getName()+ "  Size: "+ filesChild.length);
+
+            for (int j = 0; j < filesChild.length; j++) {
+                if (filesChild[j].getName().indexOf(".apk") >=0){
+
+                    String name = filesChild[j].getName();
+                    String date = String.valueOf(filesChild[j].lastModified());
+
+                    String finalpath = path + "/" +files[i].getName() + "/"+ name;
+                    System.out.println("final path   "  + finalpath);
+                    File file = new File( finalpath);
+                    int file_size = Integer.parseInt(String.valueOf(file.length() / 1024));
+                    System.out.println(file_size + " size day nay " + date);
+                    name = name.replace("_", ".");
+                    name = name.replace(".apk", "");
+                }else{
+                    System.out.println(filesChild[j].getName() + " not apk file");
+                }
+
+            }
+        }
     }
 }

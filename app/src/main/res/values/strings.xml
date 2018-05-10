@@ -15,6 +15,11 @@
     <string name="login_g">Login With Google</string>
     <string name="login_f">Login With Facebook</string>
     <string name="apply">Apply</string>
+    <string name="install">INSTALL</string>
+    <string name="open_app">OPEN</string>
+    <string name="facebook_app_id">2102773583335853</string>
+    <string name="fb_login_protocol_scheme">fb2102773583335853</string>
+
     <!--Select multi photos-->
     <string name="select_multi_photo">Select photos</string>
     <string name="select_image">Chọn ảnh</string>
@@ -49,6 +54,27 @@
     <string name="home_title">What is new today?</string>
     <string name="all_apk">All APK File In \nYour Device</string>
     <string name="you_have_like">App You Have Like</string>
+    <string name="follow">Follow</string>
+    <string name="message">Message</string>
+    <string name="hint_leave_reply">Leave Your Reply</string>
+    <string name="upload">Upload Your Apk</string>
+    <string name="upload_policy">This is the account that will be associated with your Developer Console.</string>
+    <string name="step_1">Step 1</string>
+    <string name="step_2">Step 2</string>
+    <string name="step_3">Step 3</string>
+    <string name="step_4">Step 4</string>
+    <string name="step_5">Step 5</string>
+    <string name="step_6">Step 6</string>
+    <string name="step_7">Step 7</string>
+    <string name="final_step">Final Step</string>
+    <string name="agreement">I agree and I am willing to associate my account registration with the Play Developer distribution agreement.</string>
+   <string name="your_app_title">Your App Title</string>
+    <string name="submit">Submit</string>
+    <string name="add_screenshort">Add screen short</string>
+    <string name="final_annoucement">We will review your app in 3-5 working days and will send you an email when it done</string>
+    <string name="all_apk_file">Your All Apk</string>
+    <string name="default_size">500 Mb</string>
+    <string name="date_modify">5/10/18</string>
     <!--Main-->
     <string name="open">Open</string>
     <string name="close">Close</string>
@@ -64,6 +90,10 @@
     <string name="title_category">Category</string>
     <string name="title_search">Search</string>
     <string name="policy">Policy and Privacy</string>
+    <string name="user_default">     Jack Jordan</string>
+    <string name="user_default_email">jackjordan@gmail.com</string>
+    <string name="user_download_analysis">Download Analysis</string>
+    <string name="user_upload_apk">Your App</string>
     <!--Message -->
     <string name="allow">Allow</string>
     <string name="deny">Deny</string>
