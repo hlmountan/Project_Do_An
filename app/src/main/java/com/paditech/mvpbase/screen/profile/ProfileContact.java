@@ -1,6 +1,7 @@
 package com.paditech.mvpbase.screen.profile;
 
 import com.paditech.mvpbase.common.model.AppModel;
+import com.paditech.mvpbase.common.model.UserProfile;
 import com.paditech.mvpbase.common.mvp.activity.ActivityPresenterViewOps;
 import com.paditech.mvpbase.common.mvp.activity.ActivityViewOps;
 
@@ -13,11 +14,13 @@ import java.util.List;
 public interface ProfileContact {
     interface ViewOps extends ActivityViewOps{
         void setAppDownload();
-        void setListAppData(List<AppModel> app);
+        void setUserData(UserProfile user);
+        void loadChildUserUpload(List<AppModel>  listApk);
     }
 
     interface PresenterViewOps extends ActivityPresenterViewOps{
     void setChartData();
-    void setListApp(String url);
+    void getUserData();
+        public void getUserApk();
     }
 }

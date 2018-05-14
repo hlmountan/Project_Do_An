@@ -2,6 +2,7 @@ package com.paditech.mvpbase.screen.detail;
 
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -34,9 +35,12 @@ import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Transformation;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.RelativeLayout;
@@ -51,10 +55,12 @@ import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.google.firebase.auth.FirebaseAuth;
 import com.paditech.mvpbase.R;
 import com.paditech.mvpbase.common.base.BaseDialog;
 import com.paditech.mvpbase.common.dialog.MessageDialog;
 import com.paditech.mvpbase.common.model.AppModel;
+import com.paditech.mvpbase.common.model.CommentsBean;
 import com.paditech.mvpbase.common.mvp.activity.ActivityPresenter;
 import com.paditech.mvpbase.common.mvp.activity.MVPActivity;
 import com.paditech.mvpbase.common.utils.CommonUtil;
@@ -70,6 +76,7 @@ import com.paditech.mvpbase.screen.home.HomeRecyclerViewAdapter;
 import com.paditech.mvpbase.screen.home.StartSnapHelper;
 import com.paditech.mvpbase.screen.main.adapter.ChipCateAdapter;
 import com.paditech.mvpbase.screen.report.ReportActivity;
+import com.paditech.mvpbase.screen.user.UserActivity;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -99,46 +106,61 @@ import butterknife.BindView;
  * Created by hung on 1/5/2018.
  */
 
-public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> implements DetailContact.ViewOps, View.OnClickListener, FadeToolbarScrollView.ObservableScrollViewCallbacks, RatingBar.OnRatingBarChangeListener {
-
+public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> implements DetailContact.ViewOps,
+        View.OnClickListener, FadeToolbarScrollView.ObservableScrollViewCallbacks, RatingBar.OnRatingBarChangeListener,
+        View.OnFocusChangeListener {
+    boolean isInstall= false;
     List<Entry> entries = new ArrayList<Entry>();
     private ArrayList<ArrayList<String>> screenShot = null;
+    private ArrayList<ArrayList<String>> listApp;
     int watch = 0;
     ProgressDialog mProgressDialog;
     File file;
-
-    public ArrayList<ArrayList<String>> getPriceHistory() {
-        return priceHistory;
-    }
-
-    public void setPriceHistory(ArrayList<ArrayList<String>> priceHistory) {
-        this.priceHistory = priceHistory;
-    }
-
+    final int IMGCMT = 2;
     ArrayList<ArrayList<String>> priceHistory = null;
     ArrayList<ArrayList<String>> priceHistory_trans_date = null;
     HomeRecyclerViewAdapter mHomeListAppAdapter = new HomeRecyclerViewAdapter(this);
     RecyclerViewVersionAdapter mListVersionAdapter = new RecyclerViewVersionAdapter(this);
     DetailViewPagerAdapter mDetailViewPagerAdapter;
     ChipCateAdapter mListCateAdapte;
-    private List<AppModel.SourceBean> mList = new ArrayList<>();
+    private ArrayList<String> mList = new ArrayList<>();
     String title;
     String appid;
+    ImageView imgCover;
+    boolean showdes = false;
+    public int des_lines;
+    private String urlInstall;
+    private boolean animing;
+    SnapHelper snapHelper = new StartSnapHelper();
+    SnapHelper snapHelper1 = new StartSnapHelper();
+    SnapHelper snapHelper3 = new LinearSnapHelper();
+    SnapHelper snapHelperCmt = new LinearSnapHelper();
+    Integer isHistory;
+    AppModel.SourceBean ownApp;
+    long fileLength;
 
+    @BindView(R.id.et_title)
+    TextView et_title;
+    @BindView(R.id.view_rating)
+    LinearLayout view_rating;
+    @BindView(R.id.tv_rating_success)
+    TextView tv_rating_success;
+    @BindView(R.id.et_cmt)
+    EditText et_cmt;
+    @BindView(R.id.btn_submit)
+    Button btn_submit;
+    @BindView(R.id.btn_user_name)
+    Button btn_user_name;
     @BindView(R.id.recycler_view_relate_app)
     RecyclerView recycler_view_relate_app;
     @BindView(R.id.tv_title)
     TextView textView_title;
     @BindView(R.id.tv_offerby)
     TextView tv_offerby;
-    @BindView(R.id.btn_more_option)
-    TextView btn_more_option;
     @BindView(R.id.tv_version)
     TextView tv_version;
     @BindView(R.id.tv_description)
     TextView tv_description;
-    @BindView(R.id.btn_back)
-    ImageView btn_back;
     @BindView(R.id.progressBar)
     ProgressBar progressBar;
     @BindView(R.id.btn_install_app)
@@ -201,16 +223,21 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
     RecyclerViewScreenShortAdapter mRecyclerViewScreenShortAdapter;
     RecyclerViewCmtAdapter mRecyclerViewCmtAdapter;
 
-    ImageView imgCover;
-    boolean showdes = false;
-    public int des_lines;
-    private String urlInstall;
-    private boolean animing;
-    SnapHelper snapHelper = new StartSnapHelper();
-    SnapHelper snapHelper1 = new StartSnapHelper();
-    SnapHelper snapHelper3 = new LinearSnapHelper();
-    SnapHelper snapHelperCmt = new LinearSnapHelper();
-    Integer isHistory;
+    public ArrayList<ArrayList<String>> getPriceHistory() {
+        return priceHistory;
+    }
+
+    public void setPriceHistory(ArrayList<ArrayList<String>> priceHistory) {
+        this.priceHistory = priceHistory;
+    }
+
+    public ArrayList<ArrayList<String>> getListApp() {
+        return listApp;
+    }
+
+    public void setListApp(ArrayList<ArrayList<String>> listApp) {
+        this.listApp = listApp;
+    }
 
     @Override
     protected int getContentView() {
@@ -265,7 +292,7 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
         recycler_view_relate_app.addItemDecoration(simpleDividerItemDecoration);
 
         //btn  way back to the previous screen
-        btn_back.setOnClickListener(this);
+
         // when click on text description this text will show all it have
         tv_description.setOnClickListener(this);
         // download apk file
@@ -274,7 +301,6 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
 //        scrollView.setScrollViewCallbacks(this);
         tv_offerby.setOnClickListener(this);
 
-        btn_more_option.setOnClickListener(this);
 // set on click scroll to rate
         ratingbar.setOnClickListener(this);
         // set on click show form report an app
@@ -282,13 +308,15 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
 
 
         rlt_dev.setOnClickListener(this);
-
+        et_cmt.setOnFocusChangeListener(this);
         btn_see_more_app_relate.setOnClickListener(this);
         tv_show_cmt.setOnClickListener(this);
         tv_score.setOnClickListener(this);
         btn_add.setOnClickListener(this);
         btn_share.setOnClickListener(this);
         btn_see_more_version.setOnClickListener(this);
+        btn_submit.setOnClickListener(this);
+        et_title.setOnFocusChangeListener(this);
 
         ratingbar_your.setOnRatingBarChangeListener(this);
 
@@ -344,52 +372,69 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
 
         // execute this when the downloader must be fired
         final DownloadTask downloadTask = new DownloadTask(DetailActivity.this);
+        downloadTask.setFileLength(fileLength);
         downloadTask.execute(url);
 
         mProgressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
             @Override
             public void onCancel(DialogInterface dialog) {
                 downloadTask.cancel(true);
-                String path = Environment.getExternalStorageDirectory().toString()+"/com.lenam.appstore/"+ appid +".apk";
+                String path = Environment.getExternalStorageDirectory().toString() + "/com.lenam.appstore/" + appid + ".apk";
                 System.out.println(path + " path cancel ");
                 Log.d("Files", "Path: " + path);
                 File directory = new File(path);
-                boolean d0 =directory.delete();
+                boolean d0 = directory.delete();
             }
         });
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     public void onGetAppEvent(AppModel.SourceBean app) {
+        ownApp = app;
         title = app.getTitle();
         textView_title.setText(app.getTitle());
         appid = app.getAppid();
+        getPresenter().isInstall(appid);
+        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+            getPresenter().getUserFollowApp();
+        }
+
+
         if (!getIntent().getBooleanExtra("is_cover", false))
             ImageUtil.loadImage(DetailActivity.this, app.getCover(), imgAvatar, R.drawable.events_placeholder, R.drawable.image_placeholder_500x500);
-        if ((app.getAll_price() == null)||(app.getAll_price().size()!=2)) {
+        if (FirebaseAuth.getInstance().getCurrentUser() == null)
+            btn_user_name.setText(R.string.anonymous);
+        else btn_user_name.setText(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
+        if (app.isUserUpload()) {
+            tv_offerby.setText(app.getOfferby());
+            setUpScreenShort(app.getScreenshotUserUpload());
+            fr_chart_and_pager.setVisibility(View.GONE);
+            btn_install_app.setText(R.string.install);
 
-            isHistory = 0;
-            getPresenter().cURLFromApi(app.getAppid(), 0);
         } else {
-            isHistory = 1;
+            if ((app.getAll_price() == null) || (app.getAll_price().size() != 2)) {
 
-            fr_chart_and_pager.setVisibility(View.VISIBLE);
-            getPresenter().cURLFromApi(app.getAppid(), 1);
+                isHistory = 0;
+                getPresenter().cURLFromApi(app.getAppid(), 0);
+            } else {
+                isHistory = 1;
+
+                fr_chart_and_pager.setVisibility(View.VISIBLE);
+                getPresenter().cURLFromApi(app.getAppid(), 1);
+            }
 
         }
+        getPresenter().getUserCmt(appid);
         getPresenter().getRelateApp("http://appsxyz.com/api/apk/search_related/?q=" + URLEncoder.encode(app.getTitle()) + "&page=1&size=20");
+
     }
 
 
-    private void setUpScreenShort(ArrayList<ArrayList<String>> screenShot) {
-        for (ArrayList<String> a : screenShot) {
-            AppModel.SourceBean appModel = new AppModel.SourceBean();
-            appModel.setCover(a.get(2));
-            mList.add(appModel);
-        }
+    private void setUpScreenShort(ArrayList<String> screenShot) {
+
         snapHelper3.attachToRecyclerView(recycler_view_screenshoot);
         mRecyclerViewScreenShortAdapter = new RecyclerViewScreenShortAdapter(this);
-        mRecyclerViewScreenShortAdapter.setmList(mList);
+        mRecyclerViewScreenShortAdapter.setmList(screenShot);
         recycler_view_screenshoot.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         recycler_view_screenshoot.setAdapter(mRecyclerViewScreenShortAdapter);
     }
@@ -517,16 +562,16 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
                     if (isHistory != 0)
                         btn_install_app.setText("$" + app.getPrice());
                     else {
-                        if (getPresenter().isInstall(appid)){
+                        if (isInstall) {
                             btn_install_app.setText(R.string.open_app);
-                        }else btn_install_app.setText("" + getResources().getString(R.string.install));
+                        } else
+                            btn_install_app.setText("" + getResources().getString(R.string.install));
                         setUrlInstall(app);
                     }
 
                     setUpCateAdapter(app.getTag());
-
+                    fileLength = app.getSize()*1000;
                     if (app.getTitle() != null) tv_title_scroll.setText(app.getTitle());
-
 
 
                     tv_score.setText(String.valueOf(app.getScore()));
@@ -539,7 +584,15 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
                     tv_version.setText("Version: " + app.getVersion());
                     String des = app.getDescription();
                     linesCount(des);
-                    tv_gp_info.setText(app.getOfferby() + "\n" + "4GB" + "\n" + app.getCategory() + "\n" + app.getRequire() + "\n" + app.getContentrating());
+                    String dev;
+                    if (app.getOfferby().length() > 13){
+                        dev = app.getOfferby().substring(0,13);
+                    }else{
+                         dev = app.getOfferby();
+                    }
+
+
+                    tv_gp_info.setText(dev + "..\n" + NumberFormat.getInstance().format(app.getSize()/1000000)+ " MB" + "\n" + app.getCategory() + "\n" + app.getRequire() + "\n" + app.getContentrating());
 
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                         tv_description.setText(Html.fromHtml(des, Html.FROM_HTML_MODE_COMPACT));
@@ -549,7 +602,11 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
                     //set up screenshot data
                     screenShot = app.getScreenShot();
                     if (app.getScreenShot() != null) {
-                        setUpScreenShort(app.getScreenShot());
+                        for (ArrayList<String> a : app.getScreenShot()) {
+                            ;
+                            mList.add(a.get(2));
+                        }
+                        setUpScreenShort(mList);
                     }
 
 
@@ -599,15 +656,46 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
     @Override
     public void setUrlDownload(String url) {
         this.urlInstall = url;
-        System.out.println(" url day "+this.urlInstall);
+        System.out.println(" url day " + this.urlInstall);
+    }
+
+    @Override
+    public void setFollowApp(ArrayList<ArrayList<String>> listApp) {
+        this.listApp = listApp;
+        btn_add.setVisibility(View.VISIBLE);
+        btn_share.setVisibility(View.VISIBLE);
+        if (this.listApp != null) {
+            for (ArrayList<String> a : listApp) {
+                if (a.get(0).equals(ownApp.getAppid())) {
+                    btn_add.setBackgroundResource(R.drawable.ic_check);
+                    watch = 1;
+                }
+            }
+        }
+
+    }
+
+    @Override
+    public void setCmt(final List<CommentsBean> cmt) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mRecyclerViewCmtAdapter.setCmt(cmt);
+            }
+        });
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        getPresenter().updateFollowApp(listApp);
+
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.btn_back:
-                finishAfterTransition();
-                break;
             case R.id.tv_description:
                 final int currSize = des_lines - 3;
                 Animation animation;
@@ -640,14 +728,14 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
                 break;
             case R.id.btn_install_app:
                 // check xem app co gia hay free
-                if (isHistory==0) {
+                if (isHistory == 0) {
                     // heck xm trong may da co apk cua ap chua
 //                    if (getPresenter().checkIsApk(appid)){
 //                        //co roi thi chi install
 //                    }else{
-                        // chua co thi tai va install
-                        System.out.println(urlInstall);
-                        downloadApkFile(this.urlInstall);
+                    // chua co thi tai va install
+                    System.out.println(urlInstall);
+                    downloadApkFile(this.urlInstall);
 //                    }
 
                 } else {
@@ -658,9 +746,22 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
 
                 if (watch == 0) {
                     btn_add.setBackgroundResource(R.drawable.ic_check);
+                    ArrayList<String> follow = new ArrayList<>();
+                    follow.add(ownApp.getAppid());
+                    follow.add(ownApp.getCover());
+                    follow.add(ownApp.getTitle());
+                    follow.add(String.valueOf(ownApp.isUserUpload()));
+
+                    listApp.add(follow);
                     watch = 1;
                 } else {
                     btn_add.setBackgroundResource(R.drawable.btn_add);
+                    for (ArrayList<String> a : listApp) {
+                        if (a.get(0).equals(ownApp.getAppid())) {
+                            listApp.remove(a);
+                            break;
+                        }
+                    }
                     watch = 0;
                 }
 
@@ -674,21 +775,11 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
                 sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
                 startActivity(Intent.createChooser(sharingIntent, "Share using"));
                 break;
-            case R.id.btn_more_option:
-
-                if (btn_share.getVisibility() == View.GONE) {
-                    btn_add.setVisibility(View.VISIBLE);
-                    btn_share.setVisibility(View.VISIBLE);
-                } else {
-                    btn_add.setVisibility(View.GONE);
-                    btn_share.setVisibility(View.GONE);
-                }
-                break;
             case R.id.tv_score:
                 recycler_view_cmt.getParent().requestChildFocus(recycler_view_cmt, recycler_view_cmt);
                 break;
             case R.id.btn_report:
-                Intent intent = new Intent(this, ReportActivity.class);
+                final Intent intent = new Intent(this, ReportActivity.class);
                 this.startActivity(intent);
                 break;
             case R.id.tv_offerby:
@@ -706,9 +797,41 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
             case R.id.tv_show_cmt:
                 this.startActivity(new Intent(this, CommentActivity.class));
                 break;
+            case R.id.btn_submit:
+                if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+                    if (isInstall){
+                        if (ratingbar_your.getRating() != 0 && !et_cmt.getText().toString().equals("")&&!et_title.getText().toString().equals("")) {
+                            // push cmt
+                            view_rating.setVisibility(View.GONE);
+                            tv_rating_success.setVisibility(View.VISIBLE);
+                        } else showAlertDialog(getString(R.string.empty_context_cmt));
+                    }else showAlertDialog(getString(R.string.install_condition));
+
+
+                } else {
+                    showConfirmDialog(getString(R.string.cmt_login_alert), new BaseDialog.OnPositiveClickListener() {
+                        @Override
+                        public void onPositiveClick() {
+                            Intent i = new Intent(btn_submit.getContext(), UserActivity.class);
+                            i.putExtra("SCREEN", "DETAIL");
+                            btn_submit.getContext().startActivity(i);
+                        }
+                    }, null);
+                }
+                break;
+
         }
     }
 
+    @Override
+    public void showAlertDialog(String msg) {
+        super.showAlertDialog(msg);
+    }
+
+    @Override
+    public void showConfirmDialog(String msg, BaseDialog.OnPositiveClickListener positiveListener, BaseDialog.OnNegativeClickListener negativeListener) {
+        super.showConfirmDialog(msg, positiveListener, negativeListener);
+    }
 
     // fadetoolbarscrollview
     @Override
@@ -719,7 +842,6 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
         int color_2 = CommonUtil.getColorWithAlpha(1 - alpha, baseColor);
         titleLayout.setBackgroundColor(color);
         //infoLayout.setTranslationY(scrollY / 2);
-        //btn_back.setColorFilter(color_2, PorterDuff.Mode.SRC_ATOP);
         tv_title_scroll.setAlpha(alpha);
     }
 
@@ -739,10 +861,26 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
         tv_score_your.setText(String.valueOf(v) + " Score");
     }
 
+    @Override
+    public void onFocusChange(View view, boolean b) {
+        if (!b) {
+            hideKeyboard(view);
+        }
+    }
+
     private class DownloadTask extends AsyncTask<String, Integer, String> {
 
         private Context context;
         private PowerManager.WakeLock mWakeLock;
+        private long fileLength;
+
+        public long getFileLength() {
+            return fileLength;
+        }
+
+        public void setFileLength(long fileLength) {
+            this.fileLength = fileLength;
+        }
 
         public DownloadTask(Context context) {
             this.context = context;
@@ -768,7 +906,7 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
 
                 // this will be useful to display download percentage
                 // might be -1: server did not report the length cái getcontentlenght
-                long fileLength = 500000;
+
 //                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
 //                    fileLength = connection.getContentLengthLong();
 //                } else fileLength = connection.getContentLength();
@@ -776,7 +914,7 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
 
                 // download the file
                 File folder = new File(Environment.getExternalStorageDirectory(), context.getPackageName());
-                System.out.println(folder.getName()+" name");
+                System.out.println(folder.getName() + " name");
                 if (!folder.exists() && !folder.mkdirs()) {
                     return "";
                 }
@@ -798,7 +936,7 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
                     System.out.println(total);
                     // publishing the progress....
                     if (fileLength > 0) // only if total length is known
-                        publishProgress((int) (total * 100 / fileLength));
+                        publishProgress((int) (total * 100 / this.fileLength));
                     output.write(data, 0, count);
                 }
             } catch (Exception e) {
@@ -878,10 +1016,10 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
                 newHasd = "0" + newHasd;
             String titleUrl = app.getTitle() == null ? "" : app.getTitle().replace(" ", "-");
 
-            if (titleUrl.indexOf("(") >=0){
+            if (titleUrl.indexOf("(") >= 0) {
                 String trash = "";
-                trash = titleUrl.substring(titleUrl.indexOf("("),titleUrl.indexOf(")")+1);
-                titleUrl= titleUrl.replace(trash,"");
+                trash = titleUrl.substring(titleUrl.indexOf("("), titleUrl.indexOf(")") + 1);
+                titleUrl = titleUrl.replace(trash, "");
             }
             String fieldId = app.getAppid() + "_appnaz.com_" + app.getVersion();
             String field = "app=" + titleUrl + "&appid=" + fieldId + "&s=" + newHasd + "&t=" + timestamp.getTime();
@@ -901,17 +1039,18 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
     private void installApk() {
         try {
             Uri uri = Uri.fromFile(file);
-            System.out.println(uri+" urlasasd ");
+            System.out.println(uri + " urlasasd ");
             Intent install = new Intent(Intent.ACTION_VIEW);
             install.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             install.setDataAndType(uri,
                     "application/vnd.android.package-archive");
             startActivity(install);
-            String path = Environment.getExternalStorageDirectory().toString()+"/com.lenam.appstore/"+ appid +".apk";
+            String path = Environment.getExternalStorageDirectory().toString() + "/com.lenam.appstore/" + appid + ".apk";
             System.out.println(path + " path");
             Log.d("Files", "Path: " + path);
             File directory = new File(path);
-            boolean d0 =directory.delete();
+            boolean d0 = directory.delete();
+            isInstall = true;
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -956,4 +1095,8 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
 
     }
 
+    void hideKeyboard(View view) {
+        InputMethodManager inputMethodManager = (InputMethodManager) this.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
 }

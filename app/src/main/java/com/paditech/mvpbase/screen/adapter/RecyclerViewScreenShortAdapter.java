@@ -2,7 +2,6 @@ package com.paditech.mvpbase.screen.adapter;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.media.Image;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,14 +9,13 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.paditech.mvpbase.R;
-import com.paditech.mvpbase.common.model.AppModel;
 import com.paditech.mvpbase.common.utils.CommonUtil;
 import com.paditech.mvpbase.common.utils.ImageUtil;
 import com.paditech.mvpbase.screen.detail.ScreenShotFullScreenActivity;
 
 import org.greenrobot.eventbus.EventBus;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -29,14 +27,15 @@ import butterknife.ButterKnife;
 public class RecyclerViewScreenShortAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
 
-    List<AppModel.SourceBean> mList;
+    ArrayList<String> mList;
 
-    public List<AppModel.SourceBean> getmList() {
+    public ArrayList<String> getmList() {
         return mList;
     }
 
-    public void setmList(List<AppModel.SourceBean> mList) {
+    public void setmList(ArrayList<String> mList) {
         this.mList = mList;
+        notifyDataSetChanged();
     }
 
     public Activity getAct() {
@@ -88,7 +87,7 @@ public class RecyclerViewScreenShortAdapter extends RecyclerView.Adapter<Recycle
 
         private void setData(int pos) {
             img_screen_short.setMaxWidth(CommonUtil.getWidthScreen(act));
-            ImageUtil.loadImageRounded(itemView.getContext(), mList.get(pos).getCover(), img_screen_short, R.drawable.events_placeholder, R.drawable.image_placeholder_500x500);
+            ImageUtil.loadImageRounded(itemView.getContext(), mList.get(pos), img_screen_short, R.drawable.events_placeholder, R.drawable.image_placeholder_500x500);
             itemView.setOnClickListener(this);
         }
 

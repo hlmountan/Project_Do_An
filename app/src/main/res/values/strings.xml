@@ -57,30 +57,46 @@
     <string name="follow">Follow</string>
     <string name="message">Message</string>
     <string name="hint_leave_reply">Leave Your Reply</string>
-    <string name="upload">Upload Your Apk</string>
+    <string name="upload">Title and File</string>
     <string name="upload_policy">This is the account that will be associated with your Developer Console.</string>
-    <string name="step_1">Step 1</string>
-    <string name="step_2">Step 2</string>
-    <string name="step_3">Step 3</string>
-    <string name="step_4">Step 4</string>
-    <string name="step_5">Step 5</string>
+    <string name="step_1">Next step</string>
+    <string name="step_2">Apk File</string>
+    <string name="step_3">Avatar</string>
+    <string name="step_4">ScreenShot</string>
+    <string name="step_5">Finish</string>
     <string name="step_6">Step 6</string>
     <string name="step_7">Step 7</string>
     <string name="final_step">Final Step</string>
     <string name="agreement">I agree and I am willing to associate my account registration with the Play Developer distribution agreement.</string>
    <string name="your_app_title">Your App Title</string>
     <string name="submit">Submit</string>
-    <string name="add_screenshort">Add screen short</string>
+    <string name="add_screenshot">Add ScreenShot</string>
+    <string name="add_avar">Add Avar Image</string>
+    <string name="add_cmt_img">Add Image for comment</string>
     <string name="final_annoucement">We will review your app in 3-5 working days and will send you an email when it done</string>
     <string name="all_apk_file">Your All Apk</string>
     <string name="default_size">500 Mb</string>
     <string name="date_modify">5/10/18</string>
+    <string name="upload_guide">Your title may be at least 3 characters. You can choose upload option from your local file or from your Google driver. Next when you finish this to upload your file.</string>
+    <string name="upload_guide_2">Your avartar image must be at least 500px. It use to present your app detail. Load it from the local image or Google driver image.</string>
+    <string name="upload_guide_3">Your list image screenshot must be at least 5 items and maximize is  15 items. You can choose multiple images from your local or step by step from Google Driver.</string>
+    <string name="cmt_success">Thanks for sharing your experience.\n\nGood Day ! </string>
+    <string name="cmt_login_alert">You must LOG IN to use this function.\nDo you want to LOG IN?</string>
+    <string name="empty_context_cmt">You must RATE and leave the COMMENT in this box after submit</string>
+    <string name="install_condition">You have to INSTALL this app to rate it</string>
+    <string name="cmt_title">Your title</string>
     <!--Main-->
     <string name="open">Open</string>
     <string name="close">Close</string>
 
 
     <!--Name -->
+    <string name="anonymous">Anonymous</string>
+    <string name="app_and_game_grossing">Grossing App &amp; Game</string>
+    <string name="hot_topic">Hot Topic</string>
+    <string name="app_on_sale">App On Sale</string>
+    <string name="hot_trend"> Hot Trend</string>
+    <string name="game_grossing">Top Game Grossing</string>
     <string name="google">Google</string>
     <string name="facebook">Facebook</string>
     <string name="your_email">...@gmail.com</string>
@@ -90,10 +106,11 @@
     <string name="title_category">Category</string>
     <string name="title_search">Search</string>
     <string name="policy">Policy and Privacy</string>
-    <string name="user_default">     Jack Jordan</string>
+    <string name="user_default"> Hi,\nJack Jordan</string>
     <string name="user_default_email">jackjordan@gmail.com</string>
     <string name="user_download_analysis">Download Analysis</string>
     <string name="user_upload_apk">Your App</string>
+    <string name="user_upload">User Upload</string>
     <!--Message -->
     <string name="allow">Allow</string>
     <string name="deny">Deny</string>

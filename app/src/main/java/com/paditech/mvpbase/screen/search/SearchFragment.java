@@ -6,7 +6,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -19,27 +18,21 @@ import android.widget.ProgressBar;
 
 import com.beloo.widget.chipslayoutmanager.ChipsLayoutManager;
 import com.beloo.widget.chipslayoutmanager.gravity.IChildGravityResolver;
-import com.google.gson.Gson;
 import com.paditech.mvpbase.R;
-import com.paditech.mvpbase.common.base.BaseFragment;
+import com.paditech.mvpbase.common.event.ChipCateTagEvent;
 import com.paditech.mvpbase.common.model.AppModel;
-import com.paditech.mvpbase.common.model.Appsxyz;
 import com.paditech.mvpbase.common.mvp.fragment.FragmentPresenter;
 import com.paditech.mvpbase.common.mvp.fragment.MVPFragment;
-import com.paditech.mvpbase.common.service.APIClient;
-import com.paditech.mvpbase.common.service.ICallBack;
 import com.paditech.mvpbase.common.utils.CommonUtil;
 import com.paditech.mvpbase.common.view.LoadMoreRecyclerView;
-import com.paditech.mvpbase.screen.home.HomeFragment;
 import com.paditech.mvpbase.screen.home.HomeListAppAdapter;
-import com.paditech.mvpbase.screen.main.NotificationRecycleViewAdapter;
+import com.paditech.mvpbase.screen.main.ScrollTopEvent;
 import com.paditech.mvpbase.screen.main.adapter.ChipCateAdapter;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.io.IOException;
 import java.util.List;
 
 import butterknife.BindView;
@@ -150,7 +143,9 @@ public class SearchFragment extends MVPFragment<SearchContact.PresenterViewOps> 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EventBus.getDefault().register(this);
     }
+
 
     @Override
     protected Class<? extends FragmentPresenter> onRegisterPresenter() {
@@ -160,9 +155,19 @@ public class SearchFragment extends MVPFragment<SearchContact.PresenterViewOps> 
     @Override
     public void onDestroy() {
         super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void scrolltop(ScrollTopEvent event) {
+        search_view.smoothScrollTo(0,0);
+        search_view.scrollTo(0,0);
 
+    }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void setTag(ChipCateTagEvent tag) {
+        edit_text_search.setText(tag.getTag());
+    }
 
 
 

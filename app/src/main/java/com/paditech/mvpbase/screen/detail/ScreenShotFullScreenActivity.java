@@ -1,25 +1,21 @@
 package com.paditech.mvpbase.screen.detail;
 
-import android.os.Build;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.view.View;
-import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
 import com.paditech.mvpbase.R;
 import com.paditech.mvpbase.common.base.BaseActivity;
-import com.paditech.mvpbase.common.model.AppModel;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import me.relex.circleindicator.CircleIndicator;
@@ -37,8 +33,6 @@ public class ScreenShotFullScreenActivity extends BaseActivity implements View.O
     ViewPager viewPager;
     @BindView(R.id.indicator)
     CircleIndicator circleIndicator;
-    @BindView(R.id.btn_back)
-    FloatingActionButton button;
     @BindView(R.id.frame_screen_short)
     FrameLayout frameLayout;
     @Override
@@ -60,17 +54,17 @@ public class ScreenShotFullScreenActivity extends BaseActivity implements View.O
 
     @Override
     protected void initView() {
-        button.setOnClickListener(this);
 
 
     }
 
     @Subscribe (threadMode = ThreadMode.MAIN, sticky = true)
-    public void getPagerData(List<AppModel.SourceBean> app){
+    public void getPagerData(ArrayList<String> app){
         detailViewPagerAdapter = new DetailViewPagerAdapter();
-        detailViewPagerAdapter.setList(app);
+        detailViewPagerAdapter.setmList(app);
         viewPager.setAdapter(detailViewPagerAdapter);
         circleIndicator.setViewPager(viewPager);
+        circleIndicator.setBackgroundColor(ContextCompat.getColor(this,R.color.gray_middle));
     }
 
     @Override

@@ -3,15 +3,25 @@ package com.paditech.mvpbase.screen.detail;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 import com.paditech.mvpbase.common.model.AppModel;
 import com.paditech.mvpbase.common.model.AppPriceHistory;
 import com.paditech.mvpbase.common.model.Appsxyz;
+import com.paditech.mvpbase.common.model.Cmt;
+import com.paditech.mvpbase.common.model.CmtGp;
+import com.paditech.mvpbase.common.model.UserProfile;
 import com.paditech.mvpbase.common.mvp.activity.ActivityPresenter;
 import com.paditech.mvpbase.common.service.APIClient;
 import com.paditech.mvpbase.common.service.ICallBack;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -128,6 +138,71 @@ public class DetailPresenter extends ActivityPresenter<DetailContact.ViewOps> im
             }
         }
         return check;
+    }
+
+    @Override
+    public  void getUserFollowApp() {
+        FirebaseDatabase.getInstance().getReference().child("user").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.getValue() != null){
+                    UserProfile userProfile = dataSnapshot.getValue(UserProfile.class);
+
+                    if (userProfile.getFollowApp() !=null)
+                        getView().setFollowApp(userProfile.getFollowApp());
+                    else getView().setFollowApp(new ArrayList<ArrayList<String>>());
+
+                }
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    @Override
+    public void updateFollowApp(ArrayList<ArrayList<String>> listApp) {
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference("user");
+        FirebaseDatabase.getInstance().getReference().child("user").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("followApp").setValue(listApp);
+    }
+
+    @Override
+    public void pushCmt() {
+
+        FirebaseDatabase.getInstance().getReference().child("cmt").push().setValue(new Cmt());
+    }
+
+    @Override
+    public void getUserCmt(String appid) {
+        APIClient.getInstance().execGet("https://apprevi.com/api/apk/review-daily?appid="+appid+"&time=7&star=5&language=en-US&page=1&size=6", null, new ICallBack() {
+            @Override
+            public void onErrorToken() {
+
+            }
+
+            @Override
+            public void onFailed(IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(String response, boolean isSuccessful) {
+                // do something here
+                final CmtGp cmt = new Gson().fromJson(response, CmtGp.class);
+                if (cmt != null){
+                    //return something by call back to UI thread
+                        getView().setCmt(cmt.getComments());
+
+                }
+
+
+            }
+        });
+
     }
 
 }

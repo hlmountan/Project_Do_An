@@ -18,9 +18,15 @@ import com.paditech.mvpbase.R;
 import com.paditech.mvpbase.common.mvp.activity.ActivityPresenter;
 import com.paditech.mvpbase.common.mvp.activity.MVPActivity;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
+import java.util.ArrayList;
+
 import butterknife.BindView;
 
-public class HomeActivity extends MVPActivity<HomeActContact.PresenterViewOps> implements HomeActContact.ViewOps, ViewPager.OnPageChangeListener, View.OnClickListener {
+public class HomeActivity extends MVPActivity<HomeActContact.PresenterViewOps> implements HomeActContact.ViewOps, ViewPager.OnPageChangeListener, View.OnClickListener, TabLayout.OnTabSelectedListener {
 
     @BindView(R.id.vp_tablayout)
     ViewPager viewPager_tab_layout;
@@ -47,13 +53,19 @@ public class HomeActivity extends MVPActivity<HomeActContact.PresenterViewOps> i
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
         super.onCreate(savedInstanceState, persistentState);
+        EventBus.getDefault().register(this);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void searchTag(ArrayList<String>  tag){
+
+    }
 
     @Override
     protected int getContentView() {
@@ -82,6 +94,7 @@ public class HomeActivity extends MVPActivity<HomeActContact.PresenterViewOps> i
         viewPager_tab_layout.setAdapter(mMainViewPagerAdapter);
         viewPager_tab_layout.setOffscreenPageLimit(4);
         tab_layout.setupWithViewPager(viewPager_tab_layout);
+        tab_layout.addOnTabSelectedListener(this);
         for (int i = 0; i < tab_layout.getTabCount(); i++) {
             // inflate the Parent LinearLayout Container for the tab
             // from the layout nav_tab.xml file that we created 'R.layout.nav_tab
@@ -110,11 +123,7 @@ public class HomeActivity extends MVPActivity<HomeActContact.PresenterViewOps> i
 
     @Override
     public void onPageSelected(int position) {
-        if (position != 0) {
-            btn_assivetouch.setImageResource(R.drawable.ic_home);
-        } else {
-            btn_assivetouch.setImageResource(R.drawable.pulse);
-        }
+
     }
 
     @Override
@@ -143,4 +152,23 @@ public class HomeActivity extends MVPActivity<HomeActContact.PresenterViewOps> i
     }
 
 
+    @Override
+    public void onTabSelected(TabLayout.Tab tab) {
+        System.out.println("selected");
+    }
+
+    @Override
+    public void onTabUnselected(TabLayout.Tab tab) {
+        System.out.println("unselected");
+    }
+
+    @Override
+    public void onTabReselected(TabLayout.Tab tab) {
+        if (tab.getPosition() != 2 ){
+            EventBus.getDefault().post(new ScrollTopEvent());
+        }
+    }
+    public void setVPitem(int pos){
+        viewPager_tab_layout.setCurrentItem(pos);
+    }
 }

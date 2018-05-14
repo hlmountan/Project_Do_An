@@ -3,8 +3,11 @@ package com.paditech.mvpbase.screen.apkManage;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
+import android.os.Bundle;
 import android.os.Environment;
+import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.LinearSnapHelper;
@@ -20,7 +23,12 @@ import com.paditech.mvpbase.common.mvp.fragment.MVPFragment;
 import com.paditech.mvpbase.common.view.SimpleDividerItemDecoration;
 import com.paditech.mvpbase.screen.adapter.RecyclerViewApkAdapter;
 import com.paditech.mvpbase.screen.home.HomeRecyclerViewAdapter;
+import com.paditech.mvpbase.screen.main.ScrollTopEvent;
 import com.paditech.mvpbase.screen.user.UserActivity;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
 import java.util.List;
@@ -33,6 +41,8 @@ import butterknife.BindView;
 
 public class ApkFragment extends MVPFragment<ApkContact.PresenterViewOps> implements ApkContact.ViewOps,View.OnClickListener {
     private static final String TAG = "No thing";
+    @BindView(R.id.apk_scroll)
+    NestedScrollView apk_scroll;
     @BindView(R.id.recycler_view_apk)
     RecyclerView recycler_view_apk;
     @BindView(R.id.recycler_view_like_app)
@@ -94,6 +104,25 @@ public class ApkFragment extends MVPFragment<ApkContact.PresenterViewOps> implem
 
 //        externalApk();
 
+
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void scrolltop(ScrollTopEvent event) {
+        apk_scroll.smoothScrollTo(0,0);
+        apk_scroll.scrollTo(0,0);
 
     }
 

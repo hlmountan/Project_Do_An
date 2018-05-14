@@ -13,7 +13,6 @@ import android.net.NetworkInfo;
 import android.os.Build;
 import android.provider.Settings;
 import android.support.annotation.DimenRes;
-import android.support.v4.content.ContextCompat;
 import android.text.Spannable;
 import android.text.style.ForegroundColorSpan;
 import android.util.DisplayMetrics;
@@ -27,10 +26,9 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.paditech.mvpbase.R;
-
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import static android.content.Context.LOCATION_SERVICE;
@@ -42,6 +40,7 @@ import static android.content.Context.LOCATION_SERVICE;
  * Copyright (c) 2017 Paditech. All rights reserved.
  */
 public class CommonUtil {
+    public static final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("yyyyMMdd_HHmmss");
     public static void dismissSoftKeyboard(final View view, final Activity activity) {
         if (activity == null) return;
         if (!(view instanceof EditText)) {

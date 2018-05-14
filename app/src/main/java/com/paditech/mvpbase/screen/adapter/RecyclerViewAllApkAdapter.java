@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.paditech.mvpbase.R;
+import com.paditech.mvpbase.common.event.ApkFileInfoEvent;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -94,7 +95,7 @@ public class RecyclerViewAllApkAdapter extends RecyclerView.Adapter<RecyclerView
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    EventBus.getDefault().postSticky(listApk.get(pos));
+                    EventBus.getDefault().post(new ApkFileInfoEvent(listApk.get(pos)));
                     act.finish();
                 }
             });

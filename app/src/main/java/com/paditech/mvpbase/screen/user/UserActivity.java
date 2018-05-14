@@ -12,7 +12,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -25,14 +24,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.GoogleAuthProvider;
 import com.paditech.mvpbase.R;
 import com.paditech.mvpbase.common.mvp.activity.ActivityPresenter;
 import com.paditech.mvpbase.common.mvp.activity.MVPActivity;
@@ -49,7 +42,7 @@ import butterknife.BindView;
  * Created by hung on 4/30/2018.
  */
 
-public class UserActivity extends MVPActivity<UserContact.PresenterViewOps> implements UserContact.ViewOps, View.OnClickListener,GoogleApiClient.OnConnectionFailedListener {
+public class UserActivity extends MVPActivity<UserContact.PresenterViewOps> implements UserContact.ViewOps, View.OnClickListener, GoogleApiClient.OnConnectionFailedListener {
     private static final String TAG = "TAG";
     @BindView(R.id.btn_return)
     Button btn_return;
@@ -60,15 +53,28 @@ public class UserActivity extends MVPActivity<UserContact.PresenterViewOps> impl
     @BindView(R.id.btn_login_g)
     Button btn_login_g;
 
+    public String getScreen() {
+        return screen;
+    }
+
+    public void setScreen(String screen) {
+        this.screen = screen;
+    }
+
+    String screen;
+
+
     @Override
     protected int getContentView() {
         return R.layout.act_user;
     }
 
+    Intent intent;
     private FirebaseAuth mAuth;
     GoogleApiClient mGoogleApiClient;
     CallbackManager callbackManager;
     private final int RC_SIGN_IN = 100;
+
     @Override
     protected void initView() {
         mAuth = FirebaseAuth.getInstance();
@@ -79,20 +85,9 @@ public class UserActivity extends MVPActivity<UserContact.PresenterViewOps> impl
         btn_login_g.setOnClickListener(this);
         btn_return.setOnClickListener(this);
         btn_setting.setOnClickListener(this);
-        try {
-            PackageInfo info = getPackageManager().getPackageInfo(
-                    "com.paditech.mvpbase",
-                    PackageManager.GET_SIGNATURES);
-            for (Signature signature : info.signatures) {
-                MessageDigest md = MessageDigest.getInstance("SHA");
-                md.update(signature.toByteArray());
-                Log.d("KeyHash:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
-            }
-        } catch (PackageManager.NameNotFoundException e) {
+        intent = getIntent();
+        setScreen(intent.getStringExtra("SCREEN"));
 
-        } catch (NoSuchAlgorithmException e) {
-
-        }
     }
 
     @Override
@@ -110,7 +105,7 @@ public class UserActivity extends MVPActivity<UserContact.PresenterViewOps> impl
             try {
                 // Google Sign In was successful, authenticate with Firebase
                 GoogleSignInAccount account = task.getResult(ApiException.class);
-                firebaseAuthWithGoogle(account);
+                getPresenter().firebaseAuthWithGoogle(account);
             } catch (ApiException e) {
                 // Google Sign In failed, update UI appropriately
                 Log.w(TAG, "Google sign in failed", e);
@@ -133,7 +128,7 @@ public class UserActivity extends MVPActivity<UserContact.PresenterViewOps> impl
                 LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
                     @Override
                     public void onSuccess(LoginResult loginResult) {
-                        handleFacebookAccessToken(loginResult.getAccessToken());
+                        getPresenter().handleFacebookAccessToken(loginResult.getAccessToken());
                     }
 
                     @Override
@@ -143,7 +138,7 @@ public class UserActivity extends MVPActivity<UserContact.PresenterViewOps> impl
 
                     @Override
                     public void onError(FacebookException error) {
-                        System.out.println("error" + error );
+                        System.out.println("error" + error);
                     }
                 });
                 break;
@@ -153,34 +148,6 @@ public class UserActivity extends MVPActivity<UserContact.PresenterViewOps> impl
         }
     }
 
-    private void handleFacebookAccessToken(AccessToken token) {
-        Log.d(TAG, "handleFacebookAccessToken:" + token);
-
-        AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
-        mAuth.signInWithCredential(credential)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d(TAG, "signInWithCredential:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            startActivity(new Intent(UserActivity.this, ProfileActivity.class));
-                            finish();
-
-//                            updateUI(user);
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Log.w(TAG, "signInWithCredential:failure", task.getException());
-                            Toast.makeText(UserActivity.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
-//                            updateUI(null);
-                        }
-
-                        // ...
-                    }
-                });
-    }
 
     private void setupGoogle() {
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -192,36 +159,54 @@ public class UserActivity extends MVPActivity<UserContact.PresenterViewOps> impl
                 .enableAutoManage(this, this)
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
+
+        try {
+            PackageInfo info = getPackageManager().getPackageInfo(
+                    "com.paditech.mvpbase",
+                    PackageManager.GET_SIGNATURES);
+            for (Signature signature : info.signatures) {
+                MessageDigest md = MessageDigest.getInstance("SHA");
+                md.update(signature.toByteArray());
+                Log.d("KeyHash:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+
+        } catch (NoSuchAlgorithmException e) {
+
+        }
     }
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
     }
-    private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
-        Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
 
-        AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
-        mAuth.signInWithCredential(credential)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d(TAG, "signInWithCredential:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            startActivity(new Intent(UserActivity.this, ProfileActivity.class));
-                            finish();
-//                            updateUI(user);
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Log.w(TAG, "signInWithCredential:failure", task.getException());
-                            Snackbar.make(findViewById(R.id.main_layout), "Authentication Failed.", Snackbar.LENGTH_SHORT).show();
-//                            updateUI(null);
-                        }
+    @Override
+    public void googleSuccess() {
+        if (screen.equals("HOME")) {
+            startActivity(new Intent(UserActivity.this, ProfileActivity.class));
+        }
+        finish();
+    }
 
-                        // ...
-                    }
-                });
+    @Override
+    public void googleAuthenFalse() {
+
+        Snackbar.make(findViewById(R.id.main_layout), "Authentication Failed.", Snackbar.LENGTH_SHORT).show();
+
+    }
+
+    @Override
+    public void fbSuccess() {
+        if (screen.equals("HOME")) {
+            startActivity(new Intent(UserActivity.this, ProfileActivity.class));
+        }
+        finish();
+    }
+
+    @Override
+    public void fbAuthenFalse() {
+        Toast.makeText(UserActivity.this, "Authentication failed.",
+                Toast.LENGTH_SHORT).show();
     }
 }

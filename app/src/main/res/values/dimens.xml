@@ -15,6 +15,7 @@
 
     <dimen name="app_img_size">80dp</dimen>
     <dimen name="app_img_size_detail">100dp</dimen>
+    <dimen name="app_img_size_super_small">36dp</dimen>
     <dimen name="app_img_size_small">50dp</dimen>
     <dimen name="app_layout_width">120dp</dimen>
     <dimen name="home_page_height">200dp</dimen>
@@ -97,5 +98,6 @@
     <dimen name="nav_header_height">176dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
     <integer name="text_line">5</integer>
+    <integer name="one_line">1</integer>
     <dimen name="status_bar_height">25dp</dimen>
 </resources>
