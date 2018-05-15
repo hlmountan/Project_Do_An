@@ -38,6 +38,26 @@ public class AppModel {
 
     public static class SourceBean {
 
+        private int status;
+
+        public int getStatus() {
+            return status;
+        }
+
+        public void setStatus(int status) {
+            this.status = status;
+        }
+
+        private boolean isFirebaseCmt;
+
+        public boolean isFirebaseCmt() {
+            return isFirebaseCmt;
+        }
+
+        public void setFirebaseCmt(boolean firebaseCmt) {
+            isFirebaseCmt = firebaseCmt;
+        }
+
         private  boolean isUserUpload = false;
 
         public boolean isUserUpload() {
@@ -50,6 +70,15 @@ public class AppModel {
 
         public SourceBean() {
         }
+        private String policy;
+
+        public String getPolicy() {
+            return policy;
+        }
+
+        public void setPolicy(String policy) {
+            this.policy = policy;
+        }
 
         public SourceBean(ApkFileInfoEvent apk) {
             this.screenshotUserUpload = apk.getScreenshot();
@@ -59,8 +88,14 @@ public class AppModel {
             this.score = apk.getScore();
             this.installs = apk.getNumberDownload();
             this.title = apk.getTitle();
-            this.cover = apk.getavar();
+            this.cover = apk.getAvar();
             this.isUserUpload = true;
+            this.status = apk.getStatus();
+            this.category = apk.getCate();
+            this.require = apk.getRequire();
+            this.contentrating = apk.getAge();
+            this.policy = apk.getPolicy();
+
         }
 
         private ArrayList<String> screenshotUserUpload;

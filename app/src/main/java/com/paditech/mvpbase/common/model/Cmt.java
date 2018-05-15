@@ -9,12 +9,30 @@ public class Cmt {
     private String content;
     private String appid;
     private float rate;
-    private int  date;
+    private long  date;
     private String replyedId;
     private String replyForId;
     private String title;
     private String authorName;
     private String avar;
+
+    public String getAuthorName() {
+        return authorName;
+    }
+
+    public void setAuthorName(String authorName) {
+        this.authorName = authorName;
+    }
+
+    public String getAvar() {
+        return avar;
+    }
+
+    public void setAvar(String avar) {
+        this.avar = avar;
+    }
+
+
 
     public Cmt() {
     }
@@ -51,11 +69,11 @@ public class Cmt {
         this.rate = rate;
     }
 
-    public int getDate() {
+    public long getDate() {
         return date;
     }
 
-    public void setDate(int date) {
+    public void setDate(long date) {
         this.date = date;
     }
 

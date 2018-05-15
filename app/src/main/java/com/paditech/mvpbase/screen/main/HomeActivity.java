@@ -7,8 +7,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -30,13 +28,8 @@ public class HomeActivity extends MVPActivity<HomeActContact.PresenterViewOps> i
 
     @BindView(R.id.vp_tablayout)
     ViewPager viewPager_tab_layout;
-    @BindView(R.id.notification_view)
-    LinearLayout notification_view;
     @BindView(R.id.btn_assivetouch)
     FloatingActionButton btn_assivetouch;
-    NotificationRecycleViewAdapter mNotificationRecycleViewAdapter;
-    @BindView(R.id.recycler_view_notification)
-    RecyclerView recycler_view_notification;
 
     // tab
     @BindView(R.id.tab_layout)
@@ -77,7 +70,6 @@ public class HomeActivity extends MVPActivity<HomeActContact.PresenterViewOps> i
 //    CommonUtil.setMiuiStatusBarDarkMode(this,true);
 
         setupViewPagerMain();
-        setUpAdapter();
 
         btn_assivetouch.setOnClickListener(this);
         viewPager_tab_layout.addOnPageChangeListener(this);
@@ -143,13 +135,6 @@ public class HomeActivity extends MVPActivity<HomeActContact.PresenterViewOps> i
     }
 
 
-    private void setUpAdapter() {
-
-        mNotificationRecycleViewAdapter = new NotificationRecycleViewAdapter();
-        recycler_view_notification.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        recycler_view_notification.setAdapter(mNotificationRecycleViewAdapter);
-
-    }
 
 
     @Override

@@ -9,12 +9,15 @@
     <string name="refresh">Tải lại</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
+    <string name="public_app">Public Your App</string>
+    <string name="update_app">Update Your App</string>
     <string name="see_more">See more</string>
     <string name="register">Register</string>
     <string name="login">Login</string>
     <string name="login_g">Login With Google</string>
     <string name="login_f">Login With Facebook</string>
     <string name="apply">Apply</string>
+    <string name="save">Save</string>
     <string name="install">INSTALL</string>
     <string name="open_app">OPEN</string>
     <string name="facebook_app_id">2102773583335853</string>
@@ -48,7 +51,7 @@
     <string name="aboutus_content">Lenam Store is the third product of Lenam company.The founder are full-stack dev who want to provide usability-optimized,premium content in a design-focused setting. The nearly 6 billions app were tested and optimized.</string>
     <string name="feedback">Feefback</string>
     <string name="feedback_content">appnaz.com@gmail.com</string>
-    <string name="lega_info">Legal Infomation</string>
+    <string name="lega_info">Legal Information</string>
     <string name="lenam_store">Lenam Store</string>
     <string name="feedback_title">Please, tell us what you thing!</string>
     <string name="home_title">What is new today?</string>
@@ -84,7 +87,34 @@
     <string name="cmt_login_alert">You must LOG IN to use this function.\nDo you want to LOG IN?</string>
     <string name="empty_context_cmt">You must RATE and leave the COMMENT in this box after submit</string>
     <string name="install_condition">You have to INSTALL this app to rate it</string>
-    <string name="cmt_title">Your title</string>
+    <string name="title">Your title</string>
+    <string name="des">Your description</string>
+    <string name="your_policy">Your policy</string>
+    <string name="age">Age require</string>
+    <string name="android_require">Android Require</string>
+    <string name="apk_info">Your Apk information</string>
+    <string name="apk_status">Apk Status</string>
+    <string name="pending">pending</string>
+    <string name="pending_direction">Your app id pending. Public your app for everyone</string>
+    <string name="missing_info">Missing Information</string>
+    <string name="missing_info_direction">Your app id pending because missing information. please,
+        Check it in Information tap above.</string>
+    <string name="saveinfo_false">You can not SAVE info when you not complete all the information.\n
+        Do you want to REDO?</string>
+    <string name="finish_saving"> Apply to finish save</string>
+    <string name="public_apk">Public</string>
+    <string name="public_direction">Your app is now publicising</string>
+    <string name="public_ask">Do you want to public your app?</string>
+    <string name="authen">© The ReviStore</string>
+    <string name="notify_filter_all">All</string>
+    <string name="notify_filter_New">New</string>
+    <string name="notify_read">Readed</string>
+    <string name="notify_new">New</string>
+    <string name="notify_status_1">New version</string>
+    <string name="notify_status_2">App Publiced</string>
+    <string name="notify_status_3">New Comment</string>
+
+
     <!--Main-->
     <string name="open">Open</string>
     <string name="close">Close</string>
@@ -107,6 +137,7 @@
     <string name="title_search">Search</string>
     <string name="policy">Policy and Privacy</string>
     <string name="user_default"> Hi,\nJack Jordan</string>
+    <string name="hi">Hi,\n</string>
     <string name="user_default_email">jackjordan@gmail.com</string>
     <string name="user_download_analysis">Download Analysis</string>
     <string name="user_upload_apk">Your App</string>

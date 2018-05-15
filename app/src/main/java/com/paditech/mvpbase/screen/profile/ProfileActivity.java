@@ -33,7 +33,7 @@ import com.paditech.mvpbase.common.mvp.activity.MVPActivity;
 import com.paditech.mvpbase.common.utils.ImageUtil;
 import com.paditech.mvpbase.common.view.SimpleDividerItemDecoration;
 import com.paditech.mvpbase.screen.adapter.RecyclerViewReplyCmtAdapter;
-import com.paditech.mvpbase.screen.home.HomeRecyclerViewAdapter;
+import com.paditech.mvpbase.screen.adapter.RecyclerViewUpdateApkAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,7 +64,7 @@ ProfileActivity extends MVPActivity<ProfileContact.PresenterViewOps> implements 
     SnapHelper snapHelperCmt = new LinearSnapHelper();
     RecyclerViewReplyCmtAdapter cmtAdapter;
 
-    HomeRecyclerViewAdapter listapp;
+    RecyclerViewUpdateApkAdapter listapp;
     @BindView(R.id.img_avar)
     ImageView avar;
     @BindView(R.id.tv_user_name)
@@ -160,7 +160,7 @@ ProfileActivity extends MVPActivity<ProfileContact.PresenterViewOps> implements 
         recycler_view_cmt.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         recycler_view_cmt.setAdapter(cmtAdapter);
 
-        listapp = new HomeRecyclerViewAdapter(this);
+        listapp = new RecyclerViewUpdateApkAdapter(this);
         listapp.setItemId(R.layout.item_app_horizontal_white_bg);
         recycler_view_your_app.setLayoutManager(new GridLayoutManager(this, 3, LinearLayoutManager.HORIZONTAL, false));
         recycler_view_your_app.setAdapter(listapp);

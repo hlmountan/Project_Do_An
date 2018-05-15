@@ -28,7 +28,9 @@ import android.widget.TextView;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import static android.content.Context.LOCATION_SERVICE;
@@ -60,6 +62,12 @@ public class CommonUtil {
         }
     }
 
+    public static String convertTime(Long timestaim){
+        DateFormat mDataFormat= new SimpleDateFormat("MMM-dd-yy");
+        Date mDate= new Date();
+        mDate.setTime(timestaim * 1000);
+        return mDataFormat.format(mDate);
+    }
     public static void hideSoftKeyboard(Activity activity) {
         if (activity == null) return;
         View view = activity.getCurrentFocus();

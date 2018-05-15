@@ -1,6 +1,5 @@
 package com.paditech.mvpbase.common.model;
 
-import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
@@ -18,43 +17,11 @@ public class CmtGp {
      * start_count : {"star":{"1":1083,"2":143,"3":188,"4":474,"5":2128}}
      */
 
-    @SerializedName("rate")
-    private RateBean rate;
-    @SerializedName("info")
-    private InfoBean info;
-    @SerializedName("start_count")
-    private StartCountBean startCount;
+
+
     @SerializedName("comments")
     private List<CommentsBean> comments;
 
-    public static CmtGp objectFromData(String str) {
-
-        return new Gson().fromJson(str, CmtGp.class);
-    }
-
-    public RateBean getRate() {
-        return rate;
-    }
-
-    public void setRate(RateBean rate) {
-        this.rate = rate;
-    }
-
-    public InfoBean getInfo() {
-        return info;
-    }
-
-    public void setInfo(InfoBean info) {
-        this.info = info;
-    }
-
-    public StartCountBean getStartCount() {
-        return startCount;
-    }
-
-    public void setStartCount(StartCountBean startCount) {
-        this.startCount = startCount;
-    }
 
     public List<CommentsBean> getComments() {
         return comments;
@@ -62,5 +29,133 @@ public class CmtGp {
 
     public void setComments(List<CommentsBean> comments) {
         this.comments = comments;
+    }
+
+    public static class CommentsBean {
+
+        @SerializedName("id")
+        private int id;
+        @SerializedName("appid")
+        private String appid;
+        @SerializedName("comment_id")
+        private String commentId;
+        @SerializedName("comment")
+        private String comment;
+        @SerializedName("author_name")
+        private String authorName;
+        @SerializedName("avatar")
+        private String avatar;
+        @SerializedName("title_comment")
+        private String titleComment;
+        @SerializedName("star_rating")
+        private int starRating;
+        @SerializedName("time")
+        private long time;
+        @SerializedName("version")
+        private String version;
+        @SerializedName("replytext")
+        private String replytext;
+        @SerializedName("replytime")
+        private int replytime;
+
+        public int getId() {
+            return id;
+        }
+
+        public void setId(int id) {
+            this.id = id;
+        }
+
+        public String getAppid() {
+            return appid;
+        }
+
+        public void setAppid(String appid) {
+            this.appid = appid;
+        }
+
+        public String getCommentId() {
+            return commentId;
+        }
+
+        public void setCommentId(String commentId) {
+            this.commentId = commentId;
+        }
+
+        public String getComment() {
+            return comment;
+        }
+
+        public void setComment(String comment) {
+            this.comment = comment;
+        }
+
+        public String getAuthorName() {
+            return authorName;
+        }
+
+        public void setAuthorName(String authorName) {
+            this.authorName = authorName;
+        }
+
+        public String getAvatar() {
+            return avatar;
+        }
+
+        public void setAvatar(String avatar) {
+            this.avatar = avatar;
+        }
+
+        public String getTitleComment() {
+            return titleComment;
+        }
+
+        public void setTitleComment(String titleComment) {
+            this.titleComment = titleComment;
+        }
+
+        public int getStarRating() {
+            return starRating;
+        }
+
+        public void setStarRating(int starRating) {
+            this.starRating = starRating;
+        }
+
+        public long getTime() {
+            return time;
+        }
+
+        public void setTime(long time) {
+            this.time = time;
+        }
+
+        public String getVersion() {
+            return version;
+        }
+
+        public void setVersion(String version) {
+            this.version = version;
+        }
+
+        public String getReplytext() {
+            return replytext;
+        }
+
+        public void setReplytext(String replytext) {
+            this.replytext = replytext;
+        }
+
+        public int getReplytime() {
+            return replytime;
+        }
+
+        public void setReplytime(int replytime) {
+            this.replytime = replytime;
+        }
+
+
+
+
     }
 }

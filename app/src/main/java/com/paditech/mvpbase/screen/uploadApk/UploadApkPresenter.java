@@ -139,7 +139,7 @@ public class UploadApkPresenter extends FragmentPresenter<UploadApkContact.ViewO
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("apk");
-        FirebaseDatabase.getInstance().getReference().child("apk").child(apk.getAppid()).child("avar").setValue(apk.getavar());
+        FirebaseDatabase.getInstance().getReference().child("apk").child(apk.getAppid()).child("avar").setValue(apk.getAvar());
 
     }
 

@@ -117,8 +117,10 @@ public class HomeRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
                 @Override
                 public void onClick(View view) {
                     imageView.setTransitionName("image_avatar");
+                    AppModel.SourceBean sourceBean = result.getSource();
+                    sourceBean.setFirebaseCmt(true);
 
-                    EventBus.getDefault().postSticky(result.getSource());
+                    EventBus.getDefault().postSticky(sourceBean);
 
                     Intent intent = new Intent(itemView.getContext(), DetailActivity.class);
                     ActivityOptionsCompat optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(act, imageView, "image_avatar");

@@ -17,6 +17,7 @@
         android:paddingBottom="@dimen/padding_super_big">
 
         <TextView
+            android:id="@+id/tv_user"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:lineSpacingExtra="@dimen/line_spacing_extra_bigger"

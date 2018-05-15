@@ -10,7 +10,7 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.paditech.mvpbase.R;
-import com.paditech.mvpbase.common.model.CommentsBean;
+import com.paditech.mvpbase.common.model.Cmt;
 import com.paditech.mvpbase.common.utils.ImageUtil;
 
 import java.text.DateFormat;
@@ -29,14 +29,15 @@ public class RecyclerViewCmtAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
 
     Activity act;
-    List<CommentsBean> cmt;
+    List<Cmt> cmt;
 
-    public List<CommentsBean> getCmt() {
+    public List<Cmt> getCmt() {
         return cmt;
     }
 
-    public void setCmt(List<CommentsBean> cmt) {
+    public void setCmt(List<Cmt> cmt) {
         this.cmt = cmt;
+        notifyDataSetChanged();
     }
 
     public Activity getAct() {
@@ -97,11 +98,11 @@ public class RecyclerViewCmtAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
         public void setData(int pos){
             if (cmt != null){
-                tv_title.setText(cmt.get(pos).getTitleComment());
-                tv_cmt_content.setText(cmt.get(pos).getTitleComment());
-                tv_date.setText(convertTime(cmt.get(pos).getTime()));
-                ratingbar.setRating(cmt.get(pos).getStarRating());
-                ImageUtil.loadImageRounded(itemView.getContext(),cmt.get(pos).getAvatar(),img_avar,R.drawable.events_placeholder,R.drawable.image_placeholder_500x500,20);
+                tv_title.setText(cmt.get(pos).getTitle());
+                tv_cmt_content.setText(cmt.get(pos).getContent());
+                tv_date.setText(convertTime(cmt.get(pos).getDate()));
+                ratingbar.setRating(cmt.get(pos).getRate());
+                ImageUtil.loadImageRounded(itemView.getContext(),cmt.get(pos).getAvar(),img_avar,R.drawable.events_placeholder,R.drawable.image_placeholder_500x500,20);
             }
         }
         String convertTime(Long timestaim){

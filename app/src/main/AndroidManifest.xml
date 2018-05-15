@@ -44,6 +44,9 @@
         <activity android:name=".screen.apkFile.AllApkFileActivity" />
         <activity android:name=".screen.profile.ProfileActivity" />
         <activity android:name=".common.utils.get_image.SelectMultiActivity" />
+        <activity android:name=".screen.updateApkActivity.UpdateApkActivity" />
+        <activity android:name=".screen.notification.NotificationActivity" />
+
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="34412c23d74b98181135f987d055deb339c8b39f"

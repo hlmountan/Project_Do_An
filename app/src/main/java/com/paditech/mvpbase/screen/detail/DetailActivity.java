@@ -60,7 +60,7 @@ import com.paditech.mvpbase.R;
 import com.paditech.mvpbase.common.base.BaseDialog;
 import com.paditech.mvpbase.common.dialog.MessageDialog;
 import com.paditech.mvpbase.common.model.AppModel;
-import com.paditech.mvpbase.common.model.CommentsBean;
+import com.paditech.mvpbase.common.model.Cmt;
 import com.paditech.mvpbase.common.mvp.activity.ActivityPresenter;
 import com.paditech.mvpbase.common.mvp.activity.MVPActivity;
 import com.paditech.mvpbase.common.utils.CommonUtil;
@@ -394,7 +394,8 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
         title = app.getTitle();
         textView_title.setText(app.getTitle());
         appid = app.getAppid();
-        getPresenter().isInstall(appid);
+        isInstall = getPresenter().isInstall(appid);
+    // follow app
         if (FirebaseAuth.getInstance().getCurrentUser() != null) {
             getPresenter().getUserFollowApp();
         }
@@ -402,9 +403,12 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
 
         if (!getIntent().getBooleanExtra("is_cover", false))
             ImageUtil.loadImage(DetailActivity.this, app.getCover(), imgAvatar, R.drawable.events_placeholder, R.drawable.image_placeholder_500x500);
+        // visible in cmt box
         if (FirebaseAuth.getInstance().getCurrentUser() == null)
             btn_user_name.setText(R.string.anonymous);
         else btn_user_name.setText(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
+
+        //
         if (app.isUserUpload()) {
             tv_offerby.setText(app.getOfferby());
             setUpScreenShort(app.getScreenshotUserUpload());
@@ -424,7 +428,7 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
             }
 
         }
-        getPresenter().getUserCmt(appid);
+        getPresenter().getUserCmt(appid,app.isFirebaseCmt());
         getPresenter().getRelateApp("http://appsxyz.com/api/apk/search_related/?q=" + URLEncoder.encode(app.getTitle()) + "&page=1&size=20");
 
     }
@@ -676,13 +680,11 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
     }
 
     @Override
-    public void setCmt(final List<CommentsBean> cmt) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                mRecyclerViewCmtAdapter.setCmt(cmt);
-            }
-        });
+    public void setCmt(final List<Cmt> cmts) {
+
+        mRecyclerViewCmtAdapter.setCmt(cmts);
+
+
 
     }
 
@@ -802,8 +804,21 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
                     if (isInstall){
                         if (ratingbar_your.getRating() != 0 && !et_cmt.getText().toString().equals("")&&!et_title.getText().toString().equals("")) {
                             // push cmt
+                            Cmt cmt = new Cmt();
+                            cmt.setAppid(appid);
+                            cmt.setAuthorName(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
+                            cmt.setUid(FirebaseAuth.getInstance().getCurrentUser().getUid());
+                            cmt.setContent(et_cmt.getText().toString());
+                            cmt.setRate(ratingbar_your.getRating());
+                            cmt.setDate(System.currentTimeMillis()/1000);
+                            cmt.setTitle(et_title.getText().toString());
+                            cmt.setAvar(FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl().toString());
+                            getPresenter().pushCmt(cmt);
+
+                            showAlertDialog(getString(R.string.cmt_success));
                             view_rating.setVisibility(View.GONE);
                             tv_rating_success.setVisibility(View.VISIBLE);
+
                         } else showAlertDialog(getString(R.string.empty_context_cmt));
                     }else showAlertDialog(getString(R.string.install_condition));
 
@@ -1067,6 +1082,7 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
             @Override
             public void selectCate(String string) {
                 //do somethings here
+
             }
         });
         ChipsLayoutManager chipsLayoutManager = ChipsLayoutManager.newBuilder(getActivityContext())

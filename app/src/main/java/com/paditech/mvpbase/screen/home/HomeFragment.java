@@ -27,6 +27,7 @@ import com.paditech.mvpbase.screen.adapter.RecyclerViewSliderHome;
 import com.paditech.mvpbase.screen.main.HomeActivity;
 import com.paditech.mvpbase.screen.main.ScrollTopEvent;
 import com.paditech.mvpbase.screen.main.adapter.ChipCateAdapter;
+import com.paditech.mvpbase.screen.notification.NotificationActivity;
 import com.paditech.mvpbase.screen.profile.ProfileActivity;
 import com.paditech.mvpbase.screen.showMoreApp.ShowMoreActicity;
 import com.paditech.mvpbase.screen.user.UserActivity;
@@ -79,6 +80,7 @@ public class HomeFragment extends MVPFragment<HomeContact.PresenterViewOsp> impl
     Button btn_notification;
     @BindView(R.id.view_user_upload)
     LinearLayout view_user_upload;
+
     private boolean mRunned;
 
     SnapHelper snapHelper = new StartSnapHelper();
@@ -222,7 +224,7 @@ public class HomeFragment extends MVPFragment<HomeContact.PresenterViewOsp> impl
                 }
                 break;
             case R.id.btn_notification:
-                btn_see_more.getContext().startActivity(new Intent(btn_see_more.getContext(), ShowMoreActicity.class));
+                btn_see_more.getContext().startActivity(new Intent(btn_see_more.getContext(), NotificationActivity.class));
                 break;
         }
     }
@@ -310,6 +312,7 @@ public class HomeFragment extends MVPFragment<HomeContact.PresenterViewOsp> impl
         recycler_view_slider.setAdapter(homeSlider);
     }
     private void setRecyclerViewCategory() {
+
         mChipCateAdapter = new ChipCateAdapter();
         mChipCateAdapter.setmListener(new ChipCateAdapter.OnSelectCateListener() {
             @Override

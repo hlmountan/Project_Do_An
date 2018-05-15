@@ -431,7 +431,7 @@
                         android:id="@+id/et_title"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/cmt_title"
+                        android:hint="@string/title"
                         android:layout_marginBottom="@dimen/margin_small"/>
                     <EditText
                         android:id="@+id/et_cmt"
@@ -644,7 +644,7 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@id/mark_view"
                     android:layout_marginBottom="@dimen/margin_default"
-                    android:text="© The Mindnmate"
+                    android:text="@string/authen"
                     android:textColor="@color/gray_detail"
                     android:textSize="@dimen/text_size_tiny" />
 

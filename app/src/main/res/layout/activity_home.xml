@@ -26,43 +26,7 @@
             android:background="@color/white_transfer"
             android:paddingBottom="@dimen/padding_small" />
 
-        <!-- Notify-->
-        <LinearLayout
-            android:id="@+id/notification_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/gray_light"
-            android:visibility="gone">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="@dimen/margin_recyclerview"
-                android:layout_marginLeft="@dimen/margin_default"
-                android:layout_marginRight="@dimen/margin_default"
-                android:layout_marginTop="@dimen/margin_default"
-                android:background="@drawable/border_layout_view"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:alpha="0.85"
-                    android:padding="@dimen/padding_small"
-                    android:text=" Notification"
-                    android:textAllCaps="false"
-                    android:textSize="@dimen/text_size_big"
-                    android:textStyle="bold" />
-
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/recycler_view_notification"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="@dimen/padding_small"
-                    android:paddingRight="@dimen/padding_small"></android.support.v7.widget.RecyclerView>
-
-            </LinearLayout>
-        </LinearLayout>
 
     </FrameLayout>
 

@@ -1,7 +1,7 @@
 package com.paditech.mvpbase.screen.detail;
 
 import com.paditech.mvpbase.common.model.AppModel;
-import com.paditech.mvpbase.common.model.CommentsBean;
+import com.paditech.mvpbase.common.model.Cmt;
 import com.paditech.mvpbase.common.mvp.activity.ActivityPresenterViewOps;
 import com.paditech.mvpbase.common.mvp.activity.ActivityViewOps;
 
@@ -24,7 +24,7 @@ public interface DetailContact {
         void setDevApp();
         void setUrlDownload(String url);
         void setFollowApp(ArrayList<ArrayList<String>> listApp);
-        void setCmt(List<CommentsBean> cmt);
+        void setCmt(List<Cmt> cmt);
 
     }
 
@@ -39,9 +39,9 @@ public interface DetailContact {
         boolean isInstall(String appid);
         void getUserFollowApp();
         void updateFollowApp(ArrayList<ArrayList<String>> listApp);
-        void pushCmt();
+        void pushCmt(Cmt cmt);
 
-        void getUserCmt(String appid);
+        void getUserCmt(String appid,boolean isFirebase);
 
     }
 }

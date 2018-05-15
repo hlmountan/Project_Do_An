@@ -7,6 +7,17 @@ import java.util.ArrayList;
  */
 
 public class ApkFileInfoEvent {
+    /*
+    *** status: 0: public
+    *           1: pending
+    *           2: missing info
+    *           3: unpublic
+    *           4: update
+    *
+
+     */
+
+    int status;
     String title;
     String size;
     String path;
@@ -19,8 +30,76 @@ public class ApkFileInfoEvent {
     String uid;
     String linkDownload;
     String avar;
-    ArrayList<String> screenshot;
+    String require;
+    String age;
     String offerby;
+    ArrayList<String> screenshot;
+    ArrayList<ArrayList<String>> notification;
+    ArrayList<ArrayList<String>> update;
+    String cate;
+
+
+    public String getAvar() {
+        return avar;
+    }
+
+    public void setAvar(String avar) {
+        this.avar = avar;
+    }
+
+
+
+
+    public String getAge() {
+        return age;
+    }
+
+    public void setAge(String age) {
+        this.age = age;
+    }
+
+    public String getRequire() {
+        return require;
+    }
+
+    public void setRequire(String require) {
+        this.require = require;
+    }
+
+    public String getCate() {
+        return cate;
+    }
+
+    public void setCate(String cate) {
+        this.cate = cate;
+    }
+
+
+
+    public ArrayList<ArrayList<String>> getUpdate() {
+        return update;
+    }
+
+    public void setUpdate(ArrayList<ArrayList<String>> update) {
+        this.update = update;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
+
+    public ArrayList<ArrayList<String>> getNotification() {
+        return notification;
+    }
+
+    public void setNotification(ArrayList<ArrayList<String>> notification) {
+        this.notification = notification;
+    }
 
     public String getOfferby() {
         return offerby;
@@ -30,13 +109,6 @@ public class ApkFileInfoEvent {
         this.offerby = offerby;
     }
 
-    public String getavar() {
-        return avar;
-    }
-
-    public void setavar(String avar) {
-        this.avar = avar;
-    }
 
     public ArrayList<String> getScreenshot() {
         return screenshot;

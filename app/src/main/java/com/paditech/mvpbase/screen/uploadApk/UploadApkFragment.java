@@ -100,6 +100,9 @@ public class UploadApkFragment extends MVPFragment<UploadApkContact.PresenterVie
     ProgressBar progressBar;
     @BindView(R.id.et_title)
     EditText et_title;
+    @BindView(R.id.tv_user)
+    TextView tv_user;
+
     int step = 1;
     String path = "";
     RecyclerViewListScreenshortUploadAdapter listScreenshortUploadAdapter;
@@ -160,6 +163,7 @@ public class UploadApkFragment extends MVPFragment<UploadApkContact.PresenterVie
     protected void initView(View view) {
         CommonUtil.dismissSoftKeyboard(view, getActivityReference());
         getImageManager = new GetImageManager(this);
+        tv_user.setText(getString(R.string.hi) + FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
         listScreenshortUploadAdapter = new RecyclerViewListScreenshortUploadAdapter(act);
         recycler_view_img_screenshot.setLayoutManager(new GridLayoutManager(act, 3, LinearLayoutManager.VERTICAL, false));
         recycler_view_img_screenshot.setAdapter(listScreenshortUploadAdapter);
@@ -212,8 +216,8 @@ public class UploadApkFragment extends MVPFragment<UploadApkContact.PresenterVie
 
                         break;
                     case 3:
-                        if (!StringUtil.isEmpty(apkFile.getavar())){
-                            getPresenter().updateAvar(apkFile.getavar());
+                        if (!StringUtil.isEmpty(apkFile.getAvar())) {
+                            getPresenter().updateAvar(apkFile.getAvar());
                             state.setText(R.string.step_4);
                             step = 4;
                             step3.setVisibility(View.GONE);
@@ -222,7 +226,7 @@ public class UploadApkFragment extends MVPFragment<UploadApkContact.PresenterVie
 
                         break;
                     case 4:
-                        if (apkFile.getScreenshot() != null){
+                        if (apkFile.getScreenshot() != null) {
                             getPresenter().updateScreenshot(apkFile.getScreenshot());
                             state.setText(R.string.step_5);
                             step = 5;
@@ -305,7 +309,7 @@ public class UploadApkFragment extends MVPFragment<UploadApkContact.PresenterVie
             case AVARTAR:
                 try {
                     Uri targetUri = data.getData();
-                    apkFile.setavar(converUri(data));
+                    apkFile.setAvar(converUri(data));
                     ImageUtil.loadImage(act, targetUri, avar, R.drawable.events_placeholder, R.drawable.image_placeholder_500x500);
                 } catch (Exception ex) {
                     System.out.println(ex);
@@ -400,7 +404,7 @@ public class UploadApkFragment extends MVPFragment<UploadApkContact.PresenterVie
 
     @Override
     public void onAvarLoadSuccess(String url) {
-        apkFile.setavar(url);
+        apkFile.setAvar(url);
         getPresenter().updateApkAvar(apkFile);
     }
 
