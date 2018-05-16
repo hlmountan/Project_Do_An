@@ -5,7 +5,6 @@ import android.support.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
@@ -128,8 +127,6 @@ public class UploadApkPresenter extends FragmentPresenter<UploadApkContact.ViewO
 //db
     public void createNewApk(final ApkFileInfoEvent apk) {
 
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference("apk");
         String id = FirebaseDatabase.getInstance().getReference().child("apk").push().getKey();
         FirebaseDatabase.getInstance().getReference().child("apk").child(id).setValue(apk);
         getView().uploadappid(id);
@@ -137,16 +134,12 @@ public class UploadApkPresenter extends FragmentPresenter<UploadApkContact.ViewO
 
     public void updateApkAvar(final ApkFileInfoEvent apk) {
 
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference("apk");
         FirebaseDatabase.getInstance().getReference().child("apk").child(apk.getAppid()).child("avar").setValue(apk.getAvar());
 
     }
 
     public void updateApkScreenshot(final ApkFileInfoEvent apk) {
 
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference("apk");
         FirebaseDatabase.getInstance().getReference().child("apk").child(apk.getAppid()).child("screenshot").setValue(apk.getScreenshot()).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {

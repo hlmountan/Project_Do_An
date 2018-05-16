@@ -12,15 +12,21 @@ import java.util.List;
  */
 
 public interface ProfileContact {
-    interface ViewOps extends ActivityViewOps{
+    interface ViewOps extends ActivityViewOps {
         void setAppDownload();
+
         void setUserData(UserProfile user);
-        void loadChildUserUpload(List<AppModel>  listApk);
+
+        void loadChildUserUpload(List<AppModel> listApk);
     }
 
-    interface PresenterViewOps extends ActivityPresenterViewOps{
-    void setChartData();
-    void getUserData();
+    interface PresenterViewOps extends ActivityPresenterViewOps {
+        void setChartData();
+
+        void getUserData();
+
         public void getUserApk();
+
+        void getAppCmt();
     }
 }

@@ -36,7 +36,7 @@ public class NotificationActivity extends MVPActivity<NotificationContact.Presen
 
     @Override
     protected void initView() {
-
+        getPresenter().getListNotify();
         filter.setOnClickListener(this);
         mNotificationRecycleViewAdapter = new NotificationRecycleViewAdapter();
         recycler_view_notification.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
@@ -53,5 +53,10 @@ public class NotificationActivity extends MVPActivity<NotificationContact.Presen
         if (filter.getText().toString().equals(R.string.notify_filter_all))
             filter.setText(R.string.notify_filter_New);
         else filter.setText(R.string.notify_filter_all);
+    }
+
+    @Override
+    public void setListNotify(List<Notification> listNotify) {
+        mNotificationRecycleViewAdapter.setListNotify(listNotify);
     }
 }

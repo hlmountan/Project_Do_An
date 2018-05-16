@@ -20,7 +20,7 @@ public interface UpdateApkContact {
         void getListCates();
         void updateApk(AppModel.SourceBean sourceBean);
         void updateAppStatus(AppModel.SourceBean sourceBean);
-        void pushNotify();
+        void pushNotify(AppModel.SourceBean app);
 
     }
 }

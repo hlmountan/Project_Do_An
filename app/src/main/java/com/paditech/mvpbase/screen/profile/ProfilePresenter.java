@@ -35,36 +35,41 @@ public class ProfilePresenter extends ActivityPresenter<ProfileContact.ViewOps> 
 
     public void getUserApk() {
         FirebaseDatabase.getInstance().getReference().child("apk").orderByChild("uid").equalTo(FirebaseAuth.
-                getInstance().getCurrentUser().getUid()).addValueEventListener(new ValueEventListener() {
+                getInstance().getCurrentUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.getValue() != null) {
-                    final List<AppModel> listApk = new ArrayList<>();
-                    for (DataSnapshot a : dataSnapshot.getChildren()) {
-                        final ApkFileInfoEvent apk = a.getValue(ApkFileInfoEvent.class);
-                        apk.setAppid(a.getKey());
+                try{
+                    if (dataSnapshot.getValue() != null) {
+                        final List<AppModel> listApk = new ArrayList<>();
+                        for (DataSnapshot a : dataSnapshot.getChildren()) {
+                            final ApkFileInfoEvent apk = a.getValue(ApkFileInfoEvent.class);
+                            apk.setAppid(a.getKey());
 
-                        //get user name
-                        FirebaseDatabase.getInstance().getReference().child("user").
-                                child(apk.getUid()).addValueEventListener(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                if (dataSnapshot.getValue() != null){
-                                    UserProfile userProfile = dataSnapshot.getValue(UserProfile.class);
-                                    apk.setOfferby(userProfile.getName());
-                                    AppModel app = new AppModel(apk);
-                                    listApk.add(app);
-                                    getView().loadChildUserUpload(listApk);
+                            //get user name
+                            FirebaseDatabase.getInstance().getReference().child("user").
+                                    child(apk.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    if (dataSnapshot.getValue() != null){
+                                        UserProfile userProfile = dataSnapshot.getValue(UserProfile.class);
+                                        apk.setOfferby(userProfile.getName());
+                                        AppModel app = new AppModel(apk);
+                                        listApk.add(app);
+                                        getView().loadChildUserUpload(listApk);
+                                    }
                                 }
-                            }
-                            @Override
-                            public void onCancelled(DatabaseError databaseError) {
-                                System.out.println(databaseError+ "eror day ne");
-                            }
-                        });
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+                                    System.out.println(databaseError+ "eror day ne");
+                                }
+                            });
 
+                        }
                     }
+                }catch (Exception e){
+                    System.out.println(e );
                 }
+
             }
 
             @Override
@@ -72,6 +77,11 @@ public class ProfilePresenter extends ActivityPresenter<ProfileContact.ViewOps> 
 
             }
         });
+
+    }
+
+    @Override
+    public void getAppCmt() {
 
     }
 }

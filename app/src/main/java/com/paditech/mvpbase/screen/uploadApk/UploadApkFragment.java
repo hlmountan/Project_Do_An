@@ -388,6 +388,7 @@ public class UploadApkFragment extends MVPFragment<UploadApkContact.PresenterVie
         progressBar.setVisibility(View.GONE);
         tv_percen.setVisibility(View.GONE);
         apkFile.setTitle(et_title.getText().toString());
+        apkFile.setStatus(2);
         getPresenter().createNewApk(apkFile);
     }
 

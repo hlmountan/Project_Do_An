@@ -115,6 +115,7 @@ public class UpdateApkActivity extends MVPActivity<UpdateApkContact.PresenterVie
                 statusApk.setText(getResources().getText(R.string.pending));
                 break;
             case 2:
+                statusApk.setText(R.string.missing_info);
                 break;
             case 3:
                 break;
@@ -164,7 +165,7 @@ public class UpdateApkActivity extends MVPActivity<UpdateApkContact.PresenterVie
                 } else info.setVisibility(View.GONE);
                 break;
             case R.id.btn_public_app:
-                if (checkInfo()){
+                if (app.getStatus() == 2) {
                     showConfirmDialog(getString(R.string.missing_info), new BaseDialog.OnPositiveClickListener() {
                         @Override
                         public void onPositiveClick() {
@@ -181,6 +182,7 @@ public class UpdateApkActivity extends MVPActivity<UpdateApkContact.PresenterVie
                             publicApp.setVisibility(View.GONE);
                             updateApp.setVisibility(View.VISIBLE);
                             pending.setVisibility(View.VISIBLE);
+                            getPresenter().pushNotify(app);
                         }
                     }, null);
                 break;
@@ -200,9 +202,11 @@ public class UpdateApkActivity extends MVPActivity<UpdateApkContact.PresenterVie
                     app.setPolicy(policy.getText().toString());
                     app.setContentrating(age.getText().toString());
                     app.setRequire(require.getText().toString());
+                    app.setStatus(1);
                     listCate.setVisibility(View.GONE);
                     listRequire.setVisibility(View.GONE);
                     showAlertDialog(getString(R.string.finish_saving));
+                    apply.setVisibility(View.VISIBLE);
                 }
                 break;
             case R.id.btn_update_version:
@@ -217,9 +221,13 @@ public class UpdateApkActivity extends MVPActivity<UpdateApkContact.PresenterVie
 
     public boolean checkInfo() {
         if (!title.getText().toString().equals("") && !des.getText().toString().equals("") &&
-                !cate.getText().equals(R.string.title_category) && !policy.getText().toString().equals("") &&
-                !age.getText().toString().equals("") && !require.getText().equals(R.string.android_require))
-            return true;
+                !policy.getText().toString().equals("") && !age.getText().toString().equals("")){
+            if (!cate.getText().toString().equals(getText(R.string.title_category))&&
+                    !require.getText().toString().equals(getString(R.string.android_require)))
+                return true;
+        }
+//            if (!cate.getText().toString().equals(R.string.title_category) && !require.getText().toString().equals(R.string.android_require))
+//                return true;
         return false;
     }
 
@@ -300,21 +308,26 @@ public class UpdateApkActivity extends MVPActivity<UpdateApkContact.PresenterVie
     void setInfoApp(AppModel.SourceBean sourceBean) {
         ImageUtil.loadImageRounded(this, sourceBean.getCover(), avar, R.drawable.events_placeholder, R.drawable.image_placeholder_500x500, 20);
         title.setText(sourceBean.getTitle());
+
         if (app.getDescription() != null) {
             des.setText(app.getDescription());
-        } else cate.setHint(R.string.des);
+        } else des.setHint(R.string.des);
+
         if (app.getCategory() != null) {
             cate.setText(app.getCategory());
-        } else cate.setHint(R.string.title_category);
+        } else cate.setText(R.string.title_category);
+
         if (app.getPolicy() != null) {
             policy.setHint(app.getPolicy());
         } else policy.setHint(R.string.your_policy);
+
         if (app.getContentrating() != null) {
             age.setHint(app.getContentrating());
         } else age.setHint(R.string.age);
+
         if (app.getRequire() != null) {
             require.setText(app.getRequire());
-        } else age.setHint(R.string.age);
+        } else require.setText(R.string.android_require);
     }
 
 }

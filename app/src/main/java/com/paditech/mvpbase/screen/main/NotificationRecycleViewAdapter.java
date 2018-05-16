@@ -29,6 +29,7 @@ public class NotificationRecycleViewAdapter extends RecyclerView.Adapter<Recycle
 
     public void setListNotify(List<Notification> listNotify) {
         this.listNotify = listNotify;
+        notifyDataSetChanged();
     }
 
     @Override
@@ -40,7 +41,7 @@ public class NotificationRecycleViewAdapter extends RecyclerView.Adapter<Recycle
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         com.paditech.mvpbase.screen.main.NotificationRecycleViewAdapter.RecyclerHolder recyclerHolder = (com.paditech.mvpbase.screen.main.NotificationRecycleViewAdapter.RecyclerHolder) holder;
-
+        recyclerHolder.setData(position);
     }
 
     @Override
@@ -85,7 +86,7 @@ public class NotificationRecycleViewAdapter extends RecyclerView.Adapter<Recycle
                         tv_status.setText(R.string.notify_status_3);
                         break;
                 }
-                title.setText(listNotify.get(pos).getAppTitle());
+                title.setText(listNotify.get(pos).getTitle());
                 tv_content.setText(listNotify.get(pos).getContent());
                 if (listNotify.get(pos).getRead()){
                     tv_isread.setText(R.string.notify_read);

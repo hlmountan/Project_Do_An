@@ -110,6 +110,7 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
         View.OnClickListener, FadeToolbarScrollView.ObservableScrollViewCallbacks, RatingBar.OnRatingBarChangeListener,
         View.OnFocusChangeListener {
     boolean isInstall= false;
+    int follow;
     List<Entry> entries = new ArrayList<Entry>();
     private ArrayList<ArrayList<String>> screenShot = null;
     private ArrayList<ArrayList<String>> listApp;
@@ -391,6 +392,7 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     public void onGetAppEvent(AppModel.SourceBean app) {
         ownApp = app;
+
         title = app.getTitle();
         textView_title.setText(app.getTitle());
         appid = app.getAppid();
@@ -414,7 +416,7 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
             setUpScreenShort(app.getScreenshotUserUpload());
             fr_chart_and_pager.setVisibility(View.GONE);
             btn_install_app.setText(R.string.install);
-
+            getPresenter().getUserCmt(appid,app.isFirebaseCmt());
         } else {
             if ((app.getAll_price() == null) || (app.getAll_price().size() != 2)) {
 
@@ -426,9 +428,10 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
                 fr_chart_and_pager.setVisibility(View.VISIBLE);
                 getPresenter().cURLFromApi(app.getAppid(), 1);
             }
-
+            getPresenter().getUserCmt(appid.replace("-","."),app.isFirebaseCmt());
         }
-        getPresenter().getUserCmt(appid,app.isFirebaseCmt());
+
+
         getPresenter().getRelateApp("http://appsxyz.com/api/apk/search_related/?q=" + URLEncoder.encode(app.getTitle()) + "&page=1&size=20");
 
     }
@@ -665,6 +668,7 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
 
     @Override
     public void setFollowApp(ArrayList<ArrayList<String>> listApp) {
+        follow = 100;
         this.listApp = listApp;
         btn_add.setVisibility(View.VISIBLE);
         btn_share.setVisibility(View.VISIBLE);
@@ -672,7 +676,9 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
             for (ArrayList<String> a : listApp) {
                 if (a.get(0).equals(ownApp.getAppid())) {
                     btn_add.setBackgroundResource(R.drawable.ic_check);
+                    follow = 200;
                     watch = 1;
+                    break;
                 }
             }
         }
@@ -692,6 +698,22 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
     public void onBackPressed() {
         super.onBackPressed();
         getPresenter().updateFollowApp(listApp);
+        /*
+        100:  begining unfollow
+        200:  beginning follow
+        1: follow
+        0: unfollow
+
+         */
+
+        if (follow == 100 && watch == 1 ){
+            //need add notify
+            getPresenter().notify(ownApp,1);
+        }else if (follow == 200 && watch == 0){
+            //need  remove from follow
+            getPresenter().notify(ownApp,0);
+        }
+
 
     }
 
@@ -747,6 +769,7 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
             case R.id.btn_add:
 
                 if (watch == 0) {
+
                     btn_add.setBackgroundResource(R.drawable.ic_check);
                     ArrayList<String> follow = new ArrayList<>();
                     follow.add(ownApp.getAppid());
@@ -755,6 +778,7 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
                     follow.add(String.valueOf(ownApp.isUserUpload()));
 
                     listApp.add(follow);
+
                     watch = 1;
                 } else {
                     btn_add.setBackgroundResource(R.drawable.btn_add);
@@ -801,7 +825,8 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
                 break;
             case R.id.btn_submit:
                 if (FirebaseAuth.getInstance().getCurrentUser() != null) {
-                    if (isInstall){
+                    // check user install app hay chua
+//                    if (isInstall){
                         if (ratingbar_your.getRating() != 0 && !et_cmt.getText().toString().equals("")&&!et_title.getText().toString().equals("")) {
                             // push cmt
                             Cmt cmt = new Cmt();
@@ -813,14 +838,14 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
                             cmt.setDate(System.currentTimeMillis()/1000);
                             cmt.setTitle(et_title.getText().toString());
                             cmt.setAvar(FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl().toString());
-                            getPresenter().pushCmt(cmt);
+                            getPresenter().pushCmt(cmt,ownApp);
 
                             showAlertDialog(getString(R.string.cmt_success));
                             view_rating.setVisibility(View.GONE);
                             tv_rating_success.setVisibility(View.VISIBLE);
 
                         } else showAlertDialog(getString(R.string.empty_context_cmt));
-                    }else showAlertDialog(getString(R.string.install_condition));
+//                    }else showAlertDialog(getString(R.string.install_condition));
 
 
                 } else {

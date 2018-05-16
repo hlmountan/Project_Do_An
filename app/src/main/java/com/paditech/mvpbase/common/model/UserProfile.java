@@ -16,20 +16,16 @@ public class UserProfile {
     Boolean isDev = false;
     private ArrayList<ArrayList<String>> followApp;
 
-    public ArrayList<ArrayList<String>> getFollowApp() {
-        return followApp;
+
+
+    private ArrayList<Notification> notify;
+
+    public ArrayList<Notification> getNotify() {
+        return notify;
     }
 
-    public void setFollowApp(ArrayList<ArrayList<String>> followApp) {
-        this.followApp = followApp;
-    }
-
-    public String getUid() {
-        return uid;
-    }
-
-    public void setUid(String uid) {
-        this.uid = uid;
+    public void setNotify(ArrayList<Notification> notify) {
+        this.notify = notify;
     }
 
     private String uid;
@@ -51,6 +47,22 @@ public class UserProfile {
         this.name = name;
         this.email = email;
         this.photo = photo;
+        this.uid = uid;
+    }
+
+    public ArrayList<ArrayList<String>> getFollowApp() {
+        return followApp;
+    }
+
+    public void setFollowApp(ArrayList<ArrayList<String>> followApp) {
+        this.followApp = followApp;
+    }
+
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
         this.uid = uid;
     }
     public String getName() {

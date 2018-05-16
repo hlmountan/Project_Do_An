@@ -22,7 +22,8 @@
                 android:minWidth="@dimen/min_height"
                 android:padding="@dimen/padding_default"
                 android:text="@string/apply"
-                android:textColor="@color/blue" />
+                android:textColor="@color/blue"
+                android:visibility="gone"/>
 
             <Button
                 android:id="@+id/btn_cancel"
@@ -72,7 +73,9 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/title"
                 android:padding="@dimen/padding_small"
-                android:textAlignment="center" />
+                android:textAlignment="center"
+                android:background="@drawable/border_edittex"
+                android:layout_marginBottom="@dimen/margin_small"/>
 
             <EditText
                 android:id="@+id/et_des"
@@ -80,7 +83,9 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/des"
                 android:padding="@dimen/padding_small"
-                android:textAlignment="center" />
+                android:textAlignment="center"
+                android:background="@drawable/border_edittex"
+                android:layout_marginBottom="@dimen/margin_small"/>
 
             <TextView
                 android:id="@+id/tv_cate"
@@ -111,7 +116,9 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/your_policy"
                 android:padding="@dimen/padding_small"
-                android:textAlignment="center" />
+                android:textAlignment="center"
+                android:background="@drawable/border_edittex"
+                android:layout_marginBottom="@dimen/margin_small" />
 
             <EditText
                 android:id="@+id/et_age"
@@ -120,7 +127,9 @@
                 android:hint="@string/age"
                 android:inputType="number"
                 android:padding="@dimen/padding_small"
-                android:textAlignment="center" />
+                android:textAlignment="center"
+                android:background="@drawable/border_edittex"
+                android:layout_marginBottom="@dimen/margin_small"/>
 
             <TextView
                 android:id="@+id/tv_require"

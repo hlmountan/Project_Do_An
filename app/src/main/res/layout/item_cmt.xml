@@ -54,5 +54,7 @@
         android:layout_height="@dimen/app_img_size_super_small"
         android:layout_toLeftOf="@id/tv_user"
         android:layout_alignBottom="@id/tv_user"
-        android:layout_marginRight="@dimen/margin_large"/>
+        android:layout_marginRight="@dimen/margin_large"
+        android:visibility="gone"
+        />
 </RelativeLayout>

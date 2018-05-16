@@ -11,7 +11,13 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.paditech.mvpbase.R;
+import com.paditech.mvpbase.common.model.Cmt;
 import com.paditech.mvpbase.common.utils.CommonUtil;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -22,8 +28,25 @@ import butterknife.ButterKnife;
 
 public class RecyclerViewReplyCmtAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
+    List<Cmt> cmt;
 
-        Activity act;
+    public List<Cmt> getCmt() {
+        return cmt;
+    }
+
+    public void setCmt(List<Cmt> cmt) {
+        this.cmt = cmt;
+    }
+
+    public Activity getAct() {
+        return act;
+    }
+
+    public void setAct(Activity act) {
+        this.act = act;
+    }
+
+    Activity act;
 
         public RecyclerViewReplyCmtAdapter(Activity act) {
             this.act = act;
@@ -39,16 +62,16 @@ public class RecyclerViewReplyCmtAdapter extends RecyclerView.Adapter<RecyclerVi
         @Override
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
             com.paditech.mvpbase.screen.adapter.RecyclerViewReplyCmtAdapter.RecyclerHolder recyclerHolder = (com.paditech.mvpbase.screen.adapter.RecyclerViewReplyCmtAdapter.RecyclerHolder) holder;
+            recyclerHolder.setData(position);
         }
 
         @Override
         public int getItemCount() {
-            return 6;
-//        if (mList1 != null) {
-//            return mList1.size();
-//        } else {
-//            return 0;
-//        }
+            if (cmt != null) {
+                return cmt.size();
+            } else {
+                return 0;
+            }
         }
 
         public class RecyclerHolder extends RecyclerView.ViewHolder implements View.OnClickListener,View.OnFocusChangeListener {
@@ -75,7 +98,21 @@ public class RecyclerViewReplyCmtAdapter extends RecyclerView.Adapter<RecyclerVi
                 btn_sent.setOnClickListener(this);
                 et_dev_reply.setOnFocusChangeListener(this);
             }
-
+            public void setData(int pos){
+                if (cmt != null){
+                    tv_user.setText(cmt.get(pos).getAuthorName());
+                    tv_title.setText(cmt.get(pos).getTitle());
+                    tv_cmt_content.setText(cmt.get(pos).getContent());
+                    tv_date.setText(convertTime(cmt.get(pos).getDate()));
+                    ratingbar.setRating(cmt.get(pos).getRate());
+                     }
+            }
+            String convertTime(Long timestaim){
+                DateFormat mDataFormat= new SimpleDateFormat("MMM-dd-yy");
+                Date mDate= new Date();
+                mDate.setTime(timestaim * 1000);
+                return mDataFormat.format(mDate);
+            }
             @Override
             public void onClick(View view) {
                 et_dev_reply.setText("");

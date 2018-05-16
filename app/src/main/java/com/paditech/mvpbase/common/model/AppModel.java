@@ -37,6 +37,15 @@ public class AppModel {
     }
 
     public static class SourceBean {
+        private String devId;
+
+        public String getDevId() {
+            return devId;
+        }
+
+        public void setDevId(String devId) {
+            this.devId = devId;
+        }
 
         private int status;
 
@@ -95,6 +104,7 @@ public class AppModel {
             this.require = apk.getRequire();
             this.contentrating = apk.getAge();
             this.policy = apk.getPolicy();
+            this.devId = apk.getUid();
 
         }
 

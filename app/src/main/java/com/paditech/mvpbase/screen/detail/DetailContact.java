@@ -39,9 +39,11 @@ public interface DetailContact {
         boolean isInstall(String appid);
         void getUserFollowApp();
         void updateFollowApp(ArrayList<ArrayList<String>> listApp);
-        void pushCmt(Cmt cmt);
+        void pushCmt(Cmt cmt,AppModel.SourceBean ownApp);
 
         void getUserCmt(String appid,boolean isFirebase);
+        void notify(AppModel.SourceBean app,int status);
+
 
     }
 }

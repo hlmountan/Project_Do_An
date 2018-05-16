@@ -105,6 +105,7 @@
     <string name="public_apk">Public</string>
     <string name="public_direction">Your app is now publicising</string>
     <string name="public_ask">Do you want to public your app?</string>
+    <string name="public_notify">This app is now available for you to download</string>
     <string name="authen">© The ReviStore</string>
     <string name="notify_filter_all">All</string>
     <string name="notify_filter_New">New</string>
@@ -113,6 +114,7 @@
     <string name="notify_status_1">New version</string>
     <string name="notify_status_2">App Publiced</string>
     <string name="notify_status_3">New Comment</string>
+
 
 
     <!--Main-->

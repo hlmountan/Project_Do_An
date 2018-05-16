@@ -5,6 +5,11 @@ package com.paditech.mvpbase.common.model;
  */
 
 public class Notification {
+    /*
+    notify_status_1     New version
+    notify_status_2     App Publiced
+    notify_status_3     New Comment
+     */
     int status;
     String title;
     String content;
@@ -13,8 +18,15 @@ public class Notification {
     Boolean isRead;
     String appTitle;
     String appAvar;
+    boolean ownApp = false;
 
+    public boolean isOwnApp() {
+        return ownApp;
+    }
 
+    public void setOwnApp(boolean ownApp) {
+        this.ownApp = ownApp;
+    }
 
     public Notification() {
     }
