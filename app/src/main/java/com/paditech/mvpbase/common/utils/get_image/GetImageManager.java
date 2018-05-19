@@ -16,8 +16,10 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.widget.ImageView;
 
+import com.paditech.mvpbase.BuildConfig;
 import com.paditech.mvpbase.R;
 import com.paditech.mvpbase.common.base.BaseDialog;
 import com.paditech.mvpbase.common.dialog.SelectImageDialog;
@@ -56,7 +58,12 @@ public class GetImageManager {
     private String mImageFilePath;
     private ImageView mImageView;
     private SelectType mSelectType = SelectType.SINGLE;
-    private int mMaxSelection = -1;
+    private int mMaxSelection = 15;
+
+    public ArrayList<String> getmListPhotoSelected() {
+        return mListPhotoSelected;
+    }
+
     private ArrayList<String> mListPhotoSelected;
     private OnGetListPhotoSelectListener mOnGetListPhotoSelectListener;
     private OnGetImageListener mOnGetImageListener;
@@ -303,14 +310,16 @@ public class GetImageManager {
         try {
             if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
                     == PackageManager.PERMISSION_GRANTED) {
-                File photoDirectory = new File(Environment.getExternalStorageDirectory(), IMAGE_PATH);
+                File photoDirectory = new File(Environment.getExternalStorageDirectory(), getContext().getPackageName());
                 if (!photoDirectory.exists() && !photoDirectory.mkdirs()) {
                     return;
                 }
                 File photo = new File(photoDirectory, String.format(IMAGE_FILE_NAME, SIMPLE_DATE_FORMAT.format(new Date())));
                 mImageFilePath = photo.getPath();
                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                Uri mPhotoUri = Uri.fromFile(photo);
+                Uri mPhotoUri = FileProvider.getUriForFile(getContext(),
+                        BuildConfig.APPLICATION_ID + ".provider",
+                        photo);
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, mPhotoUri);
                 if (mActivity != null)
                     mActivity.startActivityForResult(intent, OPEN_CAMERA);

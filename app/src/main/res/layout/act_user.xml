@@ -130,6 +130,7 @@
     </RelativeLayout>
 
     <Button
+        android:id="@+id/btn_login_g"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/margin_small"
@@ -140,6 +141,7 @@
         android:textColor="@color/white" />
 
     <Button
+        android:id="@+id/btn_login_fb"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/bg_btn_login"

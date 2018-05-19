@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.view.ViewPager;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -12,54 +11,61 @@ import android.support.v7.widget.SnapHelper;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 
 import com.beloo.widget.chipslayoutmanager.ChipsLayoutManager;
 import com.beloo.widget.chipslayoutmanager.gravity.IChildGravityResolver;
+import com.google.firebase.auth.FirebaseAuth;
 import com.paditech.mvpbase.R;
+import com.paditech.mvpbase.common.event.ChipCateTagEvent;
 import com.paditech.mvpbase.common.model.AppModel;
-import com.paditech.mvpbase.common.model.Appsxyz;
 import com.paditech.mvpbase.common.mvp.fragment.FragmentPresenter;
 import com.paditech.mvpbase.common.mvp.fragment.MVPFragment;
 import com.paditech.mvpbase.common.utils.CommonUtil;
-import com.paditech.mvpbase.common.utils.crypto.Crypto;
 import com.paditech.mvpbase.common.view.TranslationNestedScrollView;
+import com.paditech.mvpbase.screen.adapter.RecyclerViewSliderHome;
+import com.paditech.mvpbase.screen.main.HomeActivity;
 import com.paditech.mvpbase.screen.main.ScrollTopEvent;
 import com.paditech.mvpbase.screen.main.adapter.ChipCateAdapter;
+import com.paditech.mvpbase.screen.notification.NotificationActivity;
+import com.paditech.mvpbase.screen.profile.ProfileActivity;
 import com.paditech.mvpbase.screen.showMoreApp.ShowMoreActicity;
+import com.paditech.mvpbase.screen.user.UserActivity;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 /**
  * Created by hung on 1/2/2018.
  */
 
-public class HomeFragment extends MVPFragment<HomeContact.PresenterViewOsp> implements HomeContact.ViewOsp {
+public class HomeFragment extends MVPFragment<HomeContact.PresenterViewOsp> implements HomeContact.ViewOsp,View.OnClickListener {
 
-    HomeRecyclerViewAdapter mHomeRecyclerViewAdapter;
-    HomeRecyclerViewAdapter mHomeRecyclerViewAdapter2;
-    HomeRecyclerViewAdapter mHomeRecyclerViewAdapter3;
-    HomeRecyclerViewAdapter mHomeRecyclerViewAdapter4;
+    HomeRecyclerViewAdapter mHomeRecyclerViewAdapterOnSale;
+    HomeRecyclerViewAdapter mHomeRecyclerViewAdapterGameGrossing;
+    HomeRecyclerViewAdapter mHomeRecyclerViewAdapterAllGrossing;
+    HomeRecyclerViewAdapter mHomeRecyclerViewAdapterUserUpload;
     HomeRecyclerViewAdapter mHomeRecyclerViewAdapter5;
-    HomeViewPagerAdapter mHomeViewPagerAdapter;
+
+    RecyclerViewSliderHome homeSlider;
+
     private ChipCateAdapter mChipCateAdapter;
-    @BindView(R.id.recycler_view_recentely)
-    RecyclerView recycler_view_recentely;
-    @BindView(R.id.recycler_view_on_sale)
-    RecyclerView recycler_view_on_sale;
+    @BindView(R.id.recycler_view_app_onsale)
+    RecyclerView recycler_view_app_onsale;
+    @BindView(R.id.recycler_view_game_grossing)
+    RecyclerView recycler_view_game_grossing;
     @BindView(R.id.btn_see_more)
     Button btn_see_more;
-    @BindView(R.id.vp_main)
-    ViewPager vp_main;
-    @BindView(R.id.recycler_view_top_download)
-    RecyclerView recycler_view_top_download;
+    @BindView(R.id.recycler_view_slider)
+    RecyclerView recycler_view_slider;
+    @BindView(R.id.recycler_view_user_upload)
+    RecyclerView recycler_view_user_upload;
     @BindView(R.id.recycler_view_topic)
     RecyclerView recycler_view_topic;
     @BindView(R.id.recycler_view_grossing)
@@ -68,13 +74,23 @@ public class HomeFragment extends MVPFragment<HomeContact.PresenterViewOsp> impl
     TranslationNestedScrollView scrollView_home;
     @BindView(R.id.recycler_view_list_cate)
     RecyclerView recycler_view_list_cate;
+
+    @BindView(R.id.btn_profile)
+    Button btn_profile;
+    @BindView(R.id.btn_notification)
+    Button btn_notification;
+    @BindView(R.id.view_user_upload)
+    LinearLayout view_user_upload;
+
     private boolean mRunned;
 
     SnapHelper snapHelper = new StartSnapHelper();
     SnapHelper snapHelper1 = new StartSnapHelper();
     SnapHelper snapHelper2 = new StartSnapHelper();
     SnapHelper snapHelper3 = new StartSnapHelper();
-    SnapHelper snapHelper4 = new StartSnapHelper();
+    SnapHelper snapHelperSlider = new StartSnapHelper();
+
+
     Activity act;
     private GridLayoutManager gridLayoutManager;
 
@@ -122,136 +138,152 @@ public class HomeFragment extends MVPFragment<HomeContact.PresenterViewOsp> impl
 
     @Override
     protected void initView(View view) {
-        if (!mRunned) {
-            Timer timer = new Timer();
-            timer.scheduleAtFixedRate(new MyTimerTask(), 2000, 4000);
-        }
+//        if (!mRunned) {
+//            Timer timer = new Timer();
+//            timer.scheduleAtFixedRate(new MyTimerTask(), 2000, 4000);
+//        }
+
         mRunned = true;
         setUpRecyclerView();
         setRecyclerViewCategory();
         getPresenter().getAppFromApi();
         setUpViewPager();
-        btn_see_more.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                btn_see_more.getContext().startActivity(new Intent(btn_see_more.getContext(), ShowMoreActicity.class));
-            }
-        });
+        btn_notification.setOnClickListener(this);
+        btn_profile.setOnClickListener(this);
+        btn_see_more.setOnClickListener(this);
+        if (FirebaseAuth.getInstance().getCurrentUser() != null){
+            getPresenter().getUserApk();
+        }else view_user_upload.setVisibility(View.GONE);
+
         
     }
 
     private void setUpRecyclerView(){
-        scrollView_home.setViewPager(vp_main,CommonUtil.getWidthScreen(getActivityReference())/2);
-        snapHelper.attachToRecyclerView(recycler_view_recentely);
-        snapHelper1.attachToRecyclerView(recycler_view_grossing);
-        snapHelper2.attachToRecyclerView(recycler_view_on_sale);
-        snapHelper3.attachToRecyclerView(recycler_view_top_download);
-        snapHelper3.attachToRecyclerView(recycler_view_topic);
+        scrollView_home.setViewPager(recycler_view_slider,CommonUtil.getWidthScreen(getActivityReference())/2);
 
-        mHomeRecyclerViewAdapter = new HomeRecyclerViewAdapter(act);
-        mHomeRecyclerViewAdapter2 = new HomeRecyclerViewAdapter(act);
-        mHomeRecyclerViewAdapter3 = new HomeRecyclerViewAdapter(act);
-        mHomeRecyclerViewAdapter4 = new HomeRecyclerViewAdapter(act);
+        snapHelper.attachToRecyclerView(recycler_view_app_onsale);
+        snapHelper1.attachToRecyclerView(recycler_view_grossing);
+        snapHelper2.attachToRecyclerView(recycler_view_game_grossing);
+        snapHelper3.attachToRecyclerView(recycler_view_user_upload);
+
+        snapHelperSlider.attachToRecyclerView(recycler_view_slider);
+
+
+        mHomeRecyclerViewAdapterOnSale = new HomeRecyclerViewAdapter(act);
+        mHomeRecyclerViewAdapterGameGrossing = new HomeRecyclerViewAdapter(act);
+        mHomeRecyclerViewAdapterAllGrossing = new HomeRecyclerViewAdapter(act);
+        mHomeRecyclerViewAdapterUserUpload = new HomeRecyclerViewAdapter(act);
         mHomeRecyclerViewAdapter5 = new HomeRecyclerViewAdapter(act);
 
-        mHomeRecyclerViewAdapter.setItemId(R.layout.item_app_small);
-        mHomeRecyclerViewAdapter.setItemNumber(12);
-        gridLayoutManager = new GridLayoutManager(act, 2, LinearLayoutManager.HORIZONTAL, false);
-        recycler_view_recentely.setLayoutManager(gridLayoutManager);
-        recycler_view_recentely.setAdapter(mHomeRecyclerViewAdapter);
-//        recycler_view_recentely.setNestedScrollingEnabled(false);
+        mHomeRecyclerViewAdapterOnSale.setItemId(R.layout.item_app_horizontal_white_bg);
+        mHomeRecyclerViewAdapterOnSale.setItemNumber(15);
+        gridLayoutManager = new GridLayoutManager(act, 5, LinearLayoutManager.HORIZONTAL, false);
+        recycler_view_app_onsale.setLayoutManager(gridLayoutManager);
+        recycler_view_app_onsale.setAdapter(mHomeRecyclerViewAdapterOnSale);
+//        recycler_view_app_onsale.setNestedScrollingEnabled(false);
 
 
-        mHomeRecyclerViewAdapter2.setItemNumber(6);
-        mHomeRecyclerViewAdapter2.setItemId(R.layout.item_app);
-        recycler_view_on_sale.setLayoutManager(new LinearLayoutManager(act, LinearLayoutManager.HORIZONTAL, false));
-        recycler_view_on_sale.setAdapter(mHomeRecyclerViewAdapter2);
-//        recycler_view_on_sale.setNestedScrollingEnabled(false);
+        mHomeRecyclerViewAdapterGameGrossing.setItemNumber(6);
+        mHomeRecyclerViewAdapterGameGrossing.setItemId(R.layout.item_app);
+        recycler_view_game_grossing.setLayoutManager(new LinearLayoutManager(act, LinearLayoutManager.HORIZONTAL, false));
+        recycler_view_game_grossing.setAdapter(mHomeRecyclerViewAdapterGameGrossing);
+//        recycler_view_game_grossing.setNestedScrollingEnabled(false);
 //
 
-        mHomeRecyclerViewAdapter3.setItemNumber(12);
-        mHomeRecyclerViewAdapter3.setItemId(R.layout.item_app_download);
+        mHomeRecyclerViewAdapterAllGrossing.setItemNumber(12);
+        mHomeRecyclerViewAdapterAllGrossing.setItemId(R.layout.item_app_download);
         recycler_view_grossing.setLayoutManager(new GridLayoutManager(act, 2, LinearLayoutManager.HORIZONTAL, false));
-        recycler_view_grossing.setAdapter(mHomeRecyclerViewAdapter3);
+        recycler_view_grossing.setAdapter(mHomeRecyclerViewAdapterAllGrossing);
 //        recycler_view_grossing.setNestedScrollingEnabled(false);
 
 
 
-        mHomeRecyclerViewAdapter4.setItemId(20);
-        mHomeRecyclerViewAdapter4.setItemId(R.layout.item_app_download);
-        recycler_view_top_download.setLayoutManager(new GridLayoutManager(act, 2, LinearLayoutManager.HORIZONTAL, false));
-        recycler_view_top_download.setAdapter(mHomeRecyclerViewAdapter4);
+        mHomeRecyclerViewAdapterUserUpload.setItemId(R.layout.item_app);
+        recycler_view_user_upload.setLayoutManager(new LinearLayoutManager(act, LinearLayoutManager.HORIZONTAL, false));
+        recycler_view_user_upload.setAdapter(mHomeRecyclerViewAdapterUserUpload);
 
         mHomeRecyclerViewAdapter5.setItemNumber(2);
         mHomeRecyclerViewAdapter5.setItemId(R.layout.item_app_haft_screen);
         recycler_view_topic.setLayoutManager(new LinearLayoutManager(act, LinearLayoutManager.HORIZONTAL, false));
         recycler_view_topic.setAdapter(mHomeRecyclerViewAdapter5);
     }
-    public class MyTimerTask extends TimerTask {
 
-        @Override
-
-        public void run() {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        if (vp_main.getCurrentItem() != (2))
-                            vp_main.setCurrentItem(vp_main.getCurrentItem() + 1);
-                        else
-                            vp_main.setCurrentItem(0);
-                    } catch (Exception e) {
-                        System.out.println(e);
-                    }
-
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.btn_see_more:
+                btn_see_more.getContext().startActivity(new Intent(btn_see_more.getContext(), ShowMoreActicity.class));
+                break;
+            case R.id.btn_profile:
+                if ( FirebaseAuth.getInstance().getCurrentUser() == null){
+                    Intent intent = new Intent(btn_profile.getContext(),UserActivity.class);
+                    intent.putExtra("SCREEN","HOME");
+                    btn_profile.getContext().startActivity(intent);
+                } else {
+                    // profile
+                    btn_profile.getContext().startActivity(new Intent(btn_see_more.getContext(), ProfileActivity.class));
                 }
-            });
-
+                break;
+            case R.id.btn_notification:
+                btn_see_more.getContext().startActivity(new Intent(btn_see_more.getContext(), NotificationActivity.class));
+                break;
         }
     }
+
+    @OnClick({R.id.btn_sign_in})
+    public void onClickView(View view) {
+        switch (view.getId()) {
+            case R.id.btn_sign_in:
+                onClick(view);
+                break;
+        }
+    }
+
+
     @Override
     public void loadSlider() {
 
     }
 
     @Override
-    public void loadChild1(final List<AppModel> result) {
+    public void loadChildOnSale(final List<AppModel> result) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                mHomeRecyclerViewAdapter.setmList1(result);
+                mHomeRecyclerViewAdapterOnSale.setmList1(result);
             }
         });
     }
 
     @Override
-    public void loadChild2(final List<AppModel> result) {
+    public void loadChildGameGrossing(final List<AppModel> result) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                mHomeRecyclerViewAdapter2.setmList1(result);
+                mHomeRecyclerViewAdapterGameGrossing.setmList1(result);
             }
         });
     }
 
     @Override
-    public void loadChild3(final List<AppModel> result) {
+    public void loadChildAllGrossing(final List<AppModel> result) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
 
-                mHomeRecyclerViewAdapter3.setmList1(result);
+                mHomeRecyclerViewAdapterAllGrossing.setmList1(result);
             }
         });
     }
 
     @Override
-    public void loadChild4(final List<AppModel> result) {
+    public void loadChildUserUpload(final List<AppModel> result) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
 
-                mHomeRecyclerViewAdapter4.setmList1(result);
+                mHomeRecyclerViewAdapterUserUpload.setmList1(result);
+                mHomeRecyclerViewAdapterUserUpload.setItemNumber(result.size());
             }
         });
     }
@@ -285,15 +317,19 @@ public class HomeFragment extends MVPFragment<HomeContact.PresenterViewOsp> impl
 
 
     private void setUpViewPager() {
-        mHomeViewPagerAdapter = new HomeViewPagerAdapter();
-        vp_main.setAdapter(mHomeViewPagerAdapter);
+        homeSlider = new RecyclerViewSliderHome(act);
+        recycler_view_slider.setLayoutManager(new LinearLayoutManager(act,LinearLayoutManager.HORIZONTAL,false));
+        recycler_view_slider.setAdapter(homeSlider);
     }
     private void setRecyclerViewCategory() {
+
         mChipCateAdapter = new ChipCateAdapter();
         mChipCateAdapter.setmListener(new ChipCateAdapter.OnSelectCateListener() {
             @Override
             public void selectCate(String string) {
-                EventBus.getDefault().post(string);
+                ChipCateTagEvent tag = new ChipCateTagEvent(string);
+                EventBus.getDefault().post(tag);
+                ((HomeActivity) getActivityReference()).setVPitem(1);
             }
         });
         ChipsLayoutManager chipsLayoutManager = ChipsLayoutManager.newBuilder(getActivityContext())

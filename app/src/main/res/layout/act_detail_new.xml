@@ -17,7 +17,9 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:clickable="true"
+            android:focusableInTouchMode="true" >
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -41,28 +43,20 @@
                         android:transitionName="avartar" />
                 </android.support.v7.widget.CardView>
 
-                <Button
-                    android:id="@+id/btn_more_option"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignBottom="@id/card_image"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginRight="@dimen/margin_default"
-                    android:background="@drawable/ic_more_all"
-                    android:minHeight="0dp"
-                    android:minWidth="0dp" />
+
 
                 <Button
                     android:id="@+id/btn_add"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignBottom="@id/card_image"
-                    android:layout_marginRight="@dimen/margin_default"
-                    android:layout_toLeftOf="@id/btn_more_option"
+                    android:layout_marginRight="@dimen/margin_large"
+                    android:layout_alignParentRight="true"
                     android:background="@drawable/btn_add"
                     android:minHeight="0dp"
                     android:minWidth="0dp"
-                    android:visibility="gone" />
+                    android:visibility="gone"
+                    />
 
                 <Button
                     android:id="@+id/btn_share"
@@ -89,7 +83,8 @@
                     android:textAllCaps="false"
                     android:textColor="@color/black"
                     android:textSize="@dimen/text_size_big"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:maxLines="2"/>
 
                 <TextView
                     android:id="@+id/tv_offerby"
@@ -97,10 +92,12 @@
                     android:layout_height="wrap_content"
                     android:layout_alignLeft="@id/tv_title"
                     android:layout_below="@id/tv_title"
+                    android:lines="1"
                     android:text="Somic co.tp"
                     android:textAllCaps="false"
                     android:textColor="@color/gray_detail"
-                    android:textSize="@dimen/text_size_small" />
+                    android:textSize="@dimen/text_size_small"
+                    android:maxLines="1"/>
 
                 <TextView
                     android:id="@+id/tv_version"
@@ -126,7 +123,7 @@
                     android:paddingLeft="@dimen/padding_default"
                     android:paddingRight="@dimen/padding_default"
                     android:paddingTop="@dimen/padding_super_tiny"
-                    android:text="nhận"
+                    android:text=""
                     android:textColor="@color/white_transfer_litter"
                     android:textSize="@dimen/text_size_tiny" />
 
@@ -207,6 +204,26 @@
                 </RelativeLayout>
             </RelativeLayout>
 
+            <FrameLayout
+                android:id="@+id/fr_chart_and_pager"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/height_chart"
+                android:layout_below="@+id/tv_price_history"
+                android:visibility="gone">
+
+                <com.github.mikephil.charting.charts.LineChart
+                    android:id="@+id/lc_price_history"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="@dimen/margin_default" />
+
+                <ProgressBar
+                    android:id="@+id/progressBar_chart"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:visibility="gone" />
+            </FrameLayout>
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -333,17 +350,22 @@
 
 
             </RelativeLayout>
+
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recycler_view_cmt"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_small"></android.support.v7.widget.RecyclerView>
+
             <LinearLayout
+                android:id="@+id/view_rating"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_default"
                 android:gravity="center"
                 android:orientation="vertical"
-                android:layout_margin="@dimen/margin_default">
+                android:clickable="true"
+                android:focusableInTouchMode="true" >
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -387,7 +409,8 @@
                     android:layout_marginTop="@dimen/margin_default"
                     android:background="@drawable/border_cmt"
                     android:orientation="vertical"
-                    android:padding="@dimen/padding_default">
+                    android:padding="@dimen/padding_default" android:clickable="true"
+                    android:focusableInTouchMode="true" >
 
                     <Button
                         android:id="@+id/btn_user_name"
@@ -395,15 +418,21 @@
                         android:layout_height="wrap_content"
                         android:background="@android:color/transparent"
                         android:drawableLeft="@drawable/ic_user"
+                        android:minHeight="@dimen/min_height"
+                        android:minWidth="@dimen/min_height"
                         android:text="@string/user_name"
                         android:textAlignment="center"
                         android:textAllCaps="false"
                         android:textColor="@color/black"
-                        android:minHeight="@dimen/min_height"
-                        android:minWidth="@dimen/min_height"
+                        android:drawablePadding="@dimen/padding_default"
 
                         />
-
+                    <EditText
+                        android:id="@+id/et_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/title"
+                        android:layout_marginBottom="@dimen/margin_small"/>
                     <EditText
                         android:id="@+id/et_cmt"
                         android:layout_width="match_parent"
@@ -411,40 +440,31 @@
                         android:background="@android:color/transparent"
                         android:hint="@string/cmt_hint" />
 
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                    <Button
+                        android:id="@+id/btn_submit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="@dimen/margin_default"
+                        android:background="@android:color/transparent"
+                        android:minHeight="@dimen/min_height"
+                        android:minWidth="@dimen/min_height"
+                        android:text="@string/submit"
+                        android:textAllCaps="false"
+                        android:textColor="@color/blue"
+                        android:layout_gravity="right"/>
 
-                        <Button
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:background="@android:color/transparent"
-                            android:drawableLeft="@drawable/ic_add_image"
-                            android:minHeight="@dimen/min_height"
-                            android:minWidth="@dimen/min_height"
-                            android:text=" Add a picture"
-                            android:textAllCaps="false"
-                            android:textColor="@color/gray_middle"
-                            android:textSize="@dimen/text_size_super_so_tiny"
-                            />
-
-                        <Button
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentRight="true"
-                            android:layout_marginRight="@dimen/margin_default"
-                            android:background="@android:color/transparent"
-                            android:text="Submit"
-                            android:textColor="@color/blue"
-                            android:minHeight="@dimen/min_height"
-                            android:minWidth="@dimen/min_height"
-                            android:textAllCaps="false"/>
-                    </RelativeLayout>
 
                 </LinearLayout>
             </LinearLayout>
-
-
+            <TextView
+                android:id="@+id/tv_rating_success"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/cmt_success"
+                android:textAlignment="center"
+                android:visibility="gone"
+                />
 
             <View
                 android:layout_width="match_parent"
@@ -455,34 +475,6 @@
                 android:layout_marginTop="@dimen/padding_default"
                 android:background="@color/gray_light" />
 
-            <TextView
-                android:id="@+id/tv_price_history"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Price History"
-                android:textAlignment="center"
-                android:visibility="gone" />
-
-            <FrameLayout
-                android:id="@+id/fr_chart_and_pager"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/height_chart"
-                android:layout_below="@+id/tv_price_history"
-                android:visibility="gone">
-
-                <com.github.mikephil.charting.charts.LineChart
-                    android:id="@+id/lc_price_history"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="@dimen/margin_default" />
-
-                <ProgressBar
-                    android:id="@+id/progressBar_chart"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:visibility="gone" />
-            </FrameLayout>
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -541,38 +533,50 @@
                     android:textSize="@dimen/text_size_big"
                     android:textStyle="bold" />
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:id="@+id/mark4"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/tv_mark_3"
-                    android:background="@color/white"
-                    android:lineSpacingExtra="@dimen/line_spacing_extra_bigger"
-                    android:text="Developer\nSize\nCategory\nRequires\nAge"
-                    android:textColor="@color/gray_detail"
-                    android:textSize="@dimen/text_size_default" />
+                    android:orientation="horizontal"
+                    android:weightSum="2">
 
-                <TextView
-                    android:id="@+id/gp_info"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_below="@id/tv_mark_3"
-                    android:background="@color/white"
-                    android:gravity="right"
-                    android:lineSpacingExtra="@dimen/line_spacing_extra_bigger"
-                    android:text="1\n0.5\n22\n0.99"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/text_size_default" />
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/tv_mark_3"
+                        android:layout_weight="1"
+                        android:background="@color/white"
+                        android:lineSpacingExtra="@dimen/line_spacing_extra_bigger"
+                        android:text="Developer\nSize\nCategory\nRequires\nAge"
+                        android:textColor="@color/gray_detail"
+                        android:textSize="@dimen/text_size_default" />
+
+                    <TextView
+                        android:id="@+id/gp_info"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_below="@id/tv_mark_3"
+                        android:layout_weight="1"
+                        android:background="@color/white"
+                        android:gravity="right"
+                        android:lineSpacingExtra="@dimen/line_spacing_extra_bigger"
+                        android:text="1\n0.5\n22\n0.99"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/text_size_default" />
+                </LinearLayout>
+
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/policy"
-                    android:textColor="@color/blue"
-                    android:drawableRight="@drawable/ic_privacy"
-                    android:layout_below="@id/gp_info"
+                    android:layout_below="@id/mark4"
                     android:layout_marginBottom="@dimen/margin_small"
-                    android:layout_marginTop="@dimen/margin_default"/>
+                    android:layout_marginTop="@dimen/margin_default"
+                    android:drawableRight="@drawable/ic_privacy"
+                    android:text="@string/policy"
+                    android:textColor="@color/blue" />
             </RelativeLayout>
 
 
@@ -640,7 +644,7 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@id/mark_view"
                     android:layout_marginBottom="@dimen/margin_default"
-                    android:text="© The Mindnmate"
+                    android:text="@string/authen"
                     android:textColor="@color/gray_detail"
                     android:textSize="@dimen/text_size_tiny" />
 
@@ -676,17 +680,5 @@
             android:textSize="@dimen/text_size_big" />
     </FrameLayout>
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/btn_back"
-        android:layout_width="@dimen/height_toolbar"
-        android:layout_height="@dimen/height_toolbar"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_margin="@dimen/margin_small"
-        android:padding="@dimen/margin_small"
-        android:scaleType="centerInside"
-        android:src="@drawable/icon_back_white_topbar"
-        android:visibility="gone"
-        app:elevation="5dp"
-        app:rippleColor="@color/main_green_dark" />
+
 </RelativeLayout>

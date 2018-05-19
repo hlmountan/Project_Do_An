@@ -1,115 +1,157 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<com.paditech.mvpbase.common.view.TranslationNestedScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<com.paditech.mvpbase.common.view.TranslationNestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/scrollView_home"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white">
+    android:background="@color/white"
+    android:overScrollMode="never">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
+        android:background="@android:color/transparent"
         android:orientation="vertical">
 
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/margin_small"
+            android:src="@drawable/logoooo" />
 
-
-        <android.support.v4.view.ViewPager
-            android:id="@+id/vp_main"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/home_page_height"
-            android:background="@drawable/border_gray_ligh_background"></android.support.v4.view.ViewPager>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/line_size"
-            android:background="@color/gray_light"
-            android:layout_marginBottom="@dimen/margin_small"
-            android:layout_marginTop="@dimen/margin_small" />
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:paddingBottom="@dimen/padding_super_tiny"
+            android:paddingLeft="@dimen/padding_default"
+            android:paddingRight="@dimen/padding_default"
+            android:paddingTop="@dimen/padding_default">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text=" Recentely App"
-                android:layout_margin="@dimen/margin_small"
-                android:id="@+id/textView"
-                android:textSize="@dimen/text_size_big"
+                android:layout_centerVertical="true"
+                android:text="@string/home_title"
                 android:textColor="@color/black"
-                android:textStyle="bold"/>
+                android:textSize="@dimen/text_size_very_super_big"
+                android:textStyle="bold" />
 
             <Button
-                android:id="@+id/btn_see_more"
+                android:id="@+id/btn_profile"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                android:background="@drawable/seemore"
+                android:layout_centerVertical="true"
+                android:background="@drawable/ic_profile"
+                android:minHeight="0dp"
+                android:minWidth="0dp" />
+
+            <Button
+                android:id="@+id/btn_notification"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginRight="@dimen/margin_small"
-                android:minWidth="0dp"
-                android:minHeight="0dp"/>
-
-
+                android:layout_toLeftOf="@id/btn_profile"
+                android:background="@drawable/ic_notification_blue"
+                android:minHeight="0dp"
+                android:minWidth="0dp" />
         </RelativeLayout>
+
         <android.support.v7.widget.RecyclerView
-            android:id="@+id/recycler_view_recentely"
+            android:id="@+id/recycler_view_slider"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/home_page_height"></android.support.v7.widget.RecyclerView>
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"></android.support.v7.widget.RecyclerView>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/line_size"
-            android:background="@color/gray_light"
-            android:layout_marginBottom="@dimen/margin_small"
-            android:layout_marginTop="@dimen/margin_small" />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text=" Hot Trend"
-            android:layout_margin="@dimen/margin_small"
-            android:textSize="@dimen/text_size_big"
-            android:textColor="@color/black"
-            android:textStyle="bold"/>
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:background="@drawable/bg_shadow"
+            android:orientation="vertical"
+            android:padding="@dimen/padding_default">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/margin_small"
+                android:layout_marginLeft="@dimen/margin_super_tiny"
+                android:paddingTop="@dimen/padding_small"
+                android:text="@string/hot_trend"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_big"
+                android:textStyle="bold" />
+
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recycler_view_list_cate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
-                />
-        </RelativeLayout>
-        <TextView
-            android:text=" Top Grossing App"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/margin_small"
-            android:textSize="@dimen/text_size_big"
-            android:textColor="@color/black"
-            android:textStyle="bold"/>
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recycler_view_grossing"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/line_size"
-            android:background="@color/gray_light"
-            android:layout_marginBottom="@dimen/margin_small"
-            android:layout_marginTop="@dimen/margin_small"/>
+                android:layout_gravity="center"
+                android:layout_marginBottom="@dimen/margin_small"
+                android:overScrollMode="never" />
+        </LinearLayout>
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_alignStart="@+id/textView"
-            android:background="@drawable/batle"
             android:paddingBottom="@dimen/padding_small">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/margin_small"
+                android:padding="@dimen/padding_default"
+                android:paddingTop="@dimen/padding_small"
+                android:text="@string/game_grossing"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_big"
+                android:textStyle="bold" />
 
             <Button
                 android:id="@+id/btn_see_more1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_margin="@dimen/padding_default"
+                android:layout_marginRight="@dimen/margin_small"
+                android:background="@drawable/seemore"
+                android:minHeight="0dp"
+                android:minWidth="0dp" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler_view_game_grossing"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_below="@id/btn_see_more1"
+                android:layout_marginTop="@dimen/margin_small"
+                android:background="@android:color/transparent"
+                android:paddingBottom="@dimen/padding_super_tiny"></android.support.v7.widget.RecyclerView>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_small"
+            android:background="@drawable/bg_shadow"
+            android:padding="@dimen/padding_default">
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/margin_small"
+                android:paddingLeft="@dimen/padding_small"
+                android:paddingTop="@dimen/padding_small"
+                android:text="@string/app_on_sale"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_big"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/btn_see_more"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
@@ -117,75 +159,120 @@
                 android:background="@drawable/seemore"
                 android:minHeight="0dp"
                 android:minWidth="0dp" />
+
             <android.support.v7.widget.RecyclerView
-                android:id="@+id/recycler_view_on_sale"
+                android:id="@+id/recycler_view_app_onsale"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_small"
-                android:layout_alignParentBottom="true"
-                android:background="@android:color/transparent"
-                android:paddingBottom="@dimen/padding_super_tiny"></android.support.v7.widget.RecyclerView>
+                android:layout_below="@+id/textView"
+                android:background="@android:color/transparent"></android.support.v7.widget.RecyclerView>
         </RelativeLayout>
-        <TextView
-            android:text=" Top Gone Free"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/margin_small"
-            android:textSize="@dimen/text_size_big"
-            android:textColor="@color/black"
-            android:textStyle="bold"/>
-        <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_view_top_download"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/line_size"
-            android:background="@color/gray_light"
-            android:layout_marginBottom="@dimen/margin_small"
-            android:layout_marginTop="@dimen/margin_small" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/margin_small"
             android:gravity="center"
+            android:orientation="vertical"
+            android:padding="@dimen/padding_default">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/padding_default"
+                android:text="Hi, Did you have account?\nCan you sign in right now!" />
+
+            <Button
+                android:id="@+id/btn_sign_in"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_margin="@dimen/margin_small"
+                android:background="@drawable/install_btn_white"
+                android:minHeight="0dp"
+                android:minWidth="0dp"
+                android:paddingBottom="@dimen/padding_super_tiny"
+                android:paddingLeft="@dimen/padding_default"
+                android:paddingRight="@dimen/padding_default"
+                android:paddingTop="@dimen/padding_super_tiny"
+                android:text="Sign in"
+                android:textColor="@color/blue"
+                android:textSize="@dimen/text_size_tiny" />
+
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_shadow"
+            android:orientation="vertical"
+            android:padding="@dimen/padding_default">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/margin_small"
+                android:paddingLeft="@dimen/margin_tiny"
+                android:paddingTop="@dimen/padding_small"
+                android:text="@string/app_and_game_grossing"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_big"
+                android:textStyle="bold" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler_view_grossing"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"></android.support.v7.widget.RecyclerView>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/view_user_upload"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:orientation="vertical"
+            android:padding="@dimen/padding_default">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/margin_small"
+                android:text="@string/user_upload"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_big"
+                android:textStyle="bold" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler_view_user_upload"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Hi, Mr Thomas" />
+                android:padding="@dimen/padding_default"
+                android:text="@string/hot_topic"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_big"
+                android:textStyle="bold" />
 
-            <TextView
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler_view_topic"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="You can sign here" />
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Sign in" />
-
-
+                android:layout_gravity="center"></android.support.v7.widget.RecyclerView>
         </LinearLayout>
-        <TextView
-            android:text=" Topic"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/margin_small"
-            android:textSize="@dimen/text_size_big"
-            android:textColor="@color/black"
-            android:textStyle="bold"/>
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recycler_view_topic"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/line_size"
-            android:background="@color/gray_light"
-            android:layout_marginBottom="@dimen/margin_small"
-            android:layout_marginTop="@dimen/margin_small" />
+
+
     </LinearLayout>
 </com.paditech.mvpbase.common.view.TranslationNestedScrollView>
 

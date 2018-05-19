@@ -22,7 +22,7 @@
     <color name="main_green">#0197d2</color>
     <color name="main_green_dark">#066e97</color>
     <color name="gray_middle">#a6a6a6</color>
-    <color name="hint_gray_color">#cccccc</color>
+    <color name="hint_gray_color">#dcdbdb</color>
     <color name="black">#000000</color>
-    <color name="gray_line">#cccdd2</color>
+    <color name="gray_line">#e3e3e4</color>
 </resources>

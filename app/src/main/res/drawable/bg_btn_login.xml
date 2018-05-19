@@ -5,19 +5,15 @@
         <shape android:shape="rectangle">
             <corners android:radius="5dp" />
             <solid android:color="#a66691dc" />
-            <stroke
-                android:color="@color/gray_new"
-                android:width="@dimen/line_size"></stroke>
+            <stroke android:width="@dimen/line_size" android:color="@color/gray_new"></stroke>
         </shape>
 
     </item>
-    <item >
+    <item>
         <shape android:shape="rectangle">
             <corners android:radius="5dp" />
             <solid android:color="#488aff" />
-            <stroke
-                android:color="@color/gray_new"
-                android:width="@dimen/line_size"></stroke>
+            <stroke android:width="@dimen/line_size" android:color="@color/gray_new"></stroke>
         </shape>
 
     </item>

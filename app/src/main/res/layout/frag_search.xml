@@ -1,29 +1,127 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/swipe_refresh_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <FrameLayout
-        android:layout_marginTop="@dimen/margin_default"
+    <RelativeLayout
+        android:id="@+id/search_bar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        app:layout_scrollFlags="scroll|enterAlways">
 
-        <com.paditech.mvpbase.common.view.LoadMoreRecyclerView
+        <RelativeLayout
+            android:id="@+id/right_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true">
 
-            android:layout_marginTop="@dimen/margin_default"
-            android:id="@+id/recycler_view_search_item"
+            <Button
+                android:id="@+id/btn_cancel_search"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginBottom="@dimen/margin_small"
+                android:layout_marginRight="@dimen/margin_small"
+                android:layout_marginTop="@dimen/margin_small"
+                android:background="@drawable/bg_btn_login"
+                android:minHeight="0dp"
+                android:minWidth="0dp"
+                android:paddingBottom="@dimen/margin_tiny"
+                android:paddingLeft="@dimen/margin_small"
+                android:paddingRight="@dimen/margin_small"
+                android:paddingTop="@dimen/margin_tiny"
+                android:text="Cancel"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_size_tiny" />
+
+            <Button
+                android:id="@+id/btn_notification"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/notifi_icon"
+                android:visibility="gone" />
+
+            <ProgressBar
+                android:id="@+id/progressBar_search"
+                android:layout_width="@dimen/loading_size"
+                android:layout_height="@dimen/loading_size"
+                android:visibility="gone" />
+        </RelativeLayout>
+
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="@dimen/padding_small"/>
+            android:layout_height="wrap_content"
+            android:layout_toStartOf="@id/right_button"
+            android:background="@drawable/bg_edittext"
+            android:paddingBottom="@dimen/margin_small"
+            android:paddingLeft="@dimen/margin_tiny"
+            android:paddingRight="@dimen/margin_tiny">
 
-        <ProgressBar
-            android:id="@+id/progressBar"
-            android:layout_width="@dimen/loading_size"
-            android:layout_height="@dimen/loading_size"
-            android:layout_gravity="center" />
-    </FrameLayout>
+            <EditText
+                android:id="@+id/edit_text_search"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:background="@null"
+                android:drawableLeft="@drawable/ic_search_grey_18dp"
+                android:drawablePadding="@dimen/padding_super_tiny"
+                android:hint="@string/i_m_looking_for"
+                android:paddingLeft="@dimen/padding_big"
+                android:paddingRight="@dimen/padding_default"
+                android:textColorHint="@color/hint_gray_color"
+                android:textSize="@dimen/text_size_tiny" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right|center_vertical"
+                android:layout_marginRight="@dimen/padding_big"
+                android:src="@drawable/ic_002_qr_code" />
+        </FrameLayout>
+
+    </RelativeLayout>
+
+    <android.support.v4.widget.NestedScrollView
+        android:id="@+id/search_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white_transfer"
+        android:orientation="vertical"
+        android:overScrollMode="never">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/text_cate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_small"
+                android:text="  All Category " />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler_view_list_cate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center" />
+
+            <com.paditech.mvpbase.common.view.LoadMoreRecyclerView
+                android:id="@+id/recycler_view_search_item"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/margin_large"
+                android:layout_marginTop="@dimen/margin_default"
+                android:background="@color/white" />
+        </LinearLayout>
+
+    </android.support.v4.widget.NestedScrollView>
 
 
-</android.support.v4.widget.SwipeRefreshLayout>
+</LinearLayout>

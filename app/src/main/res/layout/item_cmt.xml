@@ -30,6 +30,7 @@
         android:layout_height="wrap_content"
         android:text="I love this app. Thanks you for "
         android:layout_below="@id/ratingbar"
+        android:lines="@integer/one_line"
         />
     <TextView
         android:id="@+id/tv_date"
@@ -47,4 +48,13 @@
         android:layout_alignParentRight="true"
         android:textColor="@color/gray_detail"
         android:text="Simon"/>
+    <ImageView
+        android:id="@+id/img_avar"
+        android:layout_width="@dimen/app_img_size_super_small"
+        android:layout_height="@dimen/app_img_size_super_small"
+        android:layout_toLeftOf="@id/tv_user"
+        android:layout_alignBottom="@id/tv_user"
+        android:layout_marginRight="@dimen/margin_large"
+        android:visibility="gone"
+        />
 </RelativeLayout>

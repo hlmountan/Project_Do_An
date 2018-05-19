@@ -18,41 +18,5 @@ import java.util.List;
  */
 
 public class HomeActPresenter extends ActivityPresenter<HomeActContact.ViewOps> implements HomeActContact.PresenterViewOps {
-    @Override
-    public void cURLSearchData(final int page, String api) {
-        getView().onSearching();
-        APIClient.getInstance().execGet(String.format(api, page), null, new ICallBack() {
-            @Override
-            public void onErrorToken() {
 
-            }
-
-            @Override
-            public void onFailed(IOException e) {
-                getView().onSearchDone();
-            }
-
-            @Override
-            public void onResponse(String response, boolean isSuccessful) {
-                // do something here
-                getView().onSearchDone();
-                final Appsxyz result = new Gson().fromJson(response, Appsxyz.class);
-                if (result != null) {
-                    if (page ==1){
-                        getView().setSearchResult(result.getResult());
-                    }else{
-                        getView().loadMore(result.getResult());
-                    }
-
-                }
-            }
-        });
-    }
-
-    @Override
-    public void getListCates() {
-        String[] array = new String[]{"Game", "Sport", "Funny", "English", "Education", "Music",
-                "Language", "Star", "Food", "Cooking", "Car"};
-        getView().updateListCates(Arrays.asList(array));
-    }
 }

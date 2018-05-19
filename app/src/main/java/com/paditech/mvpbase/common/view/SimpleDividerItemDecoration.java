@@ -4,9 +4,10 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.PorterDuff;
 import android.graphics.Rect;
-import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
@@ -79,6 +80,10 @@ public class SimpleDividerItemDecoration extends RecyclerView.ItemDecoration {
         int right = parent.getWidth() - parent.getPaddingRight() - paddingRight;
 
         int childCount = parent.getChildCount();
+        if (parent.getLayoutManager() instanceof GridLayoutManager) {
+            if (((GridLayoutManager) parent.getLayoutManager()).getOrientation() == LinearLayoutManager.HORIZONTAL)
+                childCount = ((GridLayoutManager) parent.getLayoutManager()).getSpanCount();
+        }
         int size;
         if (!hasLastLine) {
             if (hasFooter) size = childCount - 2;
@@ -89,14 +94,17 @@ public class SimpleDividerItemDecoration extends RecyclerView.ItemDecoration {
         }
         for (int i = 0; i < size; i++) {
             View child = parent.getChildAt(i);
+            if(child !=null ) {
+                int bottomMargin = 0;
+                if (child.getLayoutParams() != null) {
+                    bottomMargin = ((RecyclerView.LayoutParams) child.getLayoutParams()).bottomMargin;
+                }
+                int top = child.getBottom() + bottomMargin;
+                int bottom = top + mDivider.getIntrinsicHeight();
 
-            RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) child.getLayoutParams();
-
-            int top = child.getBottom() + params.bottomMargin;
-            int bottom = top + mDivider.getIntrinsicHeight();
-
-            mDivider.setBounds(left, top, right, bottom);
-            mDivider.draw(c);
+                mDivider.setBounds(left, top, right, bottom);
+                mDivider.draw(c);
+            }
         }
     }
 }

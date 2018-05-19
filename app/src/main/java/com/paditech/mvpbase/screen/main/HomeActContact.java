@@ -12,16 +12,9 @@ import java.util.List;
 
 public interface HomeActContact {
     interface ViewOps extends ActivityViewOps{
-        void setSearchResult(List<AppModel> listApp);
-        void updateListCates(List<String> strings);
-        void onSearching();
-        void onSearchDone();
-        void loadMore(List<AppModel> listApp);
     }
 
     interface PresenterViewOps extends ActivityPresenterViewOps{
-        void cURLSearchData(final int page, String api);
-        void getListCates();
     }
 
 

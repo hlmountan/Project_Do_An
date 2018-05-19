@@ -3,8 +3,8 @@ package com.paditech.mvpbase.common.model;
 import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
 import com.google.gson.reflect.TypeToken;
+import com.paditech.mvpbase.common.event.ApkFileInfoEvent;
 
-import java.lang.reflect.Array;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,12 +27,102 @@ public class AppModel {
     }
 
 
+    public AppModel(ApkFileInfoEvent apk) {
+        SourceBean source = new SourceBean(apk);
+        this.source = source;
+
+    }
+
+    public AppModel() {
+    }
+
     public static class SourceBean {
+        private String devId;
+
+        public String getDevId() {
+            return devId;
+        }
+
+        public void setDevId(String devId) {
+            this.devId = devId;
+        }
+
+        private int status;
+
+        public int getStatus() {
+            return status;
+        }
+
+        public void setStatus(int status) {
+            this.status = status;
+        }
+
+        private boolean isFirebaseCmt;
+
+        public boolean isFirebaseCmt() {
+            return isFirebaseCmt;
+        }
+
+        public void setFirebaseCmt(boolean firebaseCmt) {
+            isFirebaseCmt = firebaseCmt;
+        }
+
+        private  boolean isUserUpload = false;
+
+        public boolean isUserUpload() {
+            return isUserUpload;
+        }
+
+        public void setUserUpload(boolean userUpload) {
+            isUserUpload = userUpload;
+        }
+
+        public SourceBean() {
+        }
+        private String policy;
+
+        public String getPolicy() {
+            return policy;
+        }
+
+        public void setPolicy(String policy) {
+            this.policy = policy;
+        }
+
+        public SourceBean(ApkFileInfoEvent apk) {
+            this.screenshotUserUpload = apk.getScreenshot();
+            this.description = apk.getDescription();
+            this.offerby = apk.getOfferby();
+            this.appid = apk.getAppid();
+            this.score = apk.getScore();
+            this.installs = apk.getNumberDownload();
+            this.title = apk.getTitle();
+            this.cover = apk.getAvar();
+            this.isUserUpload = true;
+            this.status = apk.getStatus();
+            this.category = apk.getCate();
+            this.require = apk.getRequire();
+            this.contentrating = apk.getAge();
+            this.policy = apk.getPolicy();
+            this.devId = apk.getUid();
+
+        }
+
+        private ArrayList<String> screenshotUserUpload;
+
+        public ArrayList<String> getScreenshotUserUpload() {
+            return screenshotUserUpload;
+        }
+
+        public void setScreenshotUserUpload(ArrayList<String> screenshotUserUpload) {
+            this.screenshotUserUpload = screenshotUserUpload;
+        }
 
         @SerializedName("description")
         private String description;
         @SerializedName("contentrating")
         private String contentrating;
+
 
         public String getContentrating() {
             return contentrating;
@@ -87,6 +177,17 @@ public class AppModel {
         @SerializedName("category")
         private String category;
 
+        @SerializedName("size")
+        private int size;
+
+        public int getSize() {
+            return size;
+        }
+
+        public void setSize(int size) {
+            this.size = size;
+        }
+
         public String getCategory() {
             return category;
         }
@@ -120,6 +221,7 @@ public class AppModel {
 
         @SerializedName("requireandroid")
         private String require;
+
         public float getScore() {
             return score;
         }
@@ -215,24 +317,19 @@ public class AppModel {
         }
 
 
-
         private ArrayList<ArrayList<String>> screenShot = null;
 
         public ArrayList<ArrayList<String>> getScreenShot() {
             Gson gson = new Gson();
-            Type listType = new TypeToken<ArrayList<ArrayList<String>>>(){}.getType();
-            screenShot = gson.fromJson(thumbnails,listType);
+            Type listType = new TypeToken<ArrayList<ArrayList<String>>>() {
+            }.getType();
+            screenShot = gson.fromJson(thumbnails, listType);
             return screenShot;
         }
 
         public void setScreenShot(ArrayList<ArrayList<String>> screenShot) {
             this.screenShot = screenShot;
         }
-
-
-
-
-
 
 
     }

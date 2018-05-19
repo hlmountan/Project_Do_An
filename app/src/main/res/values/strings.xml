@@ -9,12 +9,20 @@
     <string name="refresh">Tải lại</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
+    <string name="public_app">Public Your App</string>
+    <string name="update_app">Update Your App</string>
     <string name="see_more">See more</string>
     <string name="register">Register</string>
     <string name="login">Login</string>
     <string name="login_g">Login With Google</string>
     <string name="login_f">Login With Facebook</string>
     <string name="apply">Apply</string>
+    <string name="save">Save</string>
+    <string name="install">INSTALL</string>
+    <string name="open_app">OPEN</string>
+    <string name="facebook_app_id">2102773583335853</string>
+    <string name="fb_login_protocol_scheme">fb2102773583335853</string>
+
     <!--Select multi photos-->
     <string name="select_multi_photo">Select photos</string>
     <string name="select_image">Chọn ảnh</string>
@@ -43,19 +51,100 @@
     <string name="aboutus_content">Lenam Store is the third product of Lenam company.The founder are full-stack dev who want to provide usability-optimized,premium content in a design-focused setting. The nearly 6 billions app were tested and optimized.</string>
     <string name="feedback">Feefback</string>
     <string name="feedback_content">appnaz.com@gmail.com</string>
-    <string name="lega_info">Legal Infomation</string>
+    <string name="lega_info">Legal Information</string>
     <string name="lenam_store">Lenam Store</string>
     <string name="feedback_title">Please, tell us what you thing!</string>
+    <string name="home_title">What is new today?</string>
+    <string name="all_apk">All APK File In Your Device</string>
+    <string name="you_have_like">App You Have Like</string>
+    <string name="follow">Follow</string>
+    <string name="message">Message</string>
+    <string name="hint_leave_reply">Leave Your Reply</string>
+    <string name="upload">Title and File</string>
+    <string name="upload_policy">This is the account that will be associated with your Developer Console.</string>
+    <string name="step_1">Step 1: Accept term and policy</string>
+    <string name="step_2">Step 2: Upload APK file and name</string>
+    <string name="step_3">Step 3: Upload logo</string>
+    <string name="step_4">Step 4: Upload Screenshots</string>
+    <string name="step_5">Step 5: Finish</string>
+    <string name="step_6">Step 6</string>
+    <string name="step_7">Step 7</string>
+    <string name="step_format" formatted="false">Step %d</string>
+    <string name="final_step">Final Step</string>
+    <string name="agreement">I agree and I am willing to associate my account registration with the Play Developer distribution agreement.</string>
+   <string name="your_app_title">Your App Title</string>
+    <string name="submit">Submit</string>
+    <string name="add_screenshot">Add ScreenShot</string>
+    <string name="add_avar">Add Avatar Image</string>
+    <string name="add_cmt_img">Add Image for comment</string>
+    <string name="final_annoucement">We will review your app in 3-5 working days and will send you an email when it done</string>
+    <string name="all_apk_file">Your All Apk</string>
+    <string name="default_size">500 Mb</string>
+    <string name="date_modify">5/10/18</string>
+    <string name="upload_guide">Your title may be at least 3 characters. You can choose upload option from your local file or from your Google driver. Next when you finish this to upload your file.</string>
+    <string name="upload_guide_2">Your avartar image must be at least 500px. It use to present your app detail. Load it from the local image or Google driver image.</string>
+    <string name="upload_guide_3">Your list image screenshot must be at least 5 items and maximize is  15 items. You can choose multiple images from your local or step by step from Google Driver.</string>
+    <string name="cmt_success">Thanks for sharing your experience.\n\nGood Day ! </string>
+    <string name="cmt_login_alert">You must LOG IN to use this function.\nDo you want to LOG IN?</string>
+    <string name="empty_context_cmt">You must RATE and leave the COMMENT in this box after submit</string>
+    <string name="install_condition">You have to INSTALL this app to rate it</string>
+    <string name="title">Your title</string>
+    <string name="des">Your description</string>
+    <string name="your_policy">Your policy</string>
+    <string name="age">Age require</string>
+    <string name="android_require">Android Require</string>
+    <string name="apk_info">Your Apk information</string>
+    <string name="apk_status">Apk Status</string>
+    <string name="pending">pending</string>
+    <string name="pending_direction">Your app id pending. Public your app for everyone</string>
+    <string name="missing_info">Missing Information</string>
+    <string name="missing_info_direction">Your app id pending because missing information. please,
+        Check it in Information tap above.</string>
+    <string name="saveinfo_false">You can not SAVE info when you not complete all the information.\n
+        Do you want to REDO?</string>
+    <string name="finish_saving"> Apply to finish save</string>
+    <string name="public_apk">Public</string>
+    <string name="public_direction">Your app is now publicising</string>
+    <string name="public_ask">Do you want to public your app?</string>
+    <string name="public_notify">This app is now available for you to download</string>
+    <string name="authen">© The ReviStore</string>
+    <string name="notify_filter_all">All</string>
+    <string name="notify_filter_New">New</string>
+    <string name="notify_read">Readed</string>
+    <string name="notify_new">New</string>
+    <string name="notify_status_1">New version</string>
+    <string name="notify_status_2">App Publiced</string>
+    <string name="notify_status_3">New Comment</string>
+
+
+
     <!--Main-->
     <string name="open">Open</string>
     <string name="close">Close</string>
 
 
     <!--Name -->
+    <string name="anonymous">Anonymous</string>
+    <string name="app_and_game_grossing">Grossing App &amp; Game</string>
+    <string name="hot_topic">Hot Topic</string>
+    <string name="app_on_sale">App On Sale</string>
+    <string name="hot_trend"> Hot Trend</string>
+    <string name="game_grossing">Top Game Grossing</string>
     <string name="google">Google</string>
     <string name="facebook">Facebook</string>
     <string name="your_email">...@gmail.com</string>
     <string name="password">********</string>
+    <string name="title_activity_home">HomeActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_category">Category</string>
+    <string name="title_search">Search</string>
+    <string name="policy">Policy and Privacy</string>
+    <string name="user_default"> Hi,\nJack Jordan</string>
+    <string name="hi">Hi,\n</string>
+    <string name="user_default_email">jackjordan@gmail.com</string>
+    <string name="user_download_analysis">Download Analysis</string>
+    <string name="user_upload_apk">Your App</string>
+    <string name="user_upload">User Upload</string>
     <!--Message -->
     <string name="allow">Allow</string>
     <string name="deny">Deny</string>
@@ -64,16 +153,11 @@
     <string name="register_mes">Time to Explore</string>
     <string name="mess_no_connect">Không có kết nối mạng.</string>
     <string name="notice">Thông báo</string>
-    <string name="title_activity_home">HomeActivity</string>
-    <string name="title_home">Home</string>
-    <string name="title_category">Category</string>
     <string name="title_notifications">Notifications</string>
     <string name="title_manage_apk">Apk</string>
-    <string name="title_search">Search</string>
     <string name="title_activity_menu_navigation">ActivityMenuNavigation</string>
     <string name="user_name">  User Name</string>
     <string name="cmt_hint">Comment... (optional)</string>
-    <string name="policy">Policy and Privacy</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="share_cmt">Share your experience with our community!</string>
@@ -94,4 +178,9 @@
     <string name="reason_report_5">Illegal prescription or other drug</string>
     <string name="reason_report_6">Virus or other malware issues</string>
     <string name="reason_report_7">IP Infringement</string>
+    <string name="i_m_looking_for">I\'m looking for . . .</string>
+    <string name="publish_your_app">Publish your app</string>
+    <string name="step_1_accept_term_and_policy">Step 1: Accept term and policy</string>
+    <string name="app_title">App title</string>
+    <string name="choose_apk_file">Choose APK file</string>
 </resources>
