@@ -15,7 +15,9 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
@@ -35,6 +37,7 @@ import com.paditech.mvpbase.common.utils.CommonUtil;
 import com.paditech.mvpbase.common.utils.ImageUtil;
 import com.paditech.mvpbase.common.utils.StringUtil;
 import com.paditech.mvpbase.common.utils.get_image.GetImageManager;
+import com.paditech.mvpbase.common.view.ValueProgressBar;
 import com.paditech.mvpbase.screen.adapter.RecyclerViewListScreenshortUploadAdapter;
 import com.paditech.mvpbase.screen.apkFile.AllApkFileActivity;
 
@@ -49,6 +52,9 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import butterknife.Unbinder;
 
 /**
  * Created by hung on 5/9/2018.
@@ -65,22 +71,21 @@ public class UploadApkFragment extends MVPFragment<UploadApkContact.PresenterVie
     @BindView(R.id.tv_state)
     TextView state;
     @BindView(R.id.ln_step1)
-    LinearLayout step1;
+    View step1;
     @BindView(R.id.ln_step2)
-    LinearLayout step2;
+    View step2;
     @BindView(R.id.ln_step3)
-    LinearLayout step3;
+    View step3;
     @BindView(R.id.ln_step4)
-    LinearLayout step4;
+    View step4;
     @BindView(R.id.ln_final)
-    LinearLayout ln_final;
+    View ln_final;
     @BindView(R.id.img_avar)
     ImageView avar;
     @BindView(R.id.checkbox_agreement)
     CheckBox agreement;
     @BindView(R.id.btn_add_image)
     Button btn_add_image;
-    ApkFileInfoEvent apkFile = new ApkFileInfoEvent();
     @BindView(R.id.btn_upload_local)
     Button btn_upload_local;
     @BindView(R.id.btn_upload_driver)
@@ -106,14 +111,32 @@ public class UploadApkFragment extends MVPFragment<UploadApkContact.PresenterVie
     TextView tv_user;
     @BindView(R.id.btn_previous)
     View btnPrevious;
+    @BindView(R.id.btn_reset)
+    View btnReset;
+    @BindView(R.id.recycler_view_img_screenshot)
+    RecyclerView recycler_view_img_screenshot;
+    @BindView(R.id.tv_upload_apk)
+    TextView tvUploadApk;
+    @BindView(R.id.tv_progress_apk)
+    TextView tvProgressApk;
+    @BindView(R.id.progress_bar_apk)
+    ValueProgressBar progressBarApk;
+    @BindView(R.id.tv_progress_avatar)
+    TextView tvProgressAvatar;
+    @BindView(R.id.progress_bar_avatar)
+    ValueProgressBar progressBarAvatar;
+    @BindView(R.id.tv_progress_screen)
+    TextView tvProgressScreen;
+    @BindView(R.id.progress_bar_screen)
+    ValueProgressBar progressBarScreen;
 
     int step = 1;
     String path = "";
     RecyclerViewListScreenshortUploadAdapter listScreenshortUploadAdapter;
-    @BindView(R.id.recycler_view_img_screenshot)
-    RecyclerView recycler_view_img_screenshot;
 
     GetImageManager getImageManager;
+
+    private ApkFileInfoEvent apkFile = new ApkFileInfoEvent();
 
     public String getPath() {
         return path;
@@ -180,8 +203,7 @@ public class UploadApkFragment extends MVPFragment<UploadApkContact.PresenterVie
         step3.setOnClickListener(this);
         agreement.setOnClickListener(this);
         et_title.setOnFocusChangeListener(this);
-
-
+        changeStep();
     }
 
     @Override
@@ -200,15 +222,26 @@ public class UploadApkFragment extends MVPFragment<UploadApkContact.PresenterVie
             case R.id.btn_next:
                 switch (step) {
                     case 2:
-                        if (StringUtil.isEmpty(path) || StringUtil.isEmpty(et_title.getText().toString().trim()))
+                        if (StringUtil.isEmpty(et_title.getText().toString().trim())) {
+                            showToast(getString(R.string.please_enter_title));
                             return;
+                        }
+                        if (StringUtil.isEmpty(path)) {
+                            showToast(getString(R.string.please_choose_apk));
+                            return;
+                        }
                         break;
                     case 3:
-                        if (StringUtil.isEmpty(apkFile.getAvar())) return;
+                        if (StringUtil.isEmpty(apkFile.getAvar())) {
+                            showToast(getString(R.string.please_choose_avatar));
+                            return;
+                        }
                         break;
                     case 4:
-                        if (apkFile.getScreenshot() == null || apkFile.getScreenshot().isEmpty())
+                        if (apkFile.getScreenshot() == null || apkFile.getScreenshot().isEmpty()) {
+                            showToast(getString(R.string.please_choose_screenshot));
                             return;
+                        }
                         break;
                 }
                 step++;
@@ -250,10 +283,20 @@ public class UploadApkFragment extends MVPFragment<UploadApkContact.PresenterVie
         step3.setVisibility(View.GONE);
         step4.setVisibility(View.GONE);
         ln_final.setVisibility(View.GONE);
-        if (step > 1) btnPrevious.setVisibility(View.VISIBLE);
-        else btnPrevious.setVisibility(View.GONE);
-        if (step < 5) btn_next.setVisibility(View.VISIBLE);
-        else btn_next.setVisibility(View.GONE);
+        if (step > 1) {
+            btnPrevious.setVisibility(View.VISIBLE);
+            btnPrevious.setEnabled(true);
+        } else {
+            btnPrevious.setVisibility(View.INVISIBLE);
+            btnPrevious.setEnabled(false);
+        }
+        if (step < 5) {
+            btn_next.setVisibility(View.VISIBLE);
+            btn_next.setEnabled(true);
+        } else {
+            btn_next.setVisibility(View.INVISIBLE);
+            btn_next.setEnabled(false);
+        }
         switch (step) {
             case 1:
                 tvStep.setText(R.string.step_1);
@@ -270,33 +313,48 @@ public class UploadApkFragment extends MVPFragment<UploadApkContact.PresenterVie
                 step3.setVisibility(View.VISIBLE);
                 break;
             case 4:
-                getPresenter().updateAvar(apkFile.getAvar());
                 tvStep.setText(R.string.step_4);
                 step4.setVisibility(View.VISIBLE);
                 break;
             case 5:
-                getPresenter().updateScreenshot(apkFile.getScreenshot());
+                getPresenter().createNewApk(apkFile);
                 tvStep.setText(R.string.step_5);
                 ln_final.setVisibility(View.VISIBLE);
+                btn_next.setVisibility(View.GONE);
+                btnPrevious.setVisibility(View.GONE);
+                break;
+        }
+    }
+
+    @OnClick({R.id.btn_reset})
+    public void onClickView(View view) {
+        switch (view.getId()) {
+            case R.id.btn_reset:
                 resetToStep1();
                 break;
         }
     }
 
     private void resetToStep1() {
-        state.setVisibility(View.GONE);
+        step = 1;
+        changeStep();
         agreement.setChecked(false);
         btn_next.setVisibility(View.GONE);
         ln_final.setVisibility(View.GONE);
         step1.setVisibility(View.VISIBLE);
         ln_apk_file.setVisibility(View.GONE);
-        step = 1;
         path = "";
         et_title.setText("");
         ImageUtil.loadImage(act, R.drawable.image_placeholder_500x500, avar);
         listScreenshortUploadAdapter.setListImg(new ArrayList<String>());
         getImageManager.setmListPhotoSelected(new ArrayList<String>());
         apkFile = new ApkFileInfoEvent();
+        tvProgressApk.setVisibility(View.VISIBLE);
+        tvProgressScreen.setVisibility(View.VISIBLE);
+        tvProgressAvatar.setVisibility(View.VISIBLE);
+        progressBarApk.setVisibility(View.VISIBLE);
+        progressBarScreen.setVisibility(View.VISIBLE);
+        progressBarAvatar.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -305,7 +363,6 @@ public class UploadApkFragment extends MVPFragment<UploadApkContact.PresenterVie
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
             case APKFILE:
-
                 File file = new File(converUri(data));
                 int file_size = Integer.parseInt(String.valueOf(file.length() / 1024));
                 String name = file.getName();
@@ -375,6 +432,7 @@ public class UploadApkFragment extends MVPFragment<UploadApkContact.PresenterVie
         mDate.setTime(Long.parseLong(apk.getDateModify()) / 1000);
         lastModify.setText(mDataFormat.format(mDate));
         setPath(apk.getPath());
+        apkFile = apk;
     }
 
     public void hideKeyboard(View view) {
@@ -396,36 +454,8 @@ public class UploadApkFragment extends MVPFragment<UploadApkContact.PresenterVie
     }
 
     @Override
-    public void onUploadFileSuccess(String url) {
-        apkFile.setLinkDownload(url);
-        progressBar.setVisibility(View.GONE);
-        tv_percen.setVisibility(View.GONE);
-        apkFile.setTitle(et_title.getText().toString());
-        apkFile.setStatus(2);
-        getPresenter().createNewApk(apkFile);
-    }
-
-    @Override
     public void onUploadFileFalse(@NonNull Exception exception) {
-        System.out.println(exception);
-    }
-
-    @Override
-    public void onUploading(String percent) {
-        tv_percen.setVisibility(View.VISIBLE);
-        tv_percen.setText(percent);
-    }
-
-    @Override
-    public void onAvarLoadSuccess(String url) {
-        apkFile.setAvar(url);
-        getPresenter().updateApkAvar(apkFile);
-    }
-
-    @Override
-    public void onScreenshotLoadSuccess(ArrayList<String> url) {
-        apkFile.setScreenshot(url);
-        getPresenter().updateApkScreenshot(apkFile);
+        showToast(exception.getMessage());
     }
 
     @Override
@@ -434,17 +464,60 @@ public class UploadApkFragment extends MVPFragment<UploadApkContact.PresenterVie
     }
 
     @Override
-    public void visibleSuccessUpload() {
-        btn_next.setVisibility(View.VISIBLE);
+    public void onProgressAvatar(final int percent) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                tvProgressAvatar.setText(getString(R.string.avatar_uploading_d, percent));
+                progressBarAvatar.setProgress(percent);
+            }
+        });
     }
 
+    @Override
+    public void onProgressScreens(final int percent, final String doneCont) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                tvProgressScreen.setText(getString(R.string.screen_uploading, percent, doneCont));
+                progressBarScreen.setProgress(percent);
+            }
+        });
+    }
+
+    @Override
+    public void onProgressAPK(final int percent) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                tvProgressApk.setText(getString(R.string.avatar_uploading_d, percent));
+                progressBarApk.setProgress(percent);
+            }
+        });
+    }
+
+    @Override
+    public void onFinishAll() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                tvProgressApk.setVisibility(View.GONE);
+                tvProgressScreen.setVisibility(View.GONE);
+                tvProgressAvatar.setVisibility(View.GONE);
+                progressBarApk.setVisibility(View.GONE);
+                progressBarScreen.setVisibility(View.GONE);
+                progressBarAvatar.setVisibility(View.GONE);
+                btnReset.setVisibility(View.VISIBLE);
+            }
+        });
+    }
+
+
     public void requirePermission() {
-        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
-
             // Should we show an explanation?
-
-            if (!ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
+            if (!ActivityCompat.shouldShowRequestPermissionRationale(getActivityReference(),
                     Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                 ActivityCompat.requestPermissions(act,
                         new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},

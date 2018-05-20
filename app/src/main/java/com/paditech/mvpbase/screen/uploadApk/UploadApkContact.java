@@ -14,13 +14,12 @@ import java.util.ArrayList;
 
 public interface UploadApkContact {
     interface ViewOps extends FragmentViewOps{
-        void onUploadFileSuccess(String url);
         void onUploadFileFalse(@NonNull Exception exception);
-        void onUploading(String percent);
-        void onAvarLoadSuccess(String url);
-        void onScreenshotLoadSuccess(ArrayList<String> url);
         void uploadappid(String appid);
-        void visibleSuccessUpload();
+        void onProgressAvatar(int percent);
+        void onProgressScreens(int percent, String doneCont);
+        void onProgressAPK(int percent);
+        void onFinishAll();
     }
 
     interface  PresenterViewOps extends FragmentPresenterViewOps{
@@ -28,7 +27,7 @@ public interface UploadApkContact {
         void createNewApk( ApkFileInfoEvent apk);
         void updateAvar(String path);
         void updateScreenshot(ArrayList<String> path);
-        void updateApkAvar(final ApkFileInfoEvent apk);
-        void updateApkScreenshot(final ApkFileInfoEvent apk);
+        String getAppId(String filePath);
+        void checkSuccessAll();
     }
 }

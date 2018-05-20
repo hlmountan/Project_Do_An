@@ -117,6 +117,11 @@
     <string name="notify_status_3">New Comment</string>
 
 
+    <!--Upload APk-->
+    <string name="please_enter_title">Please enter app title to continue!</string>
+    <string name="please_choose_apk">Please choose app APK to continue!</string>
+    <string name="please_choose_avatar">Please choose app avatar to continue!</string>
+    <string name="please_choose_screenshot">Please choose app screenshots to continue!</string>
 
     <!--Main-->
     <string name="open">Open</string>
@@ -183,4 +188,8 @@
     <string name="step_1_accept_term_and_policy">Step 1: Accept term and policy</string>
     <string name="app_title">App title</string>
     <string name="choose_apk_file">Choose APK file</string>
+    <string name="upload_another_app">Upload another app</string>
+    <string name="apk_uploading_d" formatted="false">APK uploading: %d %%</string>
+    <string name="avatar_uploading_d" formatted="false">Avatar uploading: %d %%</string>
+    <string name="screen_uploading" formatted="false">Screenshots uploading: %d %%\t %s</string>
 </resources>

@@ -1,7 +1,11 @@
 package com.paditech.mvpbase.screen.uploadApk;
 
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Environment;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -10,23 +14,27 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.google.gson.Gson;
 import com.paditech.mvpbase.common.event.ApkFileInfoEvent;
 import com.paditech.mvpbase.common.mvp.fragment.FragmentPresenter;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  * Created by hung on 5/9/2018.
  */
 
 public class UploadApkPresenter extends FragmentPresenter<UploadApkContact.ViewOps> implements UploadApkContact.PresenterViewOps {
-    FirebaseStorage storage = FirebaseStorage.getInstance("gs://rugged-scion-129008.appspot.com/");
-// storage
+    private String mAppId;
+    private boolean avatarSuccess, apkSuccess, screenshotSuccess;
+
+    // storage
     @Override
     public void uploadApk(String path) {
         UploadTask uploadTask;
-        StorageReference storageRef = storage.getReference();
+        StorageReference storageRef = FirebaseStorage.getInstance().getReference();
 
         Uri file = Uri.fromFile(new File(path));
         StorageReference riversRef = storageRef.child("apk/" + file.getLastPathSegment());
@@ -47,12 +55,19 @@ public class UploadApkPresenter extends FragmentPresenter<UploadApkContact.ViewO
                 // ...
                 System.out.println(taskSnapshot.getDownloadUrl());
                 System.out.println("success upload");
-                getView().onUploadFileSuccess(taskSnapshot.getDownloadUrl().toString());
+
+                // save to firebase
+                Uri linkDownload = taskSnapshot.getDownloadUrl();
+                if (linkDownload != null) {
+                    apkSuccess = true;
+                    FirebaseDatabase.getInstance().getReference().child("apk").child(mAppId).child("linkDownload").setValue(linkDownload.toString());
+                    checkSuccessAll();
+                }
             }
         }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                getView().onUploading(String.valueOf(taskSnapshot.getBytesTransferred() * 100 / taskSnapshot.getTotalByteCount()));
+                getView().onProgressAPK((int) (taskSnapshot.getBytesTransferred() * 100 / taskSnapshot.getTotalByteCount()));
             }
         });
     }
@@ -60,7 +75,7 @@ public class UploadApkPresenter extends FragmentPresenter<UploadApkContact.ViewO
     @Override
     public void updateAvar(String path) {
         UploadTask uploadTask;
-        StorageReference storageRef = storage.getReference();
+        StorageReference storageRef = FirebaseStorage.getInstance().getReference();
 
         Uri file = Uri.fromFile(new File(path));
         StorageReference riversRef = storageRef.child("avartar/" + file.getLastPathSegment());
@@ -79,7 +94,17 @@ public class UploadApkPresenter extends FragmentPresenter<UploadApkContact.ViewO
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
                 // ...
-                getView().onAvarLoadSuccess(taskSnapshot.getDownloadUrl().toString());
+                Uri link = taskSnapshot.getDownloadUrl();
+                if (link != null) {
+                    FirebaseDatabase.getInstance().getReference().child("apk").child(mAppId).child("avar").setValue(link.toString());
+                    avatarSuccess = true;
+                    checkSuccessAll();
+                }
+            }
+        }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                getView().onProgressAvatar((int) (taskSnapshot.getBytesTransferred() * 100 / taskSnapshot.getTotalByteCount()));
             }
         });
     }
@@ -88,7 +113,7 @@ public class UploadApkPresenter extends FragmentPresenter<UploadApkContact.ViewO
     public void updateScreenshot(final ArrayList<String> path) {
         final ArrayList<String> url = new ArrayList<>();
         UploadTask uploadTask;
-        StorageReference storageRef = storage.getReference();
+        StorageReference storageRef = FirebaseStorage.getInstance().getReference();
 
         for (String a : path) {
             Uri file = Uri.fromFile(new File(a));
@@ -101,8 +126,8 @@ public class UploadApkPresenter extends FragmentPresenter<UploadApkContact.ViewO
                     // Handle unsuccessful uploads
                     System.out.println("upload fail " + exception);
                     url.add("");
-                    if (url.size() == path.size()){
-                        getView().onScreenshotLoadSuccess(url);
+                    if (url.size() == path.size()) {
+                        updateApkScreenshot(url);
                     }
 
                 }
@@ -113,39 +138,58 @@ public class UploadApkPresenter extends FragmentPresenter<UploadApkContact.ViewO
                     // ...
                     System.out.println("success upload");
                     url.add(taskSnapshot.getDownloadUrl().toString());
-                    if (url.size() == path.size()){
-                        getView().onScreenshotLoadSuccess(url);
+                    if (url.size() == path.size()) {
+                        updateApkScreenshot(url);
                     }
+                }
+            }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                    getView().onProgressScreens((int) (taskSnapshot.getBytesTransferred() * 100 / taskSnapshot.getTotalByteCount()), url.size() + "/" + path.size());
                 }
             });
         }
 
 
-
     }
 
-//db
+    @Override
     public void createNewApk(final ApkFileInfoEvent apk) {
-
-        String id = FirebaseDatabase.getInstance().getReference().child("apk").push().getKey();
-        FirebaseDatabase.getInstance().getReference().child("apk").child(id).setValue(apk);
-        getView().uploadappid(id);
+        Log.e("APK", new Gson().toJson(apk));
+        mAppId = getAppId(apk.getPath());
+        if (mAppId == null) return;
+        FirebaseDatabase.getInstance().getReference().child("apk").child(mAppId).setValue(apk);
+        getView().uploadappid(mAppId);
+        uploadApk(apk.getPath());
+        updateAvar(apk.getAvar());
+        updateScreenshot(apk.getScreenshot());
     }
 
-    public void updateApkAvar(final ApkFileInfoEvent apk) {
-
-        FirebaseDatabase.getInstance().getReference().child("apk").child(apk.getAppid()).child("avar").setValue(apk.getAvar());
-
-    }
-
-    public void updateApkScreenshot(final ApkFileInfoEvent apk) {
-
-        FirebaseDatabase.getInstance().getReference().child("apk").child(apk.getAppid()).child("screenshot").setValue(apk.getScreenshot()).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                getView().visibleSuccessUpload();
-            }
-        });
+    public void updateApkScreenshot(ArrayList<String> screens) {
+        FirebaseDatabase.getInstance().getReference().child("apk").child(mAppId).child("screenshot").setValue(screens);
+        screenshotSuccess = true;
+        checkSuccessAll();
 
     }
+
+    @Override
+    public String getAppId(String filePath) {
+        try {
+            final PackageManager pm = getView().getActivityContext().getPackageManager();
+            PackageInfo info = pm.getPackageArchiveInfo(filePath, 0);
+            Log.e("APK", "VersionCode : " + info.versionCode + ", VersionName : " + info.versionName);
+            return info.packageName.replace(".", "_");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public void checkSuccessAll() {
+        if (avatarSuccess && apkSuccess && screenshotSuccess) {
+            getView().onFinishAll();
+        }
+    }
+
 }
