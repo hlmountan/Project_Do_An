@@ -5,9 +5,8 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import com.paditech.mvpbase.common.mvp.fragment.MVPFragment;
-import com.paditech.mvpbase.screen.apkManage.ApkFragment;
 import com.paditech.mvpbase.screen.home.HomeFragment;
+import com.paditech.mvpbase.screen.notification.NotificationActivity;
 import com.paditech.mvpbase.screen.search.SearchFragment;
 import com.paditech.mvpbase.screen.uploadApk.UploadApkFragment;
 
@@ -44,7 +43,7 @@ public class MainViewPagerAdapter extends FragmentPagerAdapter {
                 fragment = UploadApkFragment.getInstance(getAct());
                 return fragment;
             default:
-                fragment = ApkFragment.getInstance(getAct());
+                fragment = NotificationActivity.newInstance();
                 return fragment;
 
 

@@ -5,6 +5,7 @@ import android.content.pm.PackageManager;
 
 import com.google.gson.Gson;
 import com.paditech.mvpbase.common.model.Appsxyz;
+import com.paditech.mvpbase.common.mvp.activity.ActivityPresenter;
 import com.paditech.mvpbase.common.mvp.fragment.FragmentPresenter;
 import com.paditech.mvpbase.common.service.APIClient;
 import com.paditech.mvpbase.common.service.ICallBack;
@@ -18,7 +19,7 @@ import java.util.List;
  * Created by hung on 4/14/2018.
  */
 
-public class ApkPresenter extends FragmentPresenter<ApkContact.ViewOps> implements ApkContact.PresenterViewOps {
+public class ApkPresenter extends ActivityPresenter<ApkContact.ViewOps> implements ApkContact.PresenterViewOps {
     @Override
     public void getApkInfo() {
         final PackageManager pm = getView().getApplicationContext().getPackageManager();

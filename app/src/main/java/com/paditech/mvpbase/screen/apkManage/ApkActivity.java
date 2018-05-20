@@ -19,8 +19,8 @@ import android.widget.Button;
 import com.google.firebase.auth.FirebaseAuth;
 import com.paditech.mvpbase.R;
 import com.paditech.mvpbase.common.model.AppModel;
-import com.paditech.mvpbase.common.mvp.fragment.FragmentPresenter;
-import com.paditech.mvpbase.common.mvp.fragment.MVPFragment;
+import com.paditech.mvpbase.common.mvp.activity.ActivityPresenter;
+import com.paditech.mvpbase.common.mvp.activity.MVPActivity;
 import com.paditech.mvpbase.common.view.SimpleDividerItemDecoration;
 import com.paditech.mvpbase.screen.adapter.RecyclerViewApkAdapter;
 import com.paditech.mvpbase.screen.home.HomeRecyclerViewAdapter;
@@ -41,7 +41,7 @@ import butterknife.BindView;
  * Created by hung on 4/14/2018.
  */
 
-public class ApkFragment extends MVPFragment<ApkContact.PresenterViewOps> implements ApkContact.ViewOps, View.OnClickListener {
+public class ApkActivity extends MVPActivity<ApkContact.PresenterViewOps> implements ApkContact.ViewOps, View.OnClickListener {
     private static final String TAG = "No thing";
     @BindView(R.id.apk_scroll)
     NestedScrollView apk_scroll;
@@ -50,29 +50,11 @@ public class ApkFragment extends MVPFragment<ApkContact.PresenterViewOps> implem
     @BindView(R.id.recycler_view_like_app)
     RecyclerView recycler_view_like_app;
 
-    @BindView(R.id.btn_profile)
-    Button btn_profile;
-    Activity act;
-
     SnapHelper snapHelperCmt = new LinearSnapHelper();
     SnapHelper snapHelperLike = new LinearSnapHelper();
     RecyclerViewApkAdapter mRecyclerViewApkAdapter;
     HomeRecyclerViewAdapter mLikeAppAdapter;
 
-    public Activity getAct() {
-        return act;
-    }
-
-    public void setAct(Activity act) {
-        this.act = act;
-    }
-
-    public static ApkFragment getInstance(Activity act) {
-        ApkFragment f = new ApkFragment();
-        f.setAct(act);
-        return f;
-
-    }
 
     @Override
     protected int getContentView() {
@@ -80,36 +62,32 @@ public class ApkFragment extends MVPFragment<ApkContact.PresenterViewOps> implem
     }
 
     @Override
-    protected void initView(View view) {
-        btn_profile.setOnClickListener(this);
-
-        SimpleDividerItemDecoration simpleDividerItemDecoration = new SimpleDividerItemDecoration(act, ContextCompat.getColor(act, R.color.gray_line), 120, 20);
+    protected void initView() {
+        SimpleDividerItemDecoration simpleDividerItemDecoration = new SimpleDividerItemDecoration(this,
+                ContextCompat.getColor(this, R.color.gray_line), 120, 20);
         simpleDividerItemDecoration.setHasLastLine(false);
 
         mRecyclerViewApkAdapter = new RecyclerViewApkAdapter();
-        mRecyclerViewApkAdapter.setAct(act);
+        mRecyclerViewApkAdapter.setAct(this);
         snapHelperCmt.attachToRecyclerView(recycler_view_apk);
-        recycler_view_apk.setLayoutManager(new GridLayoutManager(view.getContext(), 5, LinearLayoutManager.HORIZONTAL, false));
+        recycler_view_apk.setLayoutManager(new GridLayoutManager(this, 5, LinearLayoutManager.HORIZONTAL, false));
         recycler_view_apk.addItemDecoration(simpleDividerItemDecoration);
         recycler_view_apk.setAdapter(mRecyclerViewApkAdapter);
 
         getPresenter().getApkInfo();
 
 
-        SimpleDividerItemDecoration decoration = new SimpleDividerItemDecoration(act, ContextCompat.getColor(act, R.color.gray_line), 120, 20);
+        SimpleDividerItemDecoration decoration = new SimpleDividerItemDecoration(this, ContextCompat.getColor(this, R.color.gray_line), 120, 20);
         decoration.setHasLastLine(false);
 
-        mLikeAppAdapter = new HomeRecyclerViewAdapter(act);
+        mLikeAppAdapter = new HomeRecyclerViewAdapter(this);
         mLikeAppAdapter.setItemId(R.layout.item_app_horizontal_white_bg);
         snapHelperLike.attachToRecyclerView(recycler_view_like_app);
-        recycler_view_like_app.setLayoutManager(new GridLayoutManager(view.getContext(), 2, LinearLayoutManager.HORIZONTAL, false));
+        recycler_view_like_app.setLayoutManager(new GridLayoutManager(this, 2, LinearLayoutManager.HORIZONTAL, false));
         recycler_view_like_app.addItemDecoration(decoration);
         recycler_view_like_app.setAdapter(mLikeAppAdapter);
-
-//        externalApk();
-
-
     }
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -131,28 +109,13 @@ public class ApkFragment extends MVPFragment<ApkContact.PresenterViewOps> implem
     }
 
     @Override
-    protected Class<? extends FragmentPresenter> onRegisterPresenter() {
+    protected Class<? extends ActivityPresenter> onRegisterPresenter() {
         return ApkPresenter.class;
     }
 
 
     private void getListApk() {
 
-    }
-
-    @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.btn_profile:
-                if (FirebaseAuth.getInstance().getCurrentUser() == null) {
-                    Intent intent = new Intent(btn_profile.getContext(), UserActivity.class);
-                    btn_profile.getContext().startActivity(intent);
-                } else {
-                    // profile
-                    btn_profile.getContext().startActivity(new Intent(getActivityContext(), ProfileActivity.class));
-                }
-                break;
-        }
     }
 
     @Override
@@ -224,5 +187,10 @@ public class ApkFragment extends MVPFragment<ApkContact.PresenterViewOps> implem
 
             }
         }
+    }
+
+    @Override
+    public void onClick(View v) {
+
     }
 }

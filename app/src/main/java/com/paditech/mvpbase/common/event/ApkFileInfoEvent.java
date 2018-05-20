@@ -16,6 +16,7 @@ public class ApkFileInfoEvent {
     *
 
      */
+    public static final int STATUS_PENDING = 1;
 
     int status;
     String title;

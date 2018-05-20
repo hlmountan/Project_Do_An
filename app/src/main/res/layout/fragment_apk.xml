@@ -5,32 +5,17 @@
     android:background="@color/white"
     android:orientation="vertical">
 
-    <RelativeLayout
+
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="@dimen/padding_small"
+        android:text="@string/manage_apk"
+        android:paddingTop="@dimen/padding_default"
         android:paddingLeft="@dimen/padding_default"
-        android:paddingRight="@dimen/padding_default"
-        android:paddingTop="@dimen/padding_default">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/manage_apk"
-            android:textColor="@color/black"
-            android:textSize="@dimen/text_size_very_super_big"
-            android:textStyle="bold" />
-
-        <Button
-            android:id="@+id/btn_profile"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:background="@drawable/ic_profile"
-            android:minHeight="0dp"
-            android:minWidth="0dp" />
-
-    </RelativeLayout>
+        android:paddingBottom="@dimen/margin_small"
+        android:textColor="@color/black"
+        android:textSize="@dimen/text_size_very_super_big"
+        android:textStyle="bold" />
 
     <android.support.v4.widget.NestedScrollView
         android:id="@+id/apk_scroll"
@@ -90,7 +75,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@android:color/transparent"
-                    android:padding="@dimen/padding_small"></android.support.v7.widget.RecyclerView>
+                    android:padding="@dimen/padding_small" />
             </LinearLayout>
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>

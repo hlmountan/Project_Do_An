@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.paditech.mvpbase.R;
+import com.paditech.mvpbase.common.event.NewNotificationEvent;
 import com.paditech.mvpbase.common.mvp.activity.ActivityPresenter;
 import com.paditech.mvpbase.common.mvp.activity.MVPActivity;
 
@@ -35,11 +36,12 @@ public class HomeActivity extends MVPActivity<HomeActContact.PresenterViewOps> i
     @BindView(R.id.tab_layout)
     TabLayout tab_layout;
 
+    private View mBadge;
     private int[] navIcons = {
             R.drawable.ic_today_home_main,
             R.drawable.ic_search_18dp,
-            R.drawable.ic_upload,
-            R.drawable.ic_category_18dp
+            R.drawable.ic_upload_selector,
+            R.drawable.ic_notification_selector
     };
 
 
@@ -56,8 +58,14 @@ public class HomeActivity extends MVPActivity<HomeActContact.PresenterViewOps> i
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void searchTag(ArrayList<String>  tag){
+    public void searchTag(ArrayList<String> tag) {
 
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onNewNotification(NewNotificationEvent event) {
+        if (mBadge != null)
+            mBadge.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -90,10 +98,13 @@ public class HomeActivity extends MVPActivity<HomeActContact.PresenterViewOps> i
         for (int i = 0; i < tab_layout.getTabCount(); i++) {
             // inflate the Parent LinearLayout Container for the tab
             // from the layout nav_tab.xml file that we created 'R.layout.nav_tab
-            LinearLayout tab = (LinearLayout) LayoutInflater.from(this).inflate(R.layout.navigation_tablayout, null);
+            View tab =  LayoutInflater.from(this).inflate(R.layout.navigation_tablayout, null);
 
             // get child TextView and ImageView from this layout for the icon and label
             ImageView tab_icon = (ImageView) tab.findViewById(R.id.nav_icon);
+            if (i == tab_layout.getTabCount() - 1) {
+                mBadge = tab.findViewById(R.id.badge);
+            }
 
             // set the label text by getting the actual string value by its id
             // by getting the actual resource value `getResources().getString(string_id)`
@@ -115,7 +126,7 @@ public class HomeActivity extends MVPActivity<HomeActContact.PresenterViewOps> i
 
     @Override
     public void onPageSelected(int position) {
-
+        if (position == 3) mBadge.setVisibility(View.GONE);
     }
 
     @Override
@@ -135,8 +146,6 @@ public class HomeActivity extends MVPActivity<HomeActContact.PresenterViewOps> i
     }
 
 
-
-
     @Override
     public void onTabSelected(TabLayout.Tab tab) {
         System.out.println("selected");
@@ -149,11 +158,12 @@ public class HomeActivity extends MVPActivity<HomeActContact.PresenterViewOps> i
 
     @Override
     public void onTabReselected(TabLayout.Tab tab) {
-        if (tab.getPosition() != 2 ){
+        if (tab.getPosition() != 2) {
             EventBus.getDefault().post(new ScrollTopEvent());
         }
     }
-    public void setVPitem(int pos){
+
+    public void setVPitem(int pos) {
         viewPager_tab_layout.setCurrentItem(pos);
     }
 }

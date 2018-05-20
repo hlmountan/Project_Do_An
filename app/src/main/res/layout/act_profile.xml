@@ -178,6 +178,26 @@
             </FrameLayout>
         </LinearLayout>
 
+        <Button
+            android:id="@+id/btn_manage_apk"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/padding_default"
+            android:background="@drawable/bg_blue_rounded"
+            android:minHeight="0dp"
+            android:minWidth="0dp"
+            android:drawablePadding="@dimen/padding_default"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            android:textAllCaps="false"
+            android:textSize="@dimen/text_size_default"
+            android:text="@string/manage_apk_files"
+            android:paddingBottom="@dimen/margin_small"
+            android:paddingLeft="@dimen/margin_big"
+            android:paddingRight="@dimen/margin_large"
+            android:paddingTop="@dimen/margin_small" />
+
 
     </LinearLayout>
 

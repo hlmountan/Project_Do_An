@@ -47,15 +47,6 @@
                 android:minHeight="0dp"
                 android:minWidth="0dp" />
 
-            <Button
-                android:id="@+id/btn_notification"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="@dimen/margin_small"
-                android:layout_toLeftOf="@id/btn_profile"
-                android:background="@drawable/ic_notification_blue"
-                android:minHeight="0dp"
-                android:minWidth="0dp" />
         </RelativeLayout>
 
         <android.support.v7.widget.RecyclerView

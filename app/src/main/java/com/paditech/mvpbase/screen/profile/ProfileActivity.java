@@ -1,5 +1,6 @@
 package com.paditech.mvpbase.screen.profile;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.support.v4.content.ContextCompat;
@@ -35,11 +36,13 @@ import com.paditech.mvpbase.common.utils.ImageUtil;
 import com.paditech.mvpbase.common.view.SimpleDividerItemDecoration;
 import com.paditech.mvpbase.screen.adapter.RecyclerViewReplyCmtAdapter;
 import com.paditech.mvpbase.screen.adapter.RecyclerViewUpdateApkAdapter;
+import com.paditech.mvpbase.screen.apkManage.ApkActivity;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 /**
  * Created by hung on 5/7/2018.
@@ -113,6 +116,10 @@ ProfileActivity extends MVPActivity<ProfileContact.PresenterViewOps> implements 
         }
     }
 
+    @OnClick(R.id.btn_manage_apk)
+    public void onGoManageApk() {
+        startActivity(new Intent(this, ApkActivity.class));
+    }
 
     @Override
     public void setAppDownload() {

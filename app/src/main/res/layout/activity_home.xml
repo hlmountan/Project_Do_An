@@ -52,7 +52,6 @@
         app:tabSelectedTextColor="@color/main_green"
         app:tabTextAppearance="@style/TabLayoutText"
         app:tabTextColor="@color/gray"
-
         >
 
     </android.support.design.widget.TabLayout>

@@ -160,6 +160,7 @@ public class UploadApkPresenter extends FragmentPresenter<UploadApkContact.ViewO
         mAppId = getAppId(apk.getPath());
         if (mAppId == null) return;
         apk.setUid(FirebaseAuth.getInstance().getUid());
+        apk.setStatus(ApkFileInfoEvent.STATUS_PENDING);
         FirebaseDatabase.getInstance().getReference().child("apk").child(mAppId).setValue(apk);
         getView().uploadappid(mAppId);
         uploadApk(apk.getPath());

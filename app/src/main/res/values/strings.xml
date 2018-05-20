@@ -194,4 +194,6 @@
     <string name="screen_uploading" formatted="false">Screenshots uploading: %d %%\t %s</string>
     <string name="confirm_logout">Do you sure want to logout?</string>
     <string name="edit_profile">Edit profile</string>
+    <string name="notification_title">Notification</string>
+    <string name="manage_apk_files">Manage APK files</string>
 </resources>

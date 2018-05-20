@@ -77,8 +77,6 @@ public class HomeFragment extends MVPFragment<HomeContact.PresenterViewOsp> impl
 
     @BindView(R.id.btn_profile)
     Button btn_profile;
-    @BindView(R.id.btn_notification)
-    Button btn_notification;
     @BindView(R.id.view_user_upload)
     LinearLayout view_user_upload;
 
@@ -148,7 +146,6 @@ public class HomeFragment extends MVPFragment<HomeContact.PresenterViewOsp> impl
         setRecyclerViewCategory();
         getPresenter().getAppFromApi();
         setUpViewPager();
-        btn_notification.setOnClickListener(this);
         btn_profile.setOnClickListener(this);
         btn_see_more.setOnClickListener(this);
         if (FirebaseAuth.getInstance().getCurrentUser() != null){
@@ -223,9 +220,6 @@ public class HomeFragment extends MVPFragment<HomeContact.PresenterViewOsp> impl
                     // profile
                     btn_profile.getContext().startActivity(new Intent(btn_see_more.getContext(), ProfileActivity.class));
                 }
-                break;
-            case R.id.btn_notification:
-                btn_see_more.getContext().startActivity(new Intent(btn_see_more.getContext(), NotificationActivity.class));
                 break;
         }
     }
