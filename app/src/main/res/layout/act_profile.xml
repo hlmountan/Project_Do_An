@@ -12,13 +12,12 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_small">
+            android:layout_height="wrap_content">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_super_large"
+                android:layout_marginTop="70dp"
                 android:background="@drawable/bg_shadow"
                 android:orientation="vertical"
                 android:padding="@dimen/padding_default">
@@ -49,10 +48,22 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_margin="@dimen/margin_default"
-                    android:background="@drawable/ic_expand_more"
-                    android:minHeight="@dimen/min_height"
-                    android:minWidth="@dimen/min_height" />
+                    android:layout_margin="@dimen/padding_default"
+                    android:background="@drawable/bg_blue_rounded"
+                    android:minHeight="0dp"
+                    android:minWidth="0dp"
+                    android:drawablePadding="@dimen/padding_default"
+                    android:textStyle="bold"
+                    android:drawableLeft="@drawable/ic_edit"
+                    android:textColor="@color/white"
+                    android:textAllCaps="false"
+                    android:text="@string/edit_profile"
+                    android:paddingBottom="@dimen/margin_tiny"
+                    android:paddingLeft="@dimen/margin_big"
+                    android:paddingRight="@dimen/margin_large"
+                    android:paddingTop="@dimen/margin_tiny" />
+
+
             </LinearLayout>
 
             <android.support.v7.widget.CardView
@@ -60,7 +71,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
-                android:layout_margin="@dimen/margin_small"
+                android:layout_margin="30dp"
                 app:cardBackgroundColor="@color/white"
                 app:cardCornerRadius="@dimen/radius_big">
 
@@ -73,15 +84,6 @@
                     android:transitionName="avartar" />
             </android.support.v7.widget.CardView>
 
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="@dimen/margin_big"
-                android:layout_marginTop="@dimen/margin_super_so_large"
-                android:background="@drawable/ic_edit"
-                android:minHeight="@dimen/min_height"
-                android:minWidth="@dimen/min_height" />
 
             <ImageView
                 android:id="@+id/btn_logout"

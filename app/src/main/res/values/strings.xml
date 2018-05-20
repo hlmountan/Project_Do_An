@@ -193,4 +193,5 @@
     <string name="avatar_uploading_d" formatted="false">Avatar uploading: %d %%</string>
     <string name="screen_uploading" formatted="false">Screenshots uploading: %d %%\t %s</string>
     <string name="confirm_logout">Do you sure want to logout?</string>
+    <string name="edit_profile">Edit profile</string>
 </resources>
