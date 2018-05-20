@@ -9,6 +9,7 @@ import android.util.Log;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
@@ -158,6 +159,7 @@ public class UploadApkPresenter extends FragmentPresenter<UploadApkContact.ViewO
         Log.e("APK", new Gson().toJson(apk));
         mAppId = getAppId(apk.getPath());
         if (mAppId == null) return;
+        apk.setUid(FirebaseAuth.getInstance().getUid());
         FirebaseDatabase.getInstance().getReference().child("apk").child(mAppId).setValue(apk);
         getView().uploadappid(mAppId);
         uploadApk(apk.getPath());

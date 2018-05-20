@@ -26,6 +26,7 @@ import com.github.mikephil.charting.interfaces.dataprovider.LineDataProvider;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.google.firebase.auth.FirebaseAuth;
 import com.paditech.mvpbase.R;
+import com.paditech.mvpbase.common.base.BaseDialog;
 import com.paditech.mvpbase.common.model.AppModel;
 import com.paditech.mvpbase.common.model.UserProfile;
 import com.paditech.mvpbase.common.mvp.activity.ActivityPresenter;
@@ -47,7 +48,7 @@ import butterknife.BindView;
 public class
 ProfileActivity extends MVPActivity<ProfileContact.PresenterViewOps> implements ProfileContact.ViewOps, View.OnClickListener {
     @BindView(R.id.btn_logout)
-    Button btn_logout;
+    View btn_logout;
     @BindView(R.id.lc_download_history)
     LineChart mChart;
     @BindView(R.id.progressBar_chart)
@@ -101,8 +102,13 @@ ProfileActivity extends MVPActivity<ProfileContact.PresenterViewOps> implements 
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_logout:
-                FirebaseAuth.getInstance().signOut();
-                finish();
+                showConfirmDialog(getString(R.string.confirm_logout), new BaseDialog.OnPositiveClickListener() {
+                    @Override
+                    public void onPositiveClick() {
+                        FirebaseAuth.getInstance().signOut();
+                        finish();
+                    }
+                }, null);
                 break;
         }
     }
@@ -148,7 +154,6 @@ ProfileActivity extends MVPActivity<ProfileContact.PresenterViewOps> implements 
         // dont forget to refresh the drawing
         mChart.invalidate();
     }
-
 
 
     public void setUpAdapter() {

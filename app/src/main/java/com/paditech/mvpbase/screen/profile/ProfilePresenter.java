@@ -65,16 +65,19 @@ public class ProfilePresenter extends ActivityPresenter<ProfileContact.ViewOps> 
                             });
 
                         }
+                    } else {
+                        getView().loadChildUserUpload(null);
                     }
                 }catch (Exception e){
                     System.out.println(e );
+                    getView().loadChildUserUpload(null);
                 }
 
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
+                getView().loadChildUserUpload(null);
             }
         });
 

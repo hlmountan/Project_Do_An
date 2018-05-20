@@ -13,7 +13,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_super_large">
+            android:layout_marginTop="@dimen/margin_small">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -30,7 +30,6 @@
                     android:layout_gravity="center"
                     android:layout_marginTop="@dimen/margin_super_large"
                     android:drawablePadding="@dimen/padding_default"
-                    android:drawableRight="@drawable/ic_check_circle"
                     android:paddingTop="@dimen/padding_big"
                     android:text="@string/user_default"
                     android:textAlignment="center"
@@ -83,6 +82,15 @@
                 android:background="@drawable/ic_edit"
                 android:minHeight="@dimen/min_height"
                 android:minWidth="@dimen/min_height" />
+
+            <ImageView
+                android:id="@+id/btn_logout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:background="?attr/selectableItemBackground"
+                android:padding="@dimen/padding_default"
+                android:src="@drawable/ic_logout_blue" />
         </RelativeLayout>
 
         <LinearLayout
@@ -96,10 +104,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="@dimen/margin_small"
+                android:paddingLeft="@dimen/padding_default"
+                android:paddingTop="@dimen/margin_small"
                 android:text="@string/user_download_analysis"
-                android:textAlignment="textEnd"
                 android:textColor="@color/black"
-                android:textSize="@dimen/text_size_big" />
+                android:textSize="@dimen/text_size_default"
+                android:textStyle="bold" />
 
             <FrameLayout
                 android:id="@+id/fr_chart_and_pager"
@@ -127,22 +137,25 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_small"
             android:background="@drawable/bg_shadow"
-            android:padding="@dimen/padding_default"></android.support.v7.widget.RecyclerView>
+            android:padding="@dimen/padding_default" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
             android:background="@drawable/bg_shadow"
+            android:orientation="vertical"
             android:padding="@dimen/padding_default">
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="@dimen/text_size_big"
-                android:textColor="@color/black"
+                android:paddingLeft="@dimen/padding_default"
+                android:paddingTop="@dimen/margin_small"
                 android:text="@string/user_upload_apk"
-                android:textAlignment="textEnd"
-                android:layout_margin="@dimen/margin_small"/>
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_default"
+                android:textStyle="bold" />
+
             <FrameLayout
                 android:id="@+id/relate_frame"
                 android:layout_width="match_parent"
@@ -163,11 +176,7 @@
             </FrameLayout>
         </LinearLayout>
 
-        <Button
-            android:id="@+id/btn_logout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Logout" />
+
     </LinearLayout>
 
 </android.support.v4.widget.NestedScrollView>
