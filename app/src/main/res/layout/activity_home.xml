@@ -9,7 +9,7 @@
     android:focusable="true"
     android:focusableInTouchMode="true"
     android:orientation="vertical"
-    tools:context="com.paditech.mvpbase.screen.main.HomeActivity">
+    tools:context="com.paditech.mvpbase.screen.main.MainActivity">
 
 
     <FrameLayout

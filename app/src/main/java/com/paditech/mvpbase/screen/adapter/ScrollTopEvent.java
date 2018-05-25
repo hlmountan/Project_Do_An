@@ -1,4 +1,4 @@
-package com.paditech.mvpbase.screen.main;
+package com.paditech.mvpbase.screen.adapter;
 
 /**
  * Created by hung on 4/15/2018.

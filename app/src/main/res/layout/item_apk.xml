@@ -7,7 +7,8 @@
     <ImageView
         android:id="@+id/img_avar"
         android:layout_width="@dimen/cate_ima_size"
-        android:layout_height="@dimen/cate_ima_size" />
+        android:layout_height="@dimen/cate_ima_size"
+        />
 
     <TextView
         android:id="@+id/tv_title"

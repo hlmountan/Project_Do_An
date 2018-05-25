@@ -1,4 +1,4 @@
-package com.paditech.mvpbase.screen.home;
+package com.paditech.mvpbase.screen.adapter;
 
 import android.support.v4.view.PagerAdapter;
 import android.view.View;

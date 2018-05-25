@@ -20,7 +20,7 @@ public interface DetailContact {
 
         void setRelateApp(List<AppModel> app);
 
-
+        void appNotAvailable();
         void setDevApp();
         void setUrlDownload(String url);
         void setFollowApp(ArrayList<ArrayList<String>> listApp);

@@ -1,4 +1,4 @@
-package com.paditech.mvpbase.screen.user;
+package com.paditech.mvpbase.screen.login;
 
 import com.facebook.AccessToken;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -10,7 +10,7 @@ import com.paditech.mvpbase.common.mvp.activity.ActivityViewOps;
  * Created by hung on 4/30/2018.
  */
 
-public interface UserContact {
+public interface LoginContact {
     interface ViewOps extends ActivityViewOps {
         void googleSuccess();
         void googleAuthenFalse();

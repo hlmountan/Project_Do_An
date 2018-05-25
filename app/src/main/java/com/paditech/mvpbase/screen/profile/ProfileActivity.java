@@ -13,8 +13,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.XAxis;
@@ -25,18 +27,28 @@ import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.IFillFormatter;
 import com.github.mikephil.charting.interfaces.dataprovider.LineDataProvider;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.FirebaseDatabase;
 import com.paditech.mvpbase.R;
 import com.paditech.mvpbase.common.base.BaseDialog;
 import com.paditech.mvpbase.common.model.AppModel;
+import com.paditech.mvpbase.common.model.Cmt;
 import com.paditech.mvpbase.common.model.UserProfile;
 import com.paditech.mvpbase.common.mvp.activity.ActivityPresenter;
 import com.paditech.mvpbase.common.mvp.activity.MVPActivity;
 import com.paditech.mvpbase.common.utils.ImageUtil;
 import com.paditech.mvpbase.common.view.SimpleDividerItemDecoration;
+import com.paditech.mvpbase.screen.adapter.HomeRecyclerViewAdapter;
 import com.paditech.mvpbase.screen.adapter.RecyclerViewReplyCmtAdapter;
 import com.paditech.mvpbase.screen.adapter.RecyclerViewUpdateApkAdapter;
 import com.paditech.mvpbase.screen.apkManage.ApkActivity;
+import com.paditech.mvpbase.screen.login.LoginActivity;
+import com.paditech.mvpbase.screen.setting.SettingActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,22 +76,42 @@ ProfileActivity extends MVPActivity<ProfileContact.PresenterViewOps> implements 
     RecyclerView recycler_view_your_app;
     @BindView(R.id.progressBar)
     ProgressBar progressBar;
-    UserProfile userProfile;
-    SnapHelper snapHelperCmt = new LinearSnapHelper();
-    RecyclerViewReplyCmtAdapter cmtAdapter;
-
-    RecyclerViewUpdateApkAdapter listapp;
+    @BindView(R.id.btn_setting)
+    Button setting;
+    @BindView(R.id.btn_join_dev)
+    Button btn_join_dev;
     @BindView(R.id.img_avar)
     ImageView avar;
     @BindView(R.id.tv_user_name)
     TextView tv_user_name;
     @BindView(R.id.tv_user_gmail)
     TextView tv_user_gmail;
+    @BindView(R.id.view_chart)
+    LinearLayout view_chart;
+    @BindView(R.id.view_own_app)
+    LinearLayout ownApp;
+    @BindView(R.id.recycler_view_like_app)
+    RecyclerView recycler_view_like_app;
+    @BindView(R.id.view_follow)
+    LinearLayout view_follow;
+    @BindView(R.id.tv_dev_status)
+    TextView tv_dev_status;
 
+
+    UserProfile userProfile;
+    SnapHelper snapHelperCmt = new LinearSnapHelper();
+    SnapHelper snapHelperFollow = new LinearSnapHelper();
+    FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+
+    HomeRecyclerViewAdapter mFollowAppAdapter;
+    RecyclerViewReplyCmtAdapter cmtAdapter;
+    RecyclerViewUpdateApkAdapter listapp;
     List<Entry> entries = new ArrayList<Entry>();
     ArrayList<ArrayList<String>> downloadAnalysis = null;
     ArrayList<ArrayList<String>> priceHistory_trans_date = null;
     protected Typeface mTfLight;
+    private GoogleApiClient mGoogleApiClient;
+    private FirebaseAuth mAuth;
 
     @Override
     protected int getContentView() {
@@ -87,13 +119,45 @@ ProfileActivity extends MVPActivity<ProfileContact.PresenterViewOps> implements 
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        mGoogleApiClient.connect();
+    }
+
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (userProfile != null)
+            if (userProfile.getRequestDev() &&
+                    FirebaseAuth.getInstance().getCurrentUser().isEmailVerified()) {
+                Boolean verify = user.isEmailVerified();
+                FirebaseDatabase.getInstance().getReference().child("user").
+                        child(user.getUid()).child("dev").setValue(verify);
+
+            }
+    }
+
+    @Override
     protected void initView() {
 
         getPresenter().getUserData();
         btn_logout.setOnClickListener(this);
+        btn_join_dev.setOnClickListener(this);
+        setting.setOnClickListener(this);
         setUpAdapter();
+        setFollowAppAdapter();
         getPresenter().setChartData();
         getPresenter().getUserApk();
+        getPresenter().getFollowApp();
+
+
+        // cho thoat dang nhap
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .enableAutoManage(this /* FragmentActivity */, null)
+                .addApi(Auth.GOOGLE_SIGN_IN_API)
+                .build();
     }
 
     @Override
@@ -109,9 +173,25 @@ ProfileActivity extends MVPActivity<ProfileContact.PresenterViewOps> implements 
                     @Override
                     public void onPositiveClick() {
                         FirebaseAuth.getInstance().signOut();
+                        Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
+                                new ResultCallback<Status>() {
+                                    @Override
+                                    public void onResult(Status status) {
+
+
+                                    }
+                                });
                         finish();
+                        startActivity(new Intent(getActivityContext(), LoginActivity.class));
                     }
                 }, null);
+                break;
+            case R.id.btn_setting:
+                setting.getContext().startActivity(new Intent(this, SettingActivity.class));
+                break;
+            case R.id.btn_join_dev:
+
+                showJoinDevDialog();
                 break;
         }
     }
@@ -235,14 +315,66 @@ ProfileActivity extends MVPActivity<ProfileContact.PresenterViewOps> implements 
 
     @Override
     public void setUserData(UserProfile user) {
-        ImageUtil.loadImage(this, user.getPhoto(), avar);
-        tv_user_name.setText(user.getName());
-        tv_user_gmail.setText(user.getEmail());
+
+        if (user != null) {
+            userProfile = user;
+            ImageUtil.loadImage(this, user.getPhoto(), avar);
+            tv_user_name.setText(user.getName());
+            tv_user_gmail.setText(user.getEmail());
+            if (user.getRequestDev()){
+                tv_dev_status.setVisibility(View.VISIBLE);
+            }
+            if (!user.getDev()) {
+                btn_join_dev.setVisibility(View.VISIBLE);
+            } else {
+                tv_dev_status.setVisibility(View.VISIBLE);
+                tv_dev_status.setTextColor(ContextCompat.getColor(this,R.color.blue));
+                tv_dev_status.setText(R.string.developer);
+                btn_join_dev.setVisibility(View.GONE);
+            }
+        } else {
+            Toast.makeText(this, "error get user", Toast.LENGTH_LONG);
+        }
+
+    }
+
+    @Override
+    public void loadAppCmt(List<Cmt> cmtList) {
+        if (cmtList != null && cmtList.size() > 0) {
+            cmtAdapter.setCmt(cmtList);
+            recycler_view_cmt.setVisibility(View.VISIBLE);
+        }
+
     }
 
     @Override
     public void loadChildUserUpload(List<AppModel> listApk) {
-        listapp.setmList1(listApk);
-        progressBar.setVisibility(View.GONE);
+        if (listApk != null && listApk.size() > 0) {
+            listapp.setmList1(listApk);
+            progressBar.setVisibility(View.GONE);
+            ownApp.setVisibility(View.VISIBLE);
+        }
+
+    }
+
+    @Override
+    public void loadFollowApp(List<AppModel> listApk) {
+        if (listApk != null && listApk.size() > 0) {
+            mFollowAppAdapter.setmList1(listApk);
+            view_follow.setVisibility(View.VISIBLE);
+        }
+
+    }
+
+    public void setFollowAppAdapter() {
+        SimpleDividerItemDecoration decoration = new SimpleDividerItemDecoration(this, ContextCompat.getColor(this, R.color.gray_line), 120, 20);
+        decoration.setHasLastLine(false);
+
+        mFollowAppAdapter = new HomeRecyclerViewAdapter(this);
+        mFollowAppAdapter.setItemId(R.layout.item_app_horizontal_white_bg);
+        snapHelperFollow.attachToRecyclerView(recycler_view_like_app);
+        recycler_view_like_app.setLayoutManager(new GridLayoutManager(this, 2, LinearLayoutManager.HORIZONTAL, false));
+        recycler_view_like_app.addItemDecoration(decoration);
+        recycler_view_like_app.setAdapter(mFollowAppAdapter);
     }
 }

@@ -3,25 +3,29 @@ package com.paditech.mvpbase.screen.uploadApk;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
-import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.google.gson.Gson;
 import com.paditech.mvpbase.common.event.ApkFileInfoEvent;
+import com.paditech.mvpbase.common.model.UserProfile;
 import com.paditech.mvpbase.common.mvp.fragment.FragmentPresenter;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Objects;
 
 /**
  * Created by hung on 5/9/2018.
@@ -30,6 +34,8 @@ import java.util.Objects;
 public class UploadApkPresenter extends FragmentPresenter<UploadApkContact.ViewOps> implements UploadApkContact.PresenterViewOps {
     private String mAppId;
     private boolean avatarSuccess, apkSuccess, screenshotSuccess;
+    FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+    DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
 
     // storage
     @Override
@@ -61,14 +67,15 @@ public class UploadApkPresenter extends FragmentPresenter<UploadApkContact.ViewO
                 Uri linkDownload = taskSnapshot.getDownloadUrl();
                 if (linkDownload != null) {
                     apkSuccess = true;
-                    FirebaseDatabase.getInstance().getReference().child("apk").child(mAppId).child("linkDownload").setValue(linkDownload.toString());
+                    databaseReference.child("apk").child(mAppId).child("linkDownload").setValue(linkDownload.toString());
                     checkSuccessAll();
                 }
             }
         }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                getView().onProgressAPK((int) (taskSnapshot.getBytesTransferred() * 100 / taskSnapshot.getTotalByteCount()));
+                getView().onProgressAPK((int) (taskSnapshot.getBytesTransferred() * 100 /
+                        taskSnapshot.getTotalByteCount()));
             }
         });
     }
@@ -97,7 +104,7 @@ public class UploadApkPresenter extends FragmentPresenter<UploadApkContact.ViewO
                 // ...
                 Uri link = taskSnapshot.getDownloadUrl();
                 if (link != null) {
-                    FirebaseDatabase.getInstance().getReference().child("apk").child(mAppId).child("avar").setValue(link.toString());
+                    databaseReference.child("apk").child(mAppId).child("avar").setValue(link.toString());
                     avatarSuccess = true;
                     checkSuccessAll();
                 }
@@ -105,7 +112,8 @@ public class UploadApkPresenter extends FragmentPresenter<UploadApkContact.ViewO
         }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                getView().onProgressAvatar((int) (taskSnapshot.getBytesTransferred() * 100 / taskSnapshot.getTotalByteCount()));
+                getView().onProgressAvatar((int) (taskSnapshot.getBytesTransferred() * 100 /
+                        taskSnapshot.getTotalByteCount()));
             }
         });
     }
@@ -146,7 +154,8 @@ public class UploadApkPresenter extends FragmentPresenter<UploadApkContact.ViewO
             }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                    getView().onProgressScreens((int) (taskSnapshot.getBytesTransferred() * 100 / taskSnapshot.getTotalByteCount()), url.size() + "/" + path.size());
+                    getView().onProgressScreens((int) (taskSnapshot.getBytesTransferred() * 100 /
+                            taskSnapshot.getTotalByteCount()), url.size() + "/" + path.size());
                 }
             });
         }
@@ -160,8 +169,9 @@ public class UploadApkPresenter extends FragmentPresenter<UploadApkContact.ViewO
         mAppId = getAppId(apk.getPath());
         if (mAppId == null) return;
         apk.setUid(FirebaseAuth.getInstance().getUid());
-        apk.setStatus(ApkFileInfoEvent.STATUS_PENDING);
-        FirebaseDatabase.getInstance().getReference().child("apk").child(mAppId).setValue(apk);
+        apk.setStatus(ApkFileInfoEvent.STATUS_MISSING_INFO);
+        apk.setUserUpload(true);
+        databaseReference.child("apk").child(mAppId).setValue(apk);
         getView().uploadappid(mAppId);
         uploadApk(apk.getPath());
         updateAvar(apk.getAvar());
@@ -169,7 +179,7 @@ public class UploadApkPresenter extends FragmentPresenter<UploadApkContact.ViewO
     }
 
     public void updateApkScreenshot(ArrayList<String> screens) {
-        FirebaseDatabase.getInstance().getReference().child("apk").child(mAppId).child("screenshot").setValue(screens);
+        databaseReference.child("apk").child(mAppId).child("screenshot").setValue(screens);
         screenshotSuccess = true;
         checkSuccessAll();
 
@@ -193,6 +203,30 @@ public class UploadApkPresenter extends FragmentPresenter<UploadApkContact.ViewO
         if (avatarSuccess && apkSuccess && screenshotSuccess) {
             getView().onFinishAll();
         }
+    }
+
+    @Override
+    public void checkDev() {
+        if (firebaseUser != null) {
+            databaseReference.child("user").child(firebaseUser.getUid()).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.getValue() != null) {
+                        UserProfile userProfile = dataSnapshot.getValue(UserProfile.class);
+                        if (getView() != null) {
+                            getView().isDev(userProfile.getDev());
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
+        }else if (getView() != null) getView().isDev(false);
+
     }
 
 }

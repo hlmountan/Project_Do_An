@@ -1,4 +1,4 @@
-package com.paditech.mvpbase.screen.user;
+package com.paditech.mvpbase.screen.login;
 
 import android.support.annotation.NonNull;
 import android.util.Log;
@@ -25,7 +25,7 @@ import com.paditech.mvpbase.common.mvp.activity.ActivityPresenter;
  * Created by hung on 4/30/2018.
  */
 
-public class UserPresenter extends ActivityPresenter<UserContact.ViewOps> implements UserContact.PresenterViewOps{
+public class LoginPresenter extends ActivityPresenter<LoginContact.ViewOps> implements LoginContact.PresenterViewOps{
     private static final String TAG = "TAG";
     private FirebaseAuth mAuth  = FirebaseAuth.getInstance();
     @Override
@@ -71,7 +71,17 @@ public class UserPresenter extends ActivityPresenter<UserContact.ViewOps> implem
                             Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
                             createNewUser(new UserProfile(user.getDisplayName(),user.getEmail(),user.getPhotoUrl().toString(),user.getUid()));
-                           getView().googleSuccess();
+                            user.sendEmailVerification()
+                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            if (task.isSuccessful()) {
+                                                Log.d(TAG, "Email sent.");
+                                            }
+                                        }
+                                    });
+
+                            getView().googleSuccess();
 
 //                            updateUI(user);
                         } else {

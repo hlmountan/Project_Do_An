@@ -1,4 +1,4 @@
-package com.paditech.mvpbase.screen.home;
+package com.paditech.mvpbase.screen.adapter;
 
 import android.app.Activity;
 import android.content.Intent;

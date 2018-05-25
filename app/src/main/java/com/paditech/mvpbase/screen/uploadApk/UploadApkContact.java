@@ -20,6 +20,7 @@ public interface UploadApkContact {
         void onProgressScreens(int percent, String doneCont);
         void onProgressAPK(int percent);
         void onFinishAll();
+        void isDev(Boolean check);
     }
 
     interface  PresenterViewOps extends FragmentPresenterViewOps{
@@ -29,5 +30,6 @@ public interface UploadApkContact {
         void updateScreenshot(ArrayList<String> path);
         String getAppId(String filePath);
         void checkSuccessAll();
+        void checkDev();
     }
 }

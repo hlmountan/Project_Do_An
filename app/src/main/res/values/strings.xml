@@ -72,7 +72,7 @@
     <string name="step_format" formatted="false">Step %d</string>
     <string name="final_step">Final Step</string>
     <string name="agreement">I agree and I am willing to associate my account registration with the Play Developer distribution agreement.</string>
-   <string name="your_app_title">Your App Title</string>
+    <string name="your_app_title">Your App Title</string>
     <string name="submit">Submit</string>
     <string name="add_screenshot">Add ScreenShot</string>
     <string name="add_avar">Add Avatar Image</string>
@@ -122,7 +122,31 @@
     <string name="please_choose_apk">Please choose app APK to continue!</string>
     <string name="please_choose_avatar">Please choose app avatar to continue!</string>
     <string name="please_choose_screenshot">Please choose app screenshots to continue!</string>
+    <string name="error_file_type">You have choices wrong file type, please chooses other files</string>
+    <string name="not_dev">You are not developer.\n Do you want to join developer community?</string>
 
+    <!--manage_apk-show_detail-->
+    <string name="error_app_unavaiable">This app is not avaiable now</string>
+
+    <!--notifi-->
+    <string name="user_notify_status_new">new</string>
+    <string name="user_notify_status_readed">readed</string>
+    <string name="not_login">You must login to receive the notification!\n Do you want to login right now ?</string>
+
+    <!--profile-->
+    <string name="join_dev">Join developer team</string>
+    <string name="confirm_email">Please, check your email to confirm your request.</string>
+    <string name="send_email">Click Verify to send verify email</string>
+    <string name="confirm">Confirm</string>
+    <string name="request_verify">An email will be send to your email:</string>
+    <string name="requesting">Developer Requesting . . .</string>
+    <string name="developer">You are Developer</string>
+
+    <!--home-->
+    <string name="signin">Hi, Did you have account?\nYou can sign in right now!</string>
+    <string name="see_profile">\nDo your want to see your profile?</string>
+    <string name="profile_go">Your profile</string>
+    <string name="signinview">Sign in</string>
     <!--Main-->
     <string name="open">Open</string>
     <string name="close">Close</string>
@@ -176,7 +200,7 @@
     <string name="new_version">New Versions</string>
     <string name="report_app">Report Inappropriate App</string>
     <string name="desription_report">Please, Let us know if you think this app is spam or abuse and the reason why you find this content or app objectionable:</string>
-<string name="reason_report_1">Sexual content</string>
+    <string name="reason_report_1">Sexual content</string>
     <string name="reason_report_2">Graphic violence</string>
     <string name="reason_report_3">Hateful or abusive content</string>
     <string name="reason_report_4">Improper content rating</string>

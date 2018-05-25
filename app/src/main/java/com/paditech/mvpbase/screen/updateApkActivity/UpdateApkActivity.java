@@ -17,7 +17,7 @@ import com.paditech.mvpbase.common.model.AppModel;
 import com.paditech.mvpbase.common.mvp.activity.ActivityPresenter;
 import com.paditech.mvpbase.common.mvp.activity.MVPActivity;
 import com.paditech.mvpbase.common.utils.ImageUtil;
-import com.paditech.mvpbase.screen.main.adapter.ChipCateAdapter;
+import com.paditech.mvpbase.screen.adapter.ChipCateAdapter;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;

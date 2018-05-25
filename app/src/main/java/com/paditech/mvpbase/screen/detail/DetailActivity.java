@@ -72,11 +72,11 @@ import com.paditech.mvpbase.screen.adapter.RecyclerViewScreenShortAdapter;
 import com.paditech.mvpbase.screen.adapter.RecyclerViewVersionAdapter;
 import com.paditech.mvpbase.screen.cmt.CommentActivity;
 import com.paditech.mvpbase.screen.dev.DevActivity;
-import com.paditech.mvpbase.screen.home.HomeRecyclerViewAdapter;
-import com.paditech.mvpbase.screen.home.StartSnapHelper;
-import com.paditech.mvpbase.screen.main.adapter.ChipCateAdapter;
+import com.paditech.mvpbase.screen.adapter.HomeRecyclerViewAdapter;
+import com.paditech.mvpbase.screen.adapter.StartSnapHelper;
+import com.paditech.mvpbase.screen.adapter.ChipCateAdapter;
 import com.paditech.mvpbase.screen.report.ReportActivity;
-import com.paditech.mvpbase.screen.user.UserActivity;
+import com.paditech.mvpbase.screen.login.LoginActivity;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -416,7 +416,7 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
             setUpScreenShort(app.getScreenshotUserUpload());
             fr_chart_and_pager.setVisibility(View.GONE);
             btn_install_app.setText(R.string.install);
-            getPresenter().getUserCmt(appid,app.isFirebaseCmt());
+
         } else {
             if ((app.getAll_price() == null) || (app.getAll_price().size() != 2)) {
 
@@ -428,11 +428,9 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
                 fr_chart_and_pager.setVisibility(View.VISIBLE);
                 getPresenter().cURLFromApi(app.getAppid(), 1);
             }
-            getPresenter().getUserCmt(appid.replace("-","."),app.isFirebaseCmt());
         }
 
-
-        getPresenter().getRelateApp("http://appsxyz.com/api/apk/search_related/?q=" + URLEncoder.encode(app.getTitle()) + "&page=1&size=20");
+        getPresenter().getUserCmt(appid,false);
 
     }
 
@@ -565,7 +563,11 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
+
                 try {
+                    if (!getIntent().getBooleanExtra("is_cover", false))
+                        ImageUtil.loadImage(DetailActivity.this, app.getCover(), imgAvatar, R.drawable.events_placeholder, R.drawable.image_placeholder_500x500);
+
                     if (isHistory != 0)
                         btn_install_app.setText("$" + app.getPrice());
                     else {
@@ -580,7 +582,7 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
                     fileLength = app.getSize()*1000;
                     if (app.getTitle() != null) tv_title_scroll.setText(app.getTitle());
 
-
+                    textView_title.setText(app.getTitle());
                     tv_score.setText(String.valueOf(app.getScore()));
                     tv_numberrate.setText(NumberFormat.getInstance().format(app.getInstalls()) + " Rating");
                     tv_offerby.setText(app.getOfferby());
@@ -598,6 +600,7 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
                          dev = app.getOfferby();
                     }
 
+                    getPresenter().getRelateApp("http://appsxyz.com/api/apk/search_related/?q=" + URLEncoder.encode(app.getTitle()) + "&page=1&size=20");
 
                     tv_gp_info.setText(dev + "..\n" + NumberFormat.getInstance().format(app.getSize()/1000000)+ " MB" + "\n" + app.getCategory() + "\n" + app.getRequire() + "\n" + app.getContentrating());
 
@@ -654,6 +657,21 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
 
     }
 
+    @Override
+    public void appNotAvailable() {
+        showConfirmDialog(getString(R.string.error_app_unavaiable), new BaseDialog.OnPositiveClickListener() {
+            @Override
+            public void onPositiveClick() {
+                finish();
+            }
+        }, new BaseDialog.OnNegativeClickListener() {
+            @Override
+            public void onNegativeClick() {
+                finish();
+            }
+        });
+    }
+
 
     @Override
     public void setDevApp() {
@@ -689,6 +707,7 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
     public void setCmt(final List<Cmt> cmts) {
 
         mRecyclerViewCmtAdapter.setCmt(cmts);
+        recycler_view_cmt.setVisibility(View.VISIBLE);
 
 
 
@@ -802,7 +821,7 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
                 startActivity(Intent.createChooser(sharingIntent, "Share using"));
                 break;
             case R.id.tv_score:
-                recycler_view_cmt.getParent().requestChildFocus(recycler_view_cmt, recycler_view_cmt);
+//                recycler_view_cmt.getParent().requestChildFocus(recycler_view_cmt, recycler_view_cmt);
                 break;
             case R.id.btn_report:
                 final Intent intent = new Intent(this, ReportActivity.class);
@@ -833,11 +852,11 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
                             cmt.setAppid(appid);
                             cmt.setAuthorName(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
                             cmt.setUid(FirebaseAuth.getInstance().getCurrentUser().getUid());
-                            cmt.setContent(et_cmt.getText().toString());
-                            cmt.setRate(ratingbar_your.getRating());
-                            cmt.setDate(System.currentTimeMillis()/1000);
-                            cmt.setTitle(et_title.getText().toString());
-                            cmt.setAvar(FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl().toString());
+                            cmt.setComment(et_cmt.getText().toString());
+                            cmt.setStarRating(ratingbar_your.getRating());
+                            cmt.setTime(System.currentTimeMillis()/1000);
+                            cmt.setTitleComment(et_title.getText().toString());
+                            cmt.setAvatar(FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl().toString());
                             getPresenter().pushCmt(cmt,ownApp);
 
                             showAlertDialog(getString(R.string.cmt_success));
@@ -852,7 +871,7 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
                     showConfirmDialog(getString(R.string.cmt_login_alert), new BaseDialog.OnPositiveClickListener() {
                         @Override
                         public void onPositiveClick() {
-                            Intent i = new Intent(btn_submit.getContext(), UserActivity.class);
+                            Intent i = new Intent(btn_submit.getContext(), LoginActivity.class);
                             i.putExtra("SCREEN", "DETAIL");
                             btn_submit.getContext().startActivity(i);
                         }

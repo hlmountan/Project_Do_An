@@ -1,6 +1,7 @@
 package com.paditech.mvpbase.common.model;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 /**
  * Created by hung on 5/12/2018.
@@ -15,20 +16,29 @@ public class UserProfile {
     private String phoneNumber;
     Boolean isDev = false;
     private ArrayList<ArrayList<String>> followApp;
+    private String uid;
+    private Boolean requestDev = false;
 
+    public Boolean getRequestDev() {
+        return requestDev;
+    }
 
+    public void setRequestDev(Boolean requestDev) {
+        this.requestDev = requestDev;
+    }
 
-    private ArrayList<Notification> notify;
+    private ArrayList<Map<String,String>> notify;
 
-    public ArrayList<Notification> getNotify() {
+    public ArrayList<Map<String,String>> getNotify() {
         return notify;
     }
 
-    public void setNotify(ArrayList<Notification> notify) {
+
+    public void setNotify(ArrayList<Map<String,String>> notify) {
         this.notify = notify;
     }
 
-    private String uid;
+
 
 
     public UserProfile(String name, String email, String photo, String gender, int age, String phoneNumber,String uid) {

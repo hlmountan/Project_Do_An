@@ -1,5 +1,6 @@
-package com.paditech.mvpbase.screen.main;
+package com.paditech.mvpbase.screen.adapter;
 
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,8 +9,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.paditech.mvpbase.R;
+import com.paditech.mvpbase.common.model.AppModel;
 import com.paditech.mvpbase.common.model.Notification;
 import com.paditech.mvpbase.common.utils.CommonUtil;
+import com.paditech.mvpbase.common.utils.ImageUtil;
+import com.paditech.mvpbase.screen.detail.DetailActivity;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
@@ -35,12 +41,12 @@ public class NotificationRecycleViewAdapter extends RecyclerView.Adapter<Recycle
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_notification, parent, false);
-        return new com.paditech.mvpbase.screen.main.NotificationRecycleViewAdapter.RecyclerHolder(view);
+        return new NotificationRecycleViewAdapter.RecyclerHolder(view);
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        com.paditech.mvpbase.screen.main.NotificationRecycleViewAdapter.RecyclerHolder recyclerHolder = (com.paditech.mvpbase.screen.main.NotificationRecycleViewAdapter.RecyclerHolder) holder;
+        NotificationRecycleViewAdapter.RecyclerHolder recyclerHolder = (NotificationRecycleViewAdapter.RecyclerHolder) holder;
         recyclerHolder.setData(position);
     }
 
@@ -73,7 +79,7 @@ public class NotificationRecycleViewAdapter extends RecyclerView.Adapter<Recycle
             ButterKnife.bind(this, itemView);
         }
 
-        public void setData(int pos) {
+        public void setData(final int pos) {
             if (listNotify.get(pos) != null) {
                 switch (listNotify.get(pos).getStatus()) {
                     case 1:
@@ -88,11 +94,25 @@ public class NotificationRecycleViewAdapter extends RecyclerView.Adapter<Recycle
                 }
                 title.setText(listNotify.get(pos).getTitle());
                 tv_content.setText(listNotify.get(pos).getContent());
+                ImageUtil.loadImage(itemView.getContext(),listNotify.get(pos).getAppAvar(),img_notifi_status);
+
                 if (listNotify.get(pos).getRead()){
                     tv_isread.setText(R.string.notify_read);
                 }else tv_isread.setText(R.string.notify_new);
                 tv_date.setText(CommonUtil.convertTime(listNotify.get(pos).getDate()));
             }
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    AppModel.SourceBean app = new AppModel.SourceBean();
+                    app.setAppid(listNotify.get(pos).getAppid());
+                    app.setCover(listNotify.get(pos).getAppAvar());
+                    EventBus.getDefault().postSticky(app);
+
+                    itemView.getContext().startActivity(new Intent(itemView.getContext(), DetailActivity.class));
+                }
+            });
         }
     }
 

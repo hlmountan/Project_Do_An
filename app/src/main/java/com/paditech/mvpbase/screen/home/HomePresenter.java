@@ -186,4 +186,6 @@ public class HomePresenter extends FragmentPresenter<HomeContact.ViewOsp> implem
         });
 
     }
+
+
 }

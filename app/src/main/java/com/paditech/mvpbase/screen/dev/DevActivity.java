@@ -1,6 +1,5 @@
 package com.paditech.mvpbase.screen.dev;
 
-import android.content.Intent;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,8 +12,8 @@ import com.paditech.mvpbase.common.model.AppModel;
 import com.paditech.mvpbase.common.mvp.activity.ActivityPresenter;
 import com.paditech.mvpbase.common.mvp.activity.MVPActivity;
 import com.paditech.mvpbase.common.view.SimpleDividerItemDecoration;
-import com.paditech.mvpbase.screen.home.HomeRecyclerViewAdapter;
-import com.paditech.mvpbase.screen.home.StartSnapHelper;
+import com.paditech.mvpbase.screen.adapter.HomeRecyclerViewAdapter;
+import com.paditech.mvpbase.screen.adapter.StartSnapHelper;
 
 import java.net.URLEncoder;
 import java.util.List;

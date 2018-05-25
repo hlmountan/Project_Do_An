@@ -1,19 +1,21 @@
 package com.paditech.mvpbase.screen.adapter;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageManager;
-import android.media.Image;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.paditech.mvpbase.R;
+import com.paditech.mvpbase.common.model.AppModel;
+import com.paditech.mvpbase.screen.detail.DetailActivity;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
@@ -86,10 +88,25 @@ public class RecyclerViewApkAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
             }
 
-            public void setData(int pos){
+            public void setData(final int pos){
                 tv_title.setText(itemView.getContext().getPackageManager().getApplicationLabel(packages.get(pos)));
                 img_avar.setImageDrawable(itemView.getContext().getPackageManager().getApplicationIcon(packages.get(pos)));
 
+                itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        img_avar.setTransitionName("image_avatar");
+                        AppModel.SourceBean app = new AppModel.SourceBean();
+                        app.setAppid(packages.get(pos).packageName);
+                        app.setFirebaseCmt(true);
+                        app.setTitle(itemView.getContext().getPackageManager().getApplicationLabel(packages.get(pos)).toString().trim());
+                        EventBus.getDefault().postSticky(app);
+                        Intent intent = new Intent(itemView.getContext(), DetailActivity.class);
+                        intent.putExtra("is_cover",false);
+                        ActivityOptionsCompat optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(act, img_avar, "image_avatar");
+                        itemView.getContext().startActivity(intent, optionsCompat.toBundle());
+                    }
+                });
             }
 
         }

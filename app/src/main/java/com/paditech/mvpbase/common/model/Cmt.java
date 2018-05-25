@@ -1,56 +1,51 @@
 package com.paditech.mvpbase.common.model;
 
+import com.google.gson.Gson;
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Created by hung on 5/14/2018.
  */
 
 public class Cmt {
-    private String uid;
-    private String content;
+
+    @SerializedName("id")
+    private int id;
+    @SerializedName("appid")
     private String appid;
-    private float rate;
-    private long  date;
-    private String replyedId;
-    private String replyForId;
-    private String title;
+    @SerializedName("comment_id")
+    private String commentId;
+    @SerializedName("comment")
+    private String comment;
+    @SerializedName("author_name")
     private String authorName;
-    private String avar;
+    @SerializedName("avatar")
+    private String avatar;
+    @SerializedName("title_comment")
+    private String titleComment;
+    @SerializedName("star_rating")
+    private float starRating;
+    @SerializedName("time")
+    private long time;
+    @SerializedName("version")
+    private String version;// FIXME check this code
 
-    public String getAuthorName() {
-        return authorName;
+    private String uid;
+
+    public static Cmt objectFromData(String str) {
+
+        return new Gson().fromJson(str, Cmt.class);
     }
-
-    public void setAuthorName(String authorName) {
-        this.authorName = authorName;
-    }
-
-    public String getAvar() {
-        return avar;
-    }
-
-    public void setAvar(String avar) {
-        this.avar = avar;
-    }
-
-
 
     public Cmt() {
     }
 
-    public String getUid() {
-        return uid;
+    public int getId() {
+        return id;
     }
 
-    public void setUid(String uid) {
-        this.uid = uid;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getAppid() {
@@ -61,43 +56,77 @@ public class Cmt {
         this.appid = appid;
     }
 
-    public float getRate() {
-        return rate;
+    public String getCommentId() {
+        return commentId;
     }
 
-    public void setRate(float rate) {
-        this.rate = rate;
+    public void setCommentId(String commentId) {
+        this.commentId = commentId;
     }
 
-    public long getDate() {
-        return date;
+    public String getComment() {
+        return comment;
     }
 
-    public void setDate(long date) {
-        this.date = date;
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 
-    public String getReplyedId() {
-        return replyedId;
+    public String getAuthorName() {
+        return authorName;
     }
 
-    public void setReplyedId(String replyedId) {
-        this.replyedId = replyedId;
+    public void setAuthorName(String authorName) {
+        this.authorName = authorName;
     }
 
-    public String getReplyForId() {
-        return replyForId;
+    public String getAvatar() {
+        return avatar;
     }
 
-    public void setReplyForId(String replyForId) {
-        this.replyForId = replyForId;
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 
-    public String getTitle() {
-        return title;
+    public String getTitleComment() {
+        return titleComment;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setTitleComment(String titleComment) {
+        this.titleComment = titleComment;
+    }
+
+    public float getStarRating() {
+        return starRating;
+    }
+
+    public void setStarRating(float starRating) {
+        this.starRating = starRating;
+    }
+
+    public long getTime() {
+        return time;
+    }
+
+    public void setTime(long time) {
+        this.time = time;
+    }
+
+    public String getVersion() {
+        return version;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
+    }
+
+
+
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
     }
 }

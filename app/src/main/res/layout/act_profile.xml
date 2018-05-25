@@ -14,6 +14,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
+            <Button
+                android:id="@+id/btn_setting"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ic_settings"
+                android:minHeight="@dimen/min_height"
+                android:minWidth="@dimen/min_height"
+                android:layout_margin="@dimen/margin_default"/>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -44,7 +52,17 @@
                     android:layout_marginTop="@dimen/margin_small"
                     android:text="@string/user_default_email" />
 
+                <TextView
+                    android:id="@+id/tv_dev_status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="@dimen/margin_default"
+                    android:textColor="@color/orange"
+                    android:text="@string/requesting"
+                    android:visibility="gone"/>
                 <Button
+                    android:id="@+id/btn_join_dev"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -53,15 +71,33 @@
                     android:minHeight="0dp"
                     android:minWidth="0dp"
                     android:drawablePadding="@dimen/padding_default"
-                    android:textStyle="bold"
                     android:drawableLeft="@drawable/ic_edit"
                     android:textColor="@color/white"
                     android:textAllCaps="false"
-                    android:text="@string/edit_profile"
+                    android:text="@string/join_dev"
                     android:paddingBottom="@dimen/margin_tiny"
                     android:paddingLeft="@dimen/margin_big"
                     android:paddingRight="@dimen/margin_large"
-                    android:paddingTop="@dimen/margin_tiny" />
+                    android:paddingTop="@dimen/margin_tiny"
+                    android:visibility="gone"/>
+                <Button
+                    android:id="@+id/btn_edit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="@dimen/padding_default"
+                    android:background="@android:color/transparent"
+                    android:minHeight="@dimen/min_height"
+                    android:minWidth="@dimen/min_height"
+                    android:textStyle="bold"
+                    android:drawableLeft="@drawable/ic_expand_more"
+                    android:textColor="@color/white"
+                    android:textAllCaps="false"
+                    android:paddingBottom="@dimen/margin_tiny"
+                    android:paddingLeft="@dimen/margin_big"
+                    android:paddingRight="@dimen/margin_large"
+                    android:paddingTop="@dimen/margin_tiny"/>
+
 
 
             </LinearLayout>
@@ -96,11 +132,13 @@
         </RelativeLayout>
 
         <LinearLayout
+            android:id="@+id/view_chart"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/bg_shadow"
             android:orientation="vertical"
-            android:padding="@dimen/padding_default">
+            android:padding="@dimen/padding_default"
+            android:visibility="gone">
 
             <TextView
                 android:layout_width="match_parent"
@@ -139,14 +177,17 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_small"
             android:background="@drawable/bg_shadow"
-            android:padding="@dimen/padding_default" />
+            android:padding="@dimen/padding_default"
+            android:visibility="gone"/>
 
         <LinearLayout
+            android:id="@+id/view_own_app"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/bg_shadow"
             android:orientation="vertical"
-            android:padding="@dimen/padding_default">
+            android:padding="@dimen/padding_default"
+            android:visibility="gone">
 
             <TextView
                 android:layout_width="match_parent"
@@ -198,7 +239,32 @@
             android:paddingRight="@dimen/margin_large"
             android:paddingTop="@dimen/margin_small" />
 
+        <LinearLayout
+            android:id="@+id/view_follow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/padding_default"
+            android:paddingLeft="@dimen/padding_default"
+            android:paddingRight="@dimen/padding_default"
+            android:visibility="gone">
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/padding_small"
+                android:text="@string/you_have_like"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_big"
+                android:textStyle="bold" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler_view_like_app"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:padding="@dimen/padding_small" />
+        </LinearLayout>
     </LinearLayout>
 
 </android.support.v4.widget.NestedScrollView>

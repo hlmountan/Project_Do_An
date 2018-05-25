@@ -1,4 +1,4 @@
-package com.paditech.mvpbase.screen.main;
+package com.paditech.mvpbase.screen.adapter;
 
 import android.app.Activity;
 import android.support.annotation.Nullable;

@@ -167,10 +167,12 @@
             android:padding="@dimen/padding_default">
 
             <TextView
+                android:id="@+id/tv_dev_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingTop="@dimen/padding_default"
-                android:text="Hi, Did you have account?\nCan you sign in right now!" />
+                android:text="@string/signin"
+                android:textAlignment="center"/>
 
             <Button
                 android:id="@+id/btn_sign_in"
@@ -186,7 +188,7 @@
                 android:paddingLeft="@dimen/padding_default"
                 android:paddingRight="@dimen/padding_default"
                 android:paddingTop="@dimen/padding_super_tiny"
-                android:text="Sign in"
+                android:text="@string/signinview"
                 android:textColor="@color/blue"
                 android:textSize="@dimen/text_size_tiny" />
 

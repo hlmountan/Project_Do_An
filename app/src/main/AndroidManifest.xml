@@ -24,7 +24,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".screen.main.HomeActivity"
+            android:name=".screen.main.MainActivity"
             android:windowSoftInputMode="adjustPan|stateAlwaysHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -41,7 +41,7 @@
         <activity android:name=".screen.report.ReportActivity" />
         <activity android:name=".screen.dev.DevActivity" />
         <activity android:name=".screen.cmt.CommentActivity" />
-        <activity android:name=".screen.user.UserActivity" />
+        <activity android:name=".screen.login.LoginActivity" />
         <activity android:name=".screen.setting.SettingActivity" />
         <activity android:name=".screen.apkFile.AllApkFileActivity" />
         <activity android:name=".screen.profile.ProfileActivity" />

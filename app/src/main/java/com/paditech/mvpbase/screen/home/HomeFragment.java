@@ -12,10 +12,12 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.beloo.widget.chipslayoutmanager.ChipsLayoutManager;
 import com.beloo.widget.chipslayoutmanager.gravity.IChildGravityResolver;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.paditech.mvpbase.R;
 import com.paditech.mvpbase.common.event.ChipCateTagEvent;
 import com.paditech.mvpbase.common.model.AppModel;
@@ -23,14 +25,14 @@ import com.paditech.mvpbase.common.mvp.fragment.FragmentPresenter;
 import com.paditech.mvpbase.common.mvp.fragment.MVPFragment;
 import com.paditech.mvpbase.common.utils.CommonUtil;
 import com.paditech.mvpbase.common.view.TranslationNestedScrollView;
+import com.paditech.mvpbase.screen.adapter.ChipCateAdapter;
+import com.paditech.mvpbase.screen.adapter.HomeRecyclerViewAdapter;
 import com.paditech.mvpbase.screen.adapter.RecyclerViewSliderHome;
-import com.paditech.mvpbase.screen.main.HomeActivity;
-import com.paditech.mvpbase.screen.main.ScrollTopEvent;
-import com.paditech.mvpbase.screen.main.adapter.ChipCateAdapter;
-import com.paditech.mvpbase.screen.notification.NotificationActivity;
+import com.paditech.mvpbase.screen.adapter.ScrollTopEvent;
+import com.paditech.mvpbase.screen.adapter.StartSnapHelper;
+import com.paditech.mvpbase.screen.login.LoginActivity;
+import com.paditech.mvpbase.screen.main.MainActivity;
 import com.paditech.mvpbase.screen.profile.ProfileActivity;
-import com.paditech.mvpbase.screen.showMoreApp.ShowMoreActicity;
-import com.paditech.mvpbase.screen.user.UserActivity;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -39,23 +41,12 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.OnClick;
 
 /**
  * Created by hung on 1/2/2018.
  */
 
 public class HomeFragment extends MVPFragment<HomeContact.PresenterViewOsp> implements HomeContact.ViewOsp,View.OnClickListener {
-
-    HomeRecyclerViewAdapter mHomeRecyclerViewAdapterOnSale;
-    HomeRecyclerViewAdapter mHomeRecyclerViewAdapterGameGrossing;
-    HomeRecyclerViewAdapter mHomeRecyclerViewAdapterAllGrossing;
-    HomeRecyclerViewAdapter mHomeRecyclerViewAdapterUserUpload;
-    HomeRecyclerViewAdapter mHomeRecyclerViewAdapter5;
-
-    RecyclerViewSliderHome homeSlider;
-
-    private ChipCateAdapter mChipCateAdapter;
     @BindView(R.id.recycler_view_app_onsale)
     RecyclerView recycler_view_app_onsale;
     @BindView(R.id.recycler_view_game_grossing)
@@ -74,13 +65,23 @@ public class HomeFragment extends MVPFragment<HomeContact.PresenterViewOsp> impl
     TranslationNestedScrollView scrollView_home;
     @BindView(R.id.recycler_view_list_cate)
     RecyclerView recycler_view_list_cate;
-
     @BindView(R.id.btn_profile)
     Button btn_profile;
     @BindView(R.id.view_user_upload)
     LinearLayout view_user_upload;
+    @BindView(R.id.tv_dev_name)
+    TextView tv_dev_name;
+    @BindView(R.id.btn_sign_in)
+    Button btn_sign_in;
 
     private boolean mRunned;
+
+    HomeRecyclerViewAdapter mHomeRecyclerViewAdapterOnSale;
+    HomeRecyclerViewAdapter mHomeRecyclerViewAdapterGameGrossing;
+    HomeRecyclerViewAdapter mHomeRecyclerViewAdapterAllGrossing;
+    HomeRecyclerViewAdapter mHomeRecyclerViewAdapterUserUpload;
+    HomeRecyclerViewAdapter mHomeRecyclerViewAdapter5;
+    RecyclerViewSliderHome homeSlider;
 
     SnapHelper snapHelper = new StartSnapHelper();
     SnapHelper snapHelper1 = new StartSnapHelper();
@@ -88,10 +89,10 @@ public class HomeFragment extends MVPFragment<HomeContact.PresenterViewOsp> impl
     SnapHelper snapHelper3 = new StartSnapHelper();
     SnapHelper snapHelperSlider = new StartSnapHelper();
 
-
+    private ChipCateAdapter mChipCateAdapter;
     Activity act;
     private GridLayoutManager gridLayoutManager;
-
+    FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
     public static HomeFragment getInstance(Activity act) {
         HomeFragment f = new HomeFragment();
@@ -106,6 +107,7 @@ public class HomeFragment extends MVPFragment<HomeContact.PresenterViewOsp> impl
         EventBus.getDefault().register(this);
 
     }
+
 
 
     @Override
@@ -136,21 +138,23 @@ public class HomeFragment extends MVPFragment<HomeContact.PresenterViewOsp> impl
 
     @Override
     protected void initView(View view) {
-//        if (!mRunned) {
-//            Timer timer = new Timer();
-//            timer.scheduleAtFixedRate(new MyTimerTask(), 2000, 4000);
-//        }
 
-        mRunned = true;
         setUpRecyclerView();
         setRecyclerViewCategory();
         getPresenter().getAppFromApi();
         setUpViewPager();
         btn_profile.setOnClickListener(this);
         btn_see_more.setOnClickListener(this);
-        if (FirebaseAuth.getInstance().getCurrentUser() != null){
+        btn_sign_in.setOnClickListener(this);
+        if (firebaseUser != null){
+            btn_sign_in.setText(getString(R.string.profile_go));
+            tv_dev_name.setText(firebaseUser.getDisplayName()+ getString(R.string.see_profile));
             getPresenter().getUserApk();
-        }else view_user_upload.setVisibility(View.GONE);
+        }else {
+            view_user_upload.setVisibility(View.GONE);
+            btn_sign_in.setText(getString(R.string.signinview));
+            tv_dev_name.setText(getString(R.string.signin));
+        }
 
         
     }
@@ -208,12 +212,9 @@ public class HomeFragment extends MVPFragment<HomeContact.PresenterViewOsp> impl
     @Override
     public void onClick(View view) {
         switch (view.getId()){
-            case R.id.btn_see_more:
-                btn_see_more.getContext().startActivity(new Intent(btn_see_more.getContext(), ShowMoreActicity.class));
-                break;
             case R.id.btn_profile:
-                if ( FirebaseAuth.getInstance().getCurrentUser() == null){
-                    Intent intent = new Intent(btn_profile.getContext(),UserActivity.class);
+                if ( firebaseUser == null){
+                    Intent intent = new Intent(btn_profile.getContext(),LoginActivity.class);
                     intent.putExtra("SCREEN","HOME");
                     btn_profile.getContext().startActivity(intent);
                 } else {
@@ -221,14 +222,14 @@ public class HomeFragment extends MVPFragment<HomeContact.PresenterViewOsp> impl
                     btn_profile.getContext().startActivity(new Intent(btn_see_more.getContext(), ProfileActivity.class));
                 }
                 break;
-        }
-    }
-
-    @OnClick({R.id.btn_sign_in})
-    public void onClickView(View view) {
-        switch (view.getId()) {
             case R.id.btn_sign_in:
-                onClick(view);
+                if (firebaseUser == null){
+                    Intent intent = new Intent(btn_profile.getContext(),LoginActivity.class);
+                    intent.putExtra("SCREEN","HOME");
+                    btn_profile.getContext().startActivity(intent);
+                }else{
+                    btn_profile.getContext().startActivity(new Intent(btn_see_more.getContext(), ProfileActivity.class));
+                }
                 break;
         }
     }
@@ -323,7 +324,7 @@ public class HomeFragment extends MVPFragment<HomeContact.PresenterViewOsp> impl
             public void selectCate(String string) {
                 ChipCateTagEvent tag = new ChipCateTagEvent(string);
                 EventBus.getDefault().post(tag);
-                ((HomeActivity) getActivityReference()).setVPitem(1);
+                ((MainActivity) getActivityReference()).setVPitem(1);
             }
         });
         ChipsLayoutManager chipsLayoutManager = ChipsLayoutManager.newBuilder(getActivityContext())

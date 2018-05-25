@@ -6,12 +6,13 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.paditech.mvpbase.common.event.ApkFileInfoEvent;
 import com.paditech.mvpbase.common.model.AppModel;
-import com.paditech.mvpbase.common.model.Notification;
 import com.paditech.mvpbase.common.model.UserProfile;
 import com.paditech.mvpbase.common.mvp.activity.ActivityPresenter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by hung on 5/15/2018.
@@ -61,11 +62,15 @@ public class UpdateApkPresenter extends ActivityPresenter<UpdateApkContact.ViewO
         2: app public
         3: new comment
          */
+        // add notify
         final com.paditech.mvpbase.common.model.Notification notify = new com.paditech.mvpbase.common.model.Notification(
                 2, app.getTitle(), "This app is now available for you to download",
                 System.currentTimeMillis()/1000,app.getAppid(),false,app.getTitle(),app.getCover()
                 );
+        final String key = FirebaseDatabase.getInstance().getReference().child("notifycation").push().getKey();
+        FirebaseDatabase.getInstance().getReference().child("notifycation").child(key).setValue(notify);
 
+        // add notify cho user
         FirebaseDatabase.getInstance().getReference().child("apk").child(app.getAppid()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -80,14 +85,18 @@ public class UpdateApkPresenter extends ActivityPresenter<UpdateApkContact.ViewO
                                 public void onDataChange(DataSnapshot dataSnapshot) {
                                     if (dataSnapshot.getValue() != null){
                                         UserProfile userProfile = dataSnapshot.getValue(UserProfile.class);
-                                        ArrayList<Notification> notifications = new ArrayList<>();
+                                        ArrayList<Map<String,String>> notify = new ArrayList<>();
+                                        Map<String, String> map = new HashMap<String, String>();
+                                        map.put("key",key);
+                                        map.put("status","new");
+                                        map.put("yourapp","true");
                                         // co notify chua ?
                                         if (userProfile.getNotify() != null){
-                                            notifications = userProfile.getNotify();
-                                            notifications.add(notify);
-                                        }else notifications.add(notify);
+                                            notify = userProfile.getNotify();
+                                            notify.add(map);
+                                        }else notify.add(map);
                                         FirebaseDatabase.getInstance().getReference().child("user").
-                                                child(usernoti.get(0)).child("notify").setValue(notifications);
+                                                child(usernoti.get(0)).child("notify").setValue(notify);
                                     }
                                 }
 
