@@ -71,19 +71,8 @@ public class LoginPresenter extends ActivityPresenter<LoginContact.ViewOps> impl
                             Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
                             createNewUser(new UserProfile(user.getDisplayName(),user.getEmail(),user.getPhotoUrl().toString(),user.getUid()));
-                            user.sendEmailVerification()
-                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<Void> task) {
-                                            if (task.isSuccessful()) {
-                                                Log.d(TAG, "Email sent.");
-                                            }
-                                        }
-                                    });
 
-                            getView().googleSuccess();
-
-//                            updateUI(user);
+                            if (getView()  != null ) getView().googleSuccess();
                         } else {
                             // If sign in fails, display a message to the user.
                            getView().googleAuthenFalse();

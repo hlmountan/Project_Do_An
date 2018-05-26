@@ -9,10 +9,8 @@ import android.util.Log;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
@@ -34,8 +32,6 @@ import java.util.ArrayList;
 public class UploadApkPresenter extends FragmentPresenter<UploadApkContact.ViewOps> implements UploadApkContact.PresenterViewOps {
     private String mAppId;
     private boolean avatarSuccess, apkSuccess, screenshotSuccess;
-    FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-    DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
 
     // storage
     @Override
@@ -67,7 +63,7 @@ public class UploadApkPresenter extends FragmentPresenter<UploadApkContact.ViewO
                 Uri linkDownload = taskSnapshot.getDownloadUrl();
                 if (linkDownload != null) {
                     apkSuccess = true;
-                    databaseReference.child("apk").child(mAppId).child("linkDownload").setValue(linkDownload.toString());
+                    FirebaseDatabase.getInstance().getReference().child("apk").child(mAppId).child("linkDownload").setValue(linkDownload.toString());
                     checkSuccessAll();
                 }
             }
@@ -104,7 +100,8 @@ public class UploadApkPresenter extends FragmentPresenter<UploadApkContact.ViewO
                 // ...
                 Uri link = taskSnapshot.getDownloadUrl();
                 if (link != null) {
-                    databaseReference.child("apk").child(mAppId).child("avar").setValue(link.toString());
+                    FirebaseDatabase.getInstance().getReference().child("apk").child(mAppId).
+                            child("avar").setValue(link.toString());
                     avatarSuccess = true;
                     checkSuccessAll();
                 }
@@ -171,7 +168,7 @@ public class UploadApkPresenter extends FragmentPresenter<UploadApkContact.ViewO
         apk.setUid(FirebaseAuth.getInstance().getUid());
         apk.setStatus(ApkFileInfoEvent.STATUS_MISSING_INFO);
         apk.setUserUpload(true);
-        databaseReference.child("apk").child(mAppId).setValue(apk);
+        FirebaseDatabase.getInstance().getReference().child("apk").child(mAppId).setValue(apk);
         getView().uploadappid(mAppId);
         uploadApk(apk.getPath());
         updateAvar(apk.getAvar());
@@ -179,7 +176,7 @@ public class UploadApkPresenter extends FragmentPresenter<UploadApkContact.ViewO
     }
 
     public void updateApkScreenshot(ArrayList<String> screens) {
-        databaseReference.child("apk").child(mAppId).child("screenshot").setValue(screens);
+        FirebaseDatabase.getInstance().getReference().child("apk").child(mAppId).child("screenshot").setValue(screens);
         screenshotSuccess = true;
         checkSuccessAll();
 
@@ -207,8 +204,9 @@ public class UploadApkPresenter extends FragmentPresenter<UploadApkContact.ViewO
 
     @Override
     public void checkDev() {
-        if (firebaseUser != null) {
-            databaseReference.child("user").child(firebaseUser.getUid()).addValueEventListener(new ValueEventListener() {
+        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+            FirebaseDatabase.getInstance().getReference().child("user").child(FirebaseAuth.getInstance().
+                    getCurrentUser().getUid()).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     if (dataSnapshot.getValue() != null) {
@@ -227,6 +225,24 @@ public class UploadApkPresenter extends FragmentPresenter<UploadApkContact.ViewO
 
         }else if (getView() != null) getView().isDev(false);
 
+    }
+
+    @Override
+    public void checkApk(String appid) {
+        FirebaseDatabase.getInstance().getReference().child("apk").child(appid).
+                addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.getValue() == null)
+                    if (getView()  != null) getView().setApkState(true);
+                else if (getView()  != null) getView().setApkState(false);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
 }

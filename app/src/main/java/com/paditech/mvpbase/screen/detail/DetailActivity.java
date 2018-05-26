@@ -416,7 +416,9 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
             setUpScreenShort(app.getScreenshotUserUpload());
             fr_chart_and_pager.setVisibility(View.GONE);
             btn_install_app.setText(R.string.install);
-
+            getPresenter().getRelateApp("http://appsxyz.com/api/apk/search_related/?q=" + URLEncoder.encode(app.getTitle()) + "&page=1&size=20");
+            tv_gp_info.setText(getText(R.string.no_info));
+            tv_description.setText(getText(R.string.no_info));
         } else {
             if ((app.getAll_price() == null) || (app.getAll_price().size() != 2)) {
 
@@ -828,19 +830,22 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
                 this.startActivity(intent);
                 break;
             case R.id.tv_offerby:
-                System.out.println(title + " asdwcsf ");
                 Intent intent1 = new Intent(this, DevActivity.class);
 //                intent1.putExtra("DEVNAME", title);
                 this.startActivity(intent1);
+                EventBus.getDefault().postSticky(ownApp);
                 break;
             case R.id.rlt_dev:
                 Intent intent2 = new Intent(this, DevActivity.class);
 //                intent2.putExtra("DEVNAME", title);
+                EventBus.getDefault().postSticky(ownApp);
                 this.startActivity(intent2);
+
                 break;
 
             case R.id.tv_show_cmt:
                 this.startActivity(new Intent(this, CommentActivity.class));
+                EventBus.getDefault().postSticky(ownApp);
                 break;
             case R.id.btn_submit:
                 if (FirebaseAuth.getInstance().getCurrentUser() != null) {

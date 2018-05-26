@@ -1,10 +1,8 @@
 package com.paditech.mvpbase.screen.notification;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.paditech.mvpbase.common.event.NewNotificationEvent;
@@ -23,29 +21,29 @@ import java.util.Map;
  */
 
 public class NotificationPresenter extends FragmentPresenter<NotificationContact.ViewOps> implements NotificationContact.PresenterViewOps {
-    FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-    DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-
     @Override
     public void getListNotify() {
-        final List<Notification> listNotify = new ArrayList<>();
-        if (firebaseUser != null)
-            databaseReference.child("user").
-                    child(firebaseUser.getUid()).addValueEventListener(new ValueEventListener() {
+
+        if (FirebaseAuth.getInstance().getCurrentUser() != null)
+            FirebaseDatabase.getInstance().getReference().child("user").
+                    child(FirebaseAuth.getInstance().getCurrentUser().getUid()).
+                    addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     if (dataSnapshot.getValue() != null) {
                         UserProfile userProfile = dataSnapshot.getValue(UserProfile.class);
                         if (userProfile != null && userProfile.getNotify() != null && getView() != null) {
                             //tu list notify id lay notify
+                            final List<Notification> listNotify = new ArrayList<>();
                             for (final Map<String, String> a : userProfile.getNotify()) {
                                 //laynotify
-                                databaseReference.child("notifycation").child(a.get("key")).
+                                FirebaseDatabase.getInstance().getReference().child("notifycation").child(a.get("key")).
                                         addListenerForSingleValueEvent(new ValueEventListener() {
                                             @Override
                                             public void onDataChange(DataSnapshot dataSnapshot) {
                                                 if (dataSnapshot.getValue() != null) {
-                                                    Notification notification = dataSnapshot.getValue(Notification.class);
+                                                    Notification notification = dataSnapshot.
+                                                            getValue(Notification.class);
                                                     // set notify da doc hay chua
                                                     if (a.get("status").equals("new")) {
                                                         notification.setRead(false);
@@ -79,6 +77,6 @@ public class NotificationPresenter extends FragmentPresenter<NotificationContact
 
                 }
             });
-        else getView().setListNotify(listNotify);
+        else getView().setListNotify(null);
     }
 }

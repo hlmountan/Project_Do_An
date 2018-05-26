@@ -115,7 +115,9 @@
     <string name="notify_status_1">New version</string>
     <string name="notify_status_2">App Publiced</string>
     <string name="notify_status_3">New Comment</string>
-
+    <string name="watch">Watch</string>
+    <!--detail-->
+    <string name="no_info">App has no infomation to display</string>
 
     <!--Upload APk-->
     <string name="please_enter_title">Please enter app title to continue!</string>
@@ -124,7 +126,7 @@
     <string name="please_choose_screenshot">Please choose app screenshots to continue!</string>
     <string name="error_file_type">You have choices wrong file type, please chooses other files</string>
     <string name="not_dev">You are not developer.\n Do you want to join developer community?</string>
-
+    <string name="exis_apk">Your apk file is exis.\n Please, Upload again</string>
     <!--manage_apk-show_detail-->
     <string name="error_app_unavaiable">This app is not avaiable now</string>
 
@@ -216,7 +218,7 @@
     <string name="apk_uploading_d" formatted="false">APK uploading: %d %%</string>
     <string name="avatar_uploading_d" formatted="false">Avatar uploading: %d %%</string>
     <string name="screen_uploading" formatted="false">Screenshots uploading: %d %%\t %s</string>
-    <string name="confirm_logout">Do you sure want to logout?</string>
+    <string name="confirm_logout">Do you want to logout?</string>
     <string name="edit_profile">Edit profile</string>
     <string name="notification_title">Notification</string>
     <string name="manage_apk_files">Manage APK files</string>

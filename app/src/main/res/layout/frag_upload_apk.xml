@@ -233,12 +233,6 @@
                     android:textSize="@dimen/text_size_tiny"
                     android:textStyle="italic" />
 
-                <ProgressBar
-                    android:id="@+id/progressBar"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:visibility="gone" />
 
                 <TextView
                     android:id="@+id/tv_percen"

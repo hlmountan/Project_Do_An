@@ -18,6 +18,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.login.LoginManager;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
@@ -32,7 +33,6 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
 import com.paditech.mvpbase.R;
 import com.paditech.mvpbase.common.base.BaseDialog;
@@ -101,7 +101,6 @@ ProfileActivity extends MVPActivity<ProfileContact.PresenterViewOps> implements 
     UserProfile userProfile;
     SnapHelper snapHelperCmt = new LinearSnapHelper();
     SnapHelper snapHelperFollow = new LinearSnapHelper();
-    FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
     HomeRecyclerViewAdapter mFollowAppAdapter;
     RecyclerViewReplyCmtAdapter cmtAdapter;
@@ -128,14 +127,13 @@ ProfileActivity extends MVPActivity<ProfileContact.PresenterViewOps> implements 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (userProfile != null)
+
+        if (userProfile != null&& FirebaseAuth.getInstance().getCurrentUser() != null)
             if (userProfile.getRequestDev() &&
                     FirebaseAuth.getInstance().getCurrentUser().isEmailVerified()) {
-                Boolean verify = user.isEmailVerified();
+                Boolean verify = FirebaseAuth.getInstance().getCurrentUser().isEmailVerified();
                 FirebaseDatabase.getInstance().getReference().child("user").
-                        child(user.getUid()).child("dev").setValue(verify);
-
+                        child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("dev").setValue(verify);
             }
     }
 
@@ -181,8 +179,10 @@ ProfileActivity extends MVPActivity<ProfileContact.PresenterViewOps> implements 
 
                                     }
                                 });
-                        finish();
                         startActivity(new Intent(getActivityContext(), LoginActivity.class));
+                        LoginManager.getInstance().logOut();
+                        finish();
+
                     }
                 }, null);
                 break;
@@ -367,13 +367,15 @@ ProfileActivity extends MVPActivity<ProfileContact.PresenterViewOps> implements 
     }
 
     public void setFollowAppAdapter() {
-        SimpleDividerItemDecoration decoration = new SimpleDividerItemDecoration(this, ContextCompat.getColor(this, R.color.gray_line), 120, 20);
+        SimpleDividerItemDecoration decoration = new SimpleDividerItemDecoration
+                (this, ContextCompat.getColor(this, R.color.gray_line), 120, 20);
         decoration.setHasLastLine(false);
 
         mFollowAppAdapter = new HomeRecyclerViewAdapter(this);
         mFollowAppAdapter.setItemId(R.layout.item_app_horizontal_white_bg);
         snapHelperFollow.attachToRecyclerView(recycler_view_like_app);
-        recycler_view_like_app.setLayoutManager(new GridLayoutManager(this, 2, LinearLayoutManager.HORIZONTAL, false));
+        recycler_view_like_app.setLayoutManager(new GridLayoutManager
+                (this, 2, LinearLayoutManager.HORIZONTAL, false));
         recycler_view_like_app.addItemDecoration(decoration);
         recycler_view_like_app.setAdapter(mFollowAppAdapter);
     }

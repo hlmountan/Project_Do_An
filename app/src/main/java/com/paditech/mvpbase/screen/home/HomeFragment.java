@@ -17,7 +17,6 @@ import android.widget.TextView;
 import com.beloo.widget.chipslayoutmanager.ChipsLayoutManager;
 import com.beloo.widget.chipslayoutmanager.gravity.IChildGravityResolver;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.paditech.mvpbase.R;
 import com.paditech.mvpbase.common.event.ChipCateTagEvent;
 import com.paditech.mvpbase.common.model.AppModel;
@@ -46,7 +45,7 @@ import butterknife.BindView;
  * Created by hung on 1/2/2018.
  */
 
-public class HomeFragment extends MVPFragment<HomeContact.PresenterViewOsp> implements HomeContact.ViewOsp,View.OnClickListener {
+public class HomeFragment extends MVPFragment<HomeContact.PresenterViewOsp> implements HomeContact.ViewOsp, View.OnClickListener {
     @BindView(R.id.recycler_view_app_onsale)
     RecyclerView recycler_view_app_onsale;
     @BindView(R.id.recycler_view_game_grossing)
@@ -92,7 +91,6 @@ public class HomeFragment extends MVPFragment<HomeContact.PresenterViewOsp> impl
     private ChipCateAdapter mChipCateAdapter;
     Activity act;
     private GridLayoutManager gridLayoutManager;
-    FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
     public static HomeFragment getInstance(Activity act) {
         HomeFragment f = new HomeFragment();
@@ -108,7 +106,19 @@ public class HomeFragment extends MVPFragment<HomeContact.PresenterViewOsp> impl
 
     }
 
-
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+            btn_sign_in.setText(getString(R.string.profile_go));
+            tv_dev_name.setText(FirebaseAuth.getInstance().getCurrentUser().getDisplayName() + getString(R.string.see_profile));
+            getPresenter().getUserApk();
+        } else {
+            view_user_upload.setVisibility(View.GONE);
+            btn_sign_in.setText(getString(R.string.signinview));
+            tv_dev_name.setText(getString(R.string.signin));
+        }
+    }
 
     @Override
     public void onDestroy() {
@@ -118,8 +128,8 @@ public class HomeFragment extends MVPFragment<HomeContact.PresenterViewOsp> impl
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void scrolltop(ScrollTopEvent event) {
-        scrollView_home.smoothScrollTo(0,0);
-        scrollView_home.scrollTo(0,0);
+        scrollView_home.smoothScrollTo(0, 0);
+        scrollView_home.scrollTo(0, 0);
 
     }
 
@@ -146,21 +156,20 @@ public class HomeFragment extends MVPFragment<HomeContact.PresenterViewOsp> impl
         btn_profile.setOnClickListener(this);
         btn_see_more.setOnClickListener(this);
         btn_sign_in.setOnClickListener(this);
-        if (firebaseUser != null){
+        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
             btn_sign_in.setText(getString(R.string.profile_go));
-            tv_dev_name.setText(firebaseUser.getDisplayName()+ getString(R.string.see_profile));
+            tv_dev_name.setText(FirebaseAuth.getInstance().getCurrentUser().getDisplayName() + getString(R.string.see_profile));
             getPresenter().getUserApk();
-        }else {
-            view_user_upload.setVisibility(View.GONE);
+        } else {
             btn_sign_in.setText(getString(R.string.signinview));
             tv_dev_name.setText(getString(R.string.signin));
         }
 
-        
+
     }
 
-    private void setUpRecyclerView(){
-        scrollView_home.setViewPager(recycler_view_slider,CommonUtil.getWidthScreen(getActivityReference())/2);
+    private void setUpRecyclerView() {
+        scrollView_home.setViewPager(recycler_view_slider, CommonUtil.getWidthScreen(getActivityReference()) / 2);
 
         snapHelper.attachToRecyclerView(recycler_view_app_onsale);
         snapHelper1.attachToRecyclerView(recycler_view_grossing);
@@ -198,7 +207,6 @@ public class HomeFragment extends MVPFragment<HomeContact.PresenterViewOsp> impl
 //        recycler_view_grossing.setNestedScrollingEnabled(false);
 
 
-
         mHomeRecyclerViewAdapterUserUpload.setItemId(R.layout.item_app);
         recycler_view_user_upload.setLayoutManager(new LinearLayoutManager(act, LinearLayoutManager.HORIZONTAL, false));
         recycler_view_user_upload.setAdapter(mHomeRecyclerViewAdapterUserUpload);
@@ -211,11 +219,11 @@ public class HomeFragment extends MVPFragment<HomeContact.PresenterViewOsp> impl
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.btn_profile:
-                if ( firebaseUser == null){
-                    Intent intent = new Intent(btn_profile.getContext(),LoginActivity.class);
-                    intent.putExtra("SCREEN","HOME");
+                if (FirebaseAuth.getInstance().getCurrentUser() == null) {
+                    Intent intent = new Intent(btn_profile.getContext(), LoginActivity.class);
+                    intent.putExtra("SCREEN", "HOME");
                     btn_profile.getContext().startActivity(intent);
                 } else {
                     // profile
@@ -223,11 +231,11 @@ public class HomeFragment extends MVPFragment<HomeContact.PresenterViewOsp> impl
                 }
                 break;
             case R.id.btn_sign_in:
-                if (firebaseUser == null){
-                    Intent intent = new Intent(btn_profile.getContext(),LoginActivity.class);
-                    intent.putExtra("SCREEN","HOME");
+                if (FirebaseAuth.getInstance().getCurrentUser() == null) {
+                    Intent intent = new Intent(btn_profile.getContext(), LoginActivity.class);
+                    intent.putExtra("SCREEN", "HOME");
                     btn_profile.getContext().startActivity(intent);
-                }else{
+                } else {
                     btn_profile.getContext().startActivity(new Intent(btn_see_more.getContext(), ProfileActivity.class));
                 }
                 break;
@@ -276,9 +284,12 @@ public class HomeFragment extends MVPFragment<HomeContact.PresenterViewOsp> impl
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                if (result != null) {
+                    mHomeRecyclerViewAdapterUserUpload.setmList1(result);
+                    mHomeRecyclerViewAdapterUserUpload.setItemNumber(result.size());
+                    view_user_upload.setVisibility(View.VISIBLE);
 
-                mHomeRecyclerViewAdapterUserUpload.setmList1(result);
-                mHomeRecyclerViewAdapterUserUpload.setItemNumber(result.size());
+                }else view_user_upload.setVisibility(View.GONE);
             }
         });
     }
@@ -301,7 +312,7 @@ public class HomeFragment extends MVPFragment<HomeContact.PresenterViewOsp> impl
 
     @Override
     public void updateListCates(final List<String> strings) {
-                mChipCateAdapter.setmListCates(strings);
+        mChipCateAdapter.setmListCates(strings);
     }
 
 
@@ -313,9 +324,10 @@ public class HomeFragment extends MVPFragment<HomeContact.PresenterViewOsp> impl
 
     private void setUpViewPager() {
         homeSlider = new RecyclerViewSliderHome(act);
-        recycler_view_slider.setLayoutManager(new LinearLayoutManager(act,LinearLayoutManager.HORIZONTAL,false));
+        recycler_view_slider.setLayoutManager(new LinearLayoutManager(act, LinearLayoutManager.HORIZONTAL, false));
         recycler_view_slider.setAdapter(homeSlider);
     }
+
     private void setRecyclerViewCategory() {
 
         mChipCateAdapter = new ChipCateAdapter();

@@ -145,7 +145,7 @@ public class HomePresenter extends FragmentPresenter<HomeContact.ViewOsp> implem
                         for (DataSnapshot a : dataSnapshot.getChildren()) {
 
                             final ApkFileInfoEvent apk = a.getValue(ApkFileInfoEvent.class);
-                            if (!apk.getUid().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
+                            if (apk.isUserUpload() && !apk.getUid().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
                                 apk.setAppid(a.getKey());
 
                                 //get user name

@@ -23,11 +23,9 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.paditech.mvpbase.R;
 import com.paditech.mvpbase.common.base.BaseDialog;
 import com.paditech.mvpbase.common.event.ApkFileInfoEvent;
@@ -93,7 +91,6 @@ public class UploadApkFragment extends MVPFragment<UploadApkContact.PresenterVie
     Button btn_upload_driver;
     @BindView(R.id.tv_step)
     TextView tvStep;
-
     @BindView(R.id.tv_title)
     TextView titleApk;
     @BindView(R.id.tv_size)
@@ -104,8 +101,6 @@ public class UploadApkFragment extends MVPFragment<UploadApkContact.PresenterVie
     LinearLayout ln_apk_file;
     @BindView(R.id.tv_percen)
     TextView tv_percen;
-    @BindView(R.id.progressBar)
-    ProgressBar progressBar;
     @BindView(R.id.et_title)
     EditText et_title;
     @BindView(R.id.tv_user)
@@ -131,6 +126,7 @@ public class UploadApkFragment extends MVPFragment<UploadApkContact.PresenterVie
     @BindView(R.id.progress_bar_screen)
     ValueProgressBar progressBarScreen;
 
+    Boolean apkState = false;
     int step = 1;
     String path = "";
     Boolean isDev = false;
@@ -138,7 +134,6 @@ public class UploadApkFragment extends MVPFragment<UploadApkContact.PresenterVie
     GetImageManager getImageManager;
     private ApkFileInfoEvent apkFile = new ApkFileInfoEvent();
 
-    FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
 
     public String getPath() {
@@ -179,6 +174,14 @@ public class UploadApkFragment extends MVPFragment<UploadApkContact.PresenterVie
         EventBus.getDefault().unregister(this);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (FirebaseAuth.getInstance().getCurrentUser() != null)
+            tv_user.setText(getString(R.string.hi) + FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
+        else tv_user.setText(getString(R.string.hi));
+    }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onGetApkFile(ApkFileInfoEvent apk) {
         setApkinfo(apk);
@@ -196,8 +199,8 @@ public class UploadApkFragment extends MVPFragment<UploadApkContact.PresenterVie
         CommonUtil.dismissSoftKeyboard(view, getActivityReference());
         getImageManager = new GetImageManager(this);
 
-        if (firebaseUser != null)
-            tv_user.setText(getString(R.string.hi) + firebaseUser.getDisplayName());
+        if (FirebaseAuth.getInstance().getCurrentUser() != null)
+            tv_user.setText(getString(R.string.hi) + FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
         else tv_user.setText(getString(R.string.hi));
 
         listScreenshortUploadAdapter = new RecyclerViewListScreenshortUploadAdapter(act);
@@ -262,7 +265,7 @@ public class UploadApkFragment extends MVPFragment<UploadApkContact.PresenterVie
                     showConfirmDialog(getString(R.string.not_dev), new BaseDialog.OnPositiveClickListener() {
                         @Override
                         public void onPositiveClick() {
-                            if (firebaseUser != null)
+                            if (FirebaseAuth.getInstance().getCurrentUser() != null)
                                 startActivity(new Intent(getActivityContext(), ProfileActivity.class));
                             else startActivity(new Intent(getActivityContext(), LoginActivity.class));
                         }
@@ -325,7 +328,6 @@ public class UploadApkFragment extends MVPFragment<UploadApkContact.PresenterVie
                 break;
             case 3:
                 tvStep.setText(R.string.step_3);
-                progressBar.setVisibility(View.VISIBLE);
                 step3.setVisibility(View.VISIBLE);
                 break;
             case 4:
@@ -333,11 +335,21 @@ public class UploadApkFragment extends MVPFragment<UploadApkContact.PresenterVie
                 step4.setVisibility(View.VISIBLE);
                 break;
             case 5:
-                getPresenter().createNewApk(apkFile);
-                tvStep.setText(R.string.step_5);
-                ln_final.setVisibility(View.VISIBLE);
-                btn_next.setVisibility(View.GONE);
-                btnPrevious.setVisibility(View.GONE);
+                if (apkState){
+                    apkFile.setTitle(et_title.getText().toString());
+                    getPresenter().createNewApk(apkFile);
+                    tvStep.setText(R.string.step_5);
+                    ln_final.setVisibility(View.VISIBLE);
+                    btn_next.setVisibility(View.GONE);
+                    btnPrevious.setVisibility(View.GONE);
+                }else showAlertDialog(getString(R.string.exis_apk), new BaseDialog.OnPositiveClickListener() {
+                    @Override
+                    public void onPositiveClick() {
+                        resetToStep1();
+                    }
+                });
+
+
                 break;
         }
     }
@@ -355,9 +367,8 @@ public class UploadApkFragment extends MVPFragment<UploadApkContact.PresenterVie
         step = 1;
         changeStep();
         agreement.setChecked(false);
-        btn_next.setVisibility(View.GONE);
+        agreement.setVisibility(View.VISIBLE);
         ln_final.setVisibility(View.GONE);
-        step1.setVisibility(View.GONE);
         ln_apk_file.setVisibility(View.GONE);
         path = "";
         et_title.setText("");
@@ -387,11 +398,12 @@ public class UploadApkFragment extends MVPFragment<UploadApkContact.PresenterVie
                         String date = String.valueOf(file.lastModified());
                         name = name.replace("_", ".");
                         name = name.replace(".apk", "");
+                        apkFile.setAppid(getPresenter().getAppId(apkFile.getPath()));
                         apkFile.setTitle(name);
                         apkFile.setSize(String.valueOf(file_size / 1024));
                         apkFile.setDateModify(date);
                         apkFile.setPath(converUri(data));
-                        apkFile.setUid(firebaseUser.getUid());
+                        apkFile.setUid(FirebaseAuth.getInstance().getCurrentUser().getUid());
                         setApkinfo(apkFile);
                     } else showToast(getString(R.string.error_file_type));
 
@@ -515,7 +527,7 @@ public class UploadApkFragment extends MVPFragment<UploadApkContact.PresenterVie
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                tvProgressApk.setText(getString(R.string.avatar_uploading_d, percent));
+                tvProgressApk.setText(getString(R.string.apk_uploading_d, percent));
                 progressBarApk.setProgress(percent);
             }
         });
@@ -540,6 +552,11 @@ public class UploadApkFragment extends MVPFragment<UploadApkContact.PresenterVie
     @Override
     public void isDev(Boolean check) {
         this.isDev = check;
+    }
+
+    @Override
+    public void setApkState(Boolean state) {
+        this.apkState = state;
     }
 
 

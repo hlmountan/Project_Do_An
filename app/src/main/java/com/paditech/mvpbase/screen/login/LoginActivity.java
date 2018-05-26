@@ -72,7 +72,7 @@ public class LoginActivity extends MVPActivity<LoginContact.PresenterViewOps> im
         this.screen = screen;
     }
 
-    String screen;
+    String screen = "";
 
 
     @Override
@@ -182,34 +182,6 @@ public class LoginActivity extends MVPActivity<LoginContact.PresenterViewOps> im
                                         userProfile.setEmail(mAuth.getCurrentUser().getEmail());
                                         getPresenter().createNewUser(userProfile);
 
-                                        // snt email verify
-                                        user.sendEmailVerification()
-                                                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                    @Override
-                                                    public void onComplete(@NonNull Task<Void> task) {
-                                                        if (task.isSuccessful()) {
-                                                            // email sent
-
-
-                                                            // after email is sent , finish this activity
-                                                            Toast.makeText(getActivityContext(),"sent verify",
-                                                                    Toast.LENGTH_LONG).show();
-                                                             finish();
-                                                        }
-                                                        else
-                                                        {
-                                                            // email not sent, so display message and restart the activity or do whatever you wish to do
-
-                                                            //restart this activity
-                                                            overridePendingTransition(0, 0);
-                                                            finish();
-                                                            overridePendingTransition(0, 0);
-                                                            startActivity(getIntent());
-
-                                                        }
-                                                    }
-                                                });
-//                                        updateUI(user);
                                     } else {
                                         // If sign in fails, display a message to the user.
                                         if (task.getException().toString().indexOf("already in use")>0){
@@ -290,7 +262,11 @@ public class LoginActivity extends MVPActivity<LoginContact.PresenterViewOps> im
 
     @Override
     public void googleSuccess() {
-        startActivity(new Intent(LoginActivity.this, ProfileActivity.class));
+
+
+        if (screen  != null && screen.equals("HOME")) {
+            startActivity(new Intent(LoginActivity.this, ProfileActivity.class));
+        }
         finish();
     }
 
@@ -303,6 +279,7 @@ public class LoginActivity extends MVPActivity<LoginContact.PresenterViewOps> im
 
     @Override
     public void fbSuccess() {
+
         if (screen.equals("HOME")) {
             startActivity(new Intent(LoginActivity.this, ProfileActivity.class));
         }

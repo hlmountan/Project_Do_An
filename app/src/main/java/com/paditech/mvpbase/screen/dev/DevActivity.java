@@ -15,6 +15,10 @@ import com.paditech.mvpbase.common.view.SimpleDividerItemDecoration;
 import com.paditech.mvpbase.screen.adapter.HomeRecyclerViewAdapter;
 import com.paditech.mvpbase.screen.adapter.StartSnapHelper;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.net.URLEncoder;
 import java.util.List;
 
@@ -32,9 +36,30 @@ public class DevActivity extends MVPActivity<DevContact.PresenterViewOps> implem
 
     SnapHelper snapHelper = new StartSnapHelper();
     HomeRecyclerViewAdapter mHomeListAppAdapter = new HomeRecyclerViewAdapter(this);
-    String url="";
+    String url = "";
 
 //    Intent intent = getIntent();
+
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    public void setUpInfo(AppModel.SourceBean app) {
+        if (!app.isUserUpload())
+            getPresenter().getServerDev("http://appsxyz.com/api/apk/search_related/?q=" +
+                    URLEncoder.encode("Free Fire") + "&page=1&size=20");
+        else getPresenter().getFirebaseDev(app.getDevId());
+    }
 
     public String getUrl() {
         return url;
@@ -51,7 +76,7 @@ public class DevActivity extends MVPActivity<DevContact.PresenterViewOps> implem
 
     @Override
     protected void initView() {
-        SimpleDividerItemDecoration simpleDividerItemDecoration = new SimpleDividerItemDecoration(this, ContextCompat.getColor(this,R.color.gray_line),120,20);
+        SimpleDividerItemDecoration simpleDividerItemDecoration = new SimpleDividerItemDecoration(this, ContextCompat.getColor(this, R.color.gray_line), 120, 20);
         simpleDividerItemDecoration.setHasLastLine(false);
         snapHelper.attachToRecyclerView(recycler_view_all);
         mHomeListAppAdapter.setItemId(R.layout.item_related_app);
@@ -59,7 +84,6 @@ public class DevActivity extends MVPActivity<DevContact.PresenterViewOps> implem
         recycler_view_all.setAdapter(mHomeListAppAdapter);
         recycler_view_all.addItemDecoration(simpleDividerItemDecoration);
 
-        getPresenter().cURLApi("http://appsxyz.com/api/apk/search_related/?q=" + URLEncoder.encode("Free Fire") + "&page=1&size=20");
     }
 
     @Override
@@ -72,7 +96,8 @@ public class DevActivity extends MVPActivity<DevContact.PresenterViewOps> implem
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                mHomeListAppAdapter.setmList1(app);
+                if (app != null)
+                    mHomeListAppAdapter.setmList1(app);
             }
         });
 

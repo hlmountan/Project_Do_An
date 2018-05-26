@@ -21,7 +21,7 @@ import java.util.List;
  */
 
 public class ProfilePresenter extends ActivityPresenter<ProfileContact.ViewOps> implements ProfileContact.PresenterViewOps {
-    @Override
+   @Override
     public void setChartData() {
         getView().setAppDownload();
     }
