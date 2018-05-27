@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.beloo.widget.chipslayoutmanager.ChipsLayoutManager;
 import com.beloo.widget.chipslayoutmanager.gravity.IChildGravityResolver;
+import com.google.firebase.database.FirebaseDatabase;
 import com.paditech.mvpbase.R;
 import com.paditech.mvpbase.common.base.BaseDialog;
 import com.paditech.mvpbase.common.model.AppModel;
@@ -151,7 +152,6 @@ public class UpdateApkActivity extends MVPActivity<UpdateApkContact.PresenterVie
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_apply:
-                getPresenter().updateApk(app);
                 finish();
                 break;
             case R.id.btn_cancel:
@@ -207,6 +207,7 @@ public class UpdateApkActivity extends MVPActivity<UpdateApkContact.PresenterVie
                     listRequire.setVisibility(View.GONE);
                     showAlertDialog(getString(R.string.finish_saving));
                     apply.setVisibility(View.VISIBLE);
+                    getPresenter().updateApk(app);
                 }
                 break;
             case R.id.btn_update_version:
@@ -215,6 +216,12 @@ public class UpdateApkActivity extends MVPActivity<UpdateApkContact.PresenterVie
                 break;
             case R.id.btn_pending:
                 // change app to pending  or unpublic
+                FirebaseDatabase.getInstance().getReference().child("apk").child(app.getAppid()).
+                        child("status").setValue(Integer.parseInt("1"));
+                publicApp.setVisibility(View.VISIBLE);
+                updateApp.setVisibility(View.GONE);
+                pending.setVisibility(View.GONE);
+
                 break;
         }
     }

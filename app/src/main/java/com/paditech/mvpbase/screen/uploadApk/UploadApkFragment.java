@@ -405,6 +405,7 @@ public class UploadApkFragment extends MVPFragment<UploadApkContact.PresenterVie
                         apkFile.setPath(converUri(data));
                         apkFile.setUid(FirebaseAuth.getInstance().getCurrentUser().getUid());
                         setApkinfo(apkFile);
+                        getPresenter().checkApk(apkFile.getAppid());
                     } else showToast(getString(R.string.error_file_type));
 
                 } catch (Exception e) {

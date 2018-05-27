@@ -111,6 +111,7 @@ ProfileActivity extends MVPActivity<ProfileContact.PresenterViewOps> implements 
     protected Typeface mTfLight;
     private GoogleApiClient mGoogleApiClient;
     private FirebaseAuth mAuth;
+    GridLayoutManager gridLayoutManager ;
 
     @Override
     protected int getContentView() {
@@ -254,10 +255,12 @@ ProfileActivity extends MVPActivity<ProfileContact.PresenterViewOps> implements 
 
         listapp = new RecyclerViewUpdateApkAdapter(this);
         listapp.setItemId(R.layout.item_app_horizontal_white_bg);
-        recycler_view_your_app.setLayoutManager(new GridLayoutManager(this, 3, LinearLayoutManager.HORIZONTAL, false));
+        gridLayoutManager = new GridLayoutManager(this, 3,
+                LinearLayoutManager.HORIZONTAL, false);
+        recycler_view_your_app.setLayoutManager(gridLayoutManager);
         recycler_view_your_app.setAdapter(listapp);
         recycler_view_your_app.addItemDecoration(simpleDividerItemDecoration);
-    }
+}
 
     private void setData(int count, float range) {
 
@@ -353,6 +356,7 @@ ProfileActivity extends MVPActivity<ProfileContact.PresenterViewOps> implements 
             listapp.setmList1(listApk);
             progressBar.setVisibility(View.GONE);
             ownApp.setVisibility(View.VISIBLE);
+            gridLayoutManager.setSpanCount(listApk.size());
         }
 
     }

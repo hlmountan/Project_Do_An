@@ -17,7 +17,7 @@
     <string name="login_g">Login With Google</string>
     <string name="login_f">Login With Facebook</string>
     <string name="apply">Apply</string>
-    <string name="save">Save</string>
+    <string name="save">Save info</string>
     <string name="install">INSTALL</string>
     <string name="open_app">OPEN</string>
     <string name="facebook_app_id">2102773583335853</string>
@@ -119,6 +119,13 @@
     <!--detail-->
     <string name="no_info">App has no infomation to display</string>
 
+    <!--Update APk-->
+    <string name="apk_name">Your app name</string>
+    <string name="apk_des">Your app description</string>
+    <string name="apk_cate">Your app category</string>
+    <string name="apk_policy">Your app policy</string>
+    <string name="apk_require_age">Your app age require</string>
+    <string name="apk_require_android">Your app android require</string>
     <!--Upload APk-->
     <string name="please_enter_title">Please enter app title to continue!</string>
     <string name="please_choose_apk">Please choose app APK to continue!</string>

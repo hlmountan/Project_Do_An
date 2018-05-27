@@ -577,10 +577,11 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
                             btn_install_app.setText(R.string.open_app);
                         } else
                             btn_install_app.setText("" + getResources().getString(R.string.install));
-                        setUrlInstall(app);
+                        if (!app.isUserUpload())
+                            setUrlInstall(app);
                     }
-
-                    setUpCateAdapter(app.getTag());
+                    if (!app.isUserUpload())
+                        setUpCateAdapter(app.getTag());
                     fileLength = app.getSize()*1000;
                     if (app.getTitle() != null) tv_title_scroll.setText(app.getTitle());
 
@@ -773,18 +774,17 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
                 break;
             case R.id.btn_install_app:
                 // check xem app co gia hay free
-                if (isHistory == 0) {
-                    // heck xm trong may da co apk cua ap chua
-//                    if (getPresenter().checkIsApk(appid)){
-//                        //co roi thi chi install
-//                    }else{
-                    // chua co thi tai va install
-                    System.out.println(urlInstall);
-                    downloadApkFile(this.urlInstall);
-//                    }
-
-                } else {
-                    Log.e("", "You need buy App first");
+//                if (isHistory == 0) {
+//                    System.out.println(urlInstall);
+//                    downloadApkFile(this.urlInstall);
+//                } else {
+//                    Log.e("", "You need buy App first");
+//                }
+//                final String appPackageName = getPackageName(); // getPackageName() from Context or Activity object
+                try {
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + ownApp.getAppid())));
+                } catch (android.content.ActivityNotFoundException anfe) {
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + ownApp.getAppid())));
                 }
                 break;
             case R.id.btn_add:

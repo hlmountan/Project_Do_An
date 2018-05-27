@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
 import com.paditech.mvpbase.R;
 import com.paditech.mvpbase.common.model.AppModel;
 import com.paditech.mvpbase.common.model.Notification;
@@ -47,7 +49,7 @@ public class NotificationRecycleViewAdapter extends RecyclerView.Adapter<Recycle
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         NotificationRecycleViewAdapter.RecyclerHolder recyclerHolder = (NotificationRecycleViewAdapter.RecyclerHolder) holder;
-        recyclerHolder.setData(position);
+        recyclerHolder.setData(listNotify.size()-position-1);
     }
 
     @Override
@@ -80,7 +82,7 @@ public class NotificationRecycleViewAdapter extends RecyclerView.Adapter<Recycle
         }
 
         public void setData(final int pos) {
-            if (listNotify.get(pos) != null) {
+            if (listNotify != null) {
                 switch (listNotify.get(pos).getStatus()) {
                     case 1:
                         tv_status.setText(R.string.notify_status_1);
@@ -94,23 +96,28 @@ public class NotificationRecycleViewAdapter extends RecyclerView.Adapter<Recycle
                 }
                 title.setText(listNotify.get(pos).getTitle());
                 tv_content.setText(listNotify.get(pos).getContent());
-                ImageUtil.loadImage(itemView.getContext(),listNotify.get(pos).getAppAvar(),img_notifi_status);
+                ImageUtil.loadImage(itemView.getContext(), listNotify.get(pos).getAppAvar(), img_notifi_status);
 
-                if (listNotify.get(pos).getRead()){
+                if (listNotify.get(pos).getRead()) {
                     tv_isread.setText(R.string.notify_read);
-                }else tv_isread.setText(R.string.notify_new);
+                } else tv_isread.setText(R.string.notify_new);
                 tv_date.setText(CommonUtil.convertTime(listNotify.get(pos).getDate()));
             }
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+
+
                     AppModel.SourceBean app = new AppModel.SourceBean();
                     app.setAppid(listNotify.get(pos).getAppid());
                     app.setCover(listNotify.get(pos).getAppAvar());
                     EventBus.getDefault().postSticky(app);
 
                     itemView.getContext().startActivity(new Intent(itemView.getContext(), DetailActivity.class));
+                    FirebaseDatabase.getInstance().getReference().child("notification").
+                            child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(listNotify.get(pos).
+                            getNotifyId()).child("read").setValue(true);
                 }
             });
         }

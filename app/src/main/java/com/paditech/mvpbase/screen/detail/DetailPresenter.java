@@ -23,17 +23,15 @@ import com.paditech.mvpbase.common.service.ICallBack;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by hung on 4/13/2018.
  */
 
 public class DetailPresenter extends ActivityPresenter<DetailContact.ViewOps> implements DetailContact.PresenterViewOps {
-      @Override
-    public void cURLFromApi(String appid, int isHistory) {
+    @Override
+    public void cURLFromApi(final String appid, int isHistory) {
         APIClient.getInstance().execGet("https://appsxyz.com/api/apk/detailApp/?appid=" + appid, null, new ICallBack() {
             @Override
             public void onErrorToken() {
@@ -54,7 +52,24 @@ public class DetailPresenter extends ActivityPresenter<DetailContact.ViewOps> im
                     //return something by call back to UI thread
                     getView().setAppInfo(app);
 
-                }else getView().appNotAvailable();
+                } else {
+                    FirebaseDatabase.getInstance().getReference().child("apk").child(appid).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            if (dataSnapshot.getValue() == null)
+                                getView().appNotAvailable();
+                            else {
+                                ApkFileInfoEvent apk = dataSnapshot.getValue(ApkFileInfoEvent.class);
+                                getView().setAppInfo(new AppModel.SourceBean(apk));
+                            }
+                        }
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+
+                }
 
 
             }
@@ -147,34 +162,34 @@ public class DetailPresenter extends ActivityPresenter<DetailContact.ViewOps> im
     @Override
     public void getUserFollowApp() {
         if (FirebaseAuth.getInstance().getCurrentUser() != null)
-        FirebaseDatabase.getInstance().getReference().child("user").
-                child(FirebaseAuth.getInstance().getCurrentUser().getUid()).
-                addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        if (dataSnapshot.getValue() != null) {
-                            UserProfile userProfile = dataSnapshot.getValue(UserProfile.class);
+            FirebaseDatabase.getInstance().getReference().child("user").
+                    child(FirebaseAuth.getInstance().getCurrentUser().getUid()).
+                    addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            if (dataSnapshot.getValue() != null) {
+                                UserProfile userProfile = dataSnapshot.getValue(UserProfile.class);
 
-                            if (userProfile.getFollowApp() != null)
-                                getView().setFollowApp(userProfile.getFollowApp());
-                            else getView().setFollowApp(new ArrayList<ArrayList<String>>());
+                                if (userProfile.getFollowApp() != null)
+                                    getView().setFollowApp(userProfile.getFollowApp());
+                                else getView().setFollowApp(new ArrayList<ArrayList<String>>());
+
+                            }
 
                         }
 
-                    }
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
 
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
+                        }
+                    });
     }
 
     @Override
     public void updateFollowApp(ArrayList<ArrayList<String>> listApp) {
         if (FirebaseAuth.getInstance().getCurrentUser() != null)
-        FirebaseDatabase.getInstance().getReference().child("user").
-                child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("followApp").setValue(listApp);
+            FirebaseDatabase.getInstance().getReference().child("user").
+                    child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("followApp").setValue(listApp);
 
     }
 
@@ -182,50 +197,25 @@ public class DetailPresenter extends ActivityPresenter<DetailContact.ViewOps> im
     public void pushCmt(final Cmt cmt, final AppModel.SourceBean ownApp) {
 
         //add notify
-        ArrayList<Notification> notify = new ArrayList<>();
-        final Notification noti = new Notification(3,cmt.getTitleComment(),
-                cmt.getComment(),cmt.getTime(),cmt.getAppid(),false,"","");
+        final Notification noti = new Notification(3, cmt.getTitleComment(),
+                cmt.getComment(), cmt.getTime(), cmt.getAppid(), false, "", "");
         noti.setAppAvar(ownApp.getCover());
-
-        final String key = FirebaseDatabase.getInstance().getReference().child("notifycation").push().getKey();
-        FirebaseDatabase.getInstance().getReference().child("notifycation").child(key).setValue(noti);
-
-        // add notiffy id into user notify
         FirebaseDatabase.getInstance().getReference().child("apk").child(cmt.getAppid().
-                replace(".","-")).addListenerForSingleValueEvent(new ValueEventListener() {
+                replace(".", "_")).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.getValue() != null){
+                if (dataSnapshot.getValue() != null) {
                     ApkFileInfoEvent apk = dataSnapshot.getValue(ApkFileInfoEvent.class);
                     // app co thang nao follow hay k
-                    if (apk.getNotification() != null){
-                        for (final ArrayList<String> usernoti: apk.getNotification()) {
-                            //lay user  de them notify
-                            FirebaseDatabase.getInstance().getReference().child("user").child(usernoti.get(0)).addListenerForSingleValueEvent(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(DataSnapshot dataSnapshot) {
-                                    if (dataSnapshot.getValue() != null){
-                                        ArrayList<Map<String,String>> notify = new ArrayList<>();
-                                        Map<String, String> map = new HashMap<String, String>();
-                                        map.put("key",key);
-                                        map.put("status","new");
-                                        UserProfile user = dataSnapshot.getValue(UserProfile.class);
-                                        // kiem tra da co notify hay chua
-                                        if (user.getNotify() !=null){
-                                            notify = user.getNotify();
-                                            notify.add(map);
+                    if (apk.getNotification() != null) {
+                        for (final ArrayList<String> usernoti : apk.getNotification()) {
+                            //push notify for each user
+                            final String key = FirebaseDatabase.getInstance().getReference().child("notification").
+                                    child(usernoti.get(0)).push().getKey();
+                            noti.setNotifyId(key);
+                            FirebaseDatabase.getInstance().getReference().child("notification").child(usernoti.get(0)).
+                                    child(key).setValue(noti);
 
-                                        }else notify.add(map);
-                                       // update notify
-                                        FirebaseDatabase.getInstance().getReference().child("user").child(usernoti.get(0)).child("notify").setValue(notify);
-                                    }
-                                }
-
-                                @Override
-                                public void onCancelled(DatabaseError databaseError) {
-
-                                }
-                            });
                         }
                     }
                 }
@@ -237,34 +227,13 @@ public class DetailPresenter extends ActivityPresenter<DetailContact.ViewOps> im
             }
         });
         // add notify for author
-        if (ownApp.isUserUpload()){
-            FirebaseDatabase.getInstance().getReference().child("user").child(ownApp.getDevId()).addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    if (dataSnapshot.getValue() != null){
-                        ArrayList<Map<String,String>> notify = new ArrayList<>();
-                        Map<String, String> map = new HashMap<String, String>();
-                        map.put("key",key);
-                        map.put("status","new");
-                        map.put("yourapp","true");
-                        UserProfile user = dataSnapshot.getValue(UserProfile.class);
-                        // kiem tra da co notify hay chua
-                        if (user.getNotify() !=null){
-                            notify = user.getNotify();
-                            notify.add(map);
-
-                        }else notify.add(map);
-                        // update notify
-                        FirebaseDatabase.getInstance().getReference().child("user").child(ownApp.getDevId()).child("notify").setValue(notify);
-                    }
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });
-
+        if (ownApp.isUserUpload()) {
+            final String key = FirebaseDatabase.getInstance().getReference().child("notification").
+                    child(ownApp.getDevId()).push().getKey();
+            noti.setNotifyId(key);
+            noti.setOwnApp(true);
+            FirebaseDatabase.getInstance().getReference().child("notification").child(ownApp.getDevId()).
+                    child(key).setValue(noti);
         }
         // add cmt
         FirebaseDatabase.getInstance().getReference().child("cmt").push().setValue(cmt);
@@ -274,59 +243,59 @@ public class DetailPresenter extends ActivityPresenter<DetailContact.ViewOps> im
     public void getUserCmt(final String appid, boolean isFirebase) {
 
 
-            APIClient.getInstance().execGet("https://apprevi.com/api/apk/review-daily?appid=" + appid + "&time=7&star=5&language=en-US&page=1&size=6", null, new ICallBack() {
-//              APIClient.getInstance().execGet("https://apprevi.com/api/apk/review-daily?appid=com.instagram.android&time=7&star=5&language=en-US&page=1&size=6", null, new ICallBack() {
+        APIClient.getInstance().execGet("https://apprevi.com/api/apk/review-daily?appid=" + appid + "&time=7&star=5&language=en-US&page=1&size=6", null, new ICallBack() {
+            //              APIClient.getInstance().execGet("https://apprevi.com/api/apk/review-daily?appid=com.instagram.android&time=7&star=5&language=en-US&page=1&size=6", null, new ICallBack() {
+            @Override
+            public void onErrorToken() {
+
+            }
+
+            @Override
+            public void onFailed(IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(String response, boolean isSuccessful) {
+                // do something here
+                final CmtGp cmt = new Gson().fromJson(response, CmtGp.class);
+                final List<Cmt> cmtList;
+                if (cmt != null) {
+                    //return something by call back to UI thread
+                    cmtList = cmt.getComments();
+
+                } else {
+                    cmtList = new ArrayList<>();
+                }
+                FirebaseDatabase.getInstance().getReference().child("cmt").
+                        orderByChild("appid").equalTo(appid).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
-                public void onErrorToken() {
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.getValue() != null) {
 
-                }
-
-                @Override
-                public void onFailed(IOException e) {
-
-                }
-
-                @Override
-                public void onResponse(String response, boolean isSuccessful) {
-                    // do something here
-                    final CmtGp cmt = new Gson().fromJson(response, CmtGp.class);
-                    final List<Cmt> cmtList;
-                    if (cmt != null) {
-                        //return something by call back to UI thread
-                     cmtList = cmt.getComments();
-
-                    }else {
-                        cmtList  = new ArrayList<>();
-                    }
-                    FirebaseDatabase.getInstance().getReference().child("cmt").
-                            orderByChild("appid").equalTo(appid).addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            if (dataSnapshot.getValue() != null) {
-
-                                for (DataSnapshot a : dataSnapshot.getChildren()) {
-                                    final Cmt cmt = a.getValue(Cmt.class);
-                                    cmtList.add(cmt);
-                                }
-                                if (getView()!=null)
+                            for (DataSnapshot a : dataSnapshot.getChildren()) {
+                                final Cmt cmt = a.getValue(Cmt.class);
+                                cmtList.add(cmt);
+                            }
+                            if (getView() != null)
                                 getView().setCmt(cmtList);
-                            }else getView().setCmt(cmtList);
-                        }
+                        } else getView().setCmt(cmtList);
+                    }
 
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
 
-                        }
-                    });
+                    }
+                });
 
 
-                }
-            });
+            }
+        });
 
     }
 
     @Override
-    public void notify(final AppModel.SourceBean app,int status) {
+    public void notify(final AppModel.SourceBean app, int status) {
         final ArrayList<ArrayList<String>> notify = new ArrayList<>();
         final ArrayList<String> noti = new ArrayList<>();
         noti.add(FirebaseAuth.getInstance().getCurrentUser().getUid());
@@ -339,90 +308,91 @@ public class DetailPresenter extends ActivityPresenter<DetailContact.ViewOps> im
             notify_status_2     App Publiced
             notify_status_3     New Comment
         */
-        if (status == 1){
+        if (status == 1) {
             // check user upload hay khong
             if (app.isUserUpload()) {
 
                 //lay thong tin apk
                 FirebaseDatabase.getInstance().getReference().child("apk").child(app.getAppid()).
                         addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        if (dataSnapshot.getValue() != null) {
-                            ApkFileInfoEvent apk = dataSnapshot.getValue(ApkFileInfoEvent.class);
-                            // da co ai follow hay chua
-                            apk.setAppid(app.getAppid());
-                            if (apk.getNotification() == null) {
-                                apk.setNotification(notify);
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                if (dataSnapshot.getValue() != null) {
+                                    ApkFileInfoEvent apk = dataSnapshot.getValue(ApkFileInfoEvent.class);
+                                    // da co ai follow hay chua
+                                    apk.setAppid(app.getAppid());
+                                    if (apk.getNotification() == null) {
+                                        apk.setNotification(notify);
 
-                            } else {
-                                ArrayList<ArrayList<String>> notifyInner = apk.getNotification();
-                                notifyInner.add(noti);
-                                apk.setNotification(notifyInner);
+                                    } else {
+                                        ArrayList<ArrayList<String>> notifyInner = apk.getNotification();
+                                        notifyInner.add(noti);
+                                        apk.setNotification(notifyInner);
+                                    }
+                                    FirebaseDatabase.getInstance().getReference().child("apk").child(app.getAppid()).
+                                            setValue(apk);
+                                }
                             }
-                            FirebaseDatabase.getInstance().getReference().child("apk").child(app.getAppid()).setValue(apk);
-                        }
-                    }
 
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
 
-                    }
-                });
+                            }
+                        });
 
             } else {
                 // checnk  exeis
                 FirebaseDatabase.getInstance().getReference().child("apk").child(app.getAppid().
-                        replace(".", "-")).addListenerForSingleValueEvent
+                        replace(".", "_")).addListenerForSingleValueEvent
                         (new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        if (dataSnapshot.getValue() == null) {
-                            ApkFileInfoEvent apk = new ApkFileInfoEvent();
-                            apk.setAppid(app.getAppid().replace(".", "-"));
-                            apk.setNotification(notify);
-                            apk.setUserUpload(false);
-                            FirebaseDatabase.getInstance().getReference().child("apk").
-                                    child(app.getAppid().replace(".", "-")).setValue(apk);
-                        } else {
-                            ApkFileInfoEvent apk = dataSnapshot.getValue(ApkFileInfoEvent.class);
-                            ArrayList<ArrayList<String>> notifyInner;
-                              if (apk.getNotification() != null){
-                                  notifyInner = apk.getNotification();
-                              }else notifyInner  = new ArrayList<>();
-                            notifyInner.add(noti);
-                            FirebaseDatabase.getInstance().getReference().child("apk").child(app.getAppid().
-                                    replace(".", "-")).
-                                    child("notification").setValue(notifyInner);
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                if (dataSnapshot.getValue() == null) {
+                                    ApkFileInfoEvent apk = new ApkFileInfoEvent();
+                                    apk.setAppid(app.getAppid().replace(".", "_"));
+                                    apk.setNotification(notify);
+                                    apk.setUserUpload(false);
+                                    FirebaseDatabase.getInstance().getReference().child("apk").
+                                            child(app.getAppid().replace(".", "_")).setValue(apk);
+                                } else {
+                                    ApkFileInfoEvent apk = dataSnapshot.getValue(ApkFileInfoEvent.class);
+                                    ArrayList<ArrayList<String>> notifyInner;
+                                    if (apk.getNotification() != null) {
+                                        notifyInner = apk.getNotification();
+                                    } else notifyInner = new ArrayList<>();
+                                    notifyInner.add(noti);
+                                    FirebaseDatabase.getInstance().getReference().child("apk").child(app.getAppid().
+                                            replace(".", "_")).
+                                            child("notification").setValue(notifyInner);
 
-                        }
-                    }
+                                }
+                            }
 
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
 
-                    }
-                });
+                            }
+                        });
 
 
             }
-        }else {
+        } else {
             // remove follow
             FirebaseDatabase.getInstance().getReference().child("apk").child(app.getAppid().
-                    replace(".","-")).addListenerForSingleValueEvent(new ValueEventListener() {
+                    replace(".", "_")).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    if (dataSnapshot.getValue() != null){
-                        ApkFileInfoEvent apk  = dataSnapshot.getValue(ApkFileInfoEvent.class);
+                    if (dataSnapshot.getValue() != null) {
+                        ApkFileInfoEvent apk = dataSnapshot.getValue(ApkFileInfoEvent.class);
                         ArrayList<ArrayList<String>> notify = apk.getNotification();
-                        for (ArrayList<String> no: notify) {
-                            if (no.get(0).equals(FirebaseAuth.getInstance().getCurrentUser().getUid())){
+                        for (ArrayList<String> no : notify) {
+                            if (no.get(0).equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
                                 notify.remove(no);
                                 break;
                             }
                         }
                         FirebaseDatabase.getInstance().getReference().child("apk").child(app.getAppid().
-                                replace(".","-")).child("notification").setValue(notify);
+                                replace(".", "_")).child("notification").setValue(notify);
 
                     }
                 }
@@ -433,7 +403,6 @@ public class DetailPresenter extends ActivityPresenter<DetailContact.ViewOps> im
                 }
             });
         }
-
 
 
     }

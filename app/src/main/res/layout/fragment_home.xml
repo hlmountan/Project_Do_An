@@ -13,20 +13,13 @@
         android:background="@android:color/transparent"
         android:orientation="vertical">
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="@dimen/margin_small"
-            android:src="@drawable/logoooo" />
-
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingBottom="@dimen/padding_super_tiny"
             android:paddingLeft="@dimen/padding_default"
             android:paddingRight="@dimen/padding_default"
-            android:paddingTop="@dimen/padding_default">
+            android:layout_marginTop="@dimen/padding_big">
 
             <TextView
                 android:layout_width="wrap_content"
