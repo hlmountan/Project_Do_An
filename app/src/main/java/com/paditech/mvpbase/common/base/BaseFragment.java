@@ -1,17 +1,15 @@
 package com.paditech.mvpbase.common.base;
 
 import android.app.Activity;
-import android.app.FragmentManager;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatDelegate;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import com.paditech.mvpbase.R;
 
 import java.lang.ref.WeakReference;
 
@@ -22,6 +20,9 @@ import butterknife.ButterKnife;
  */
 
 public abstract class BaseFragment extends Fragment {
+    static {
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
+    }
     //protected View mRootView;
     private WeakReference<Activity> mWeakRef;
 
@@ -43,9 +44,9 @@ public abstract class BaseFragment extends Fragment {
         } catch (Exception e) {
             e.printStackTrace();
         }*/
+        View view = LayoutInflater.from(getContext()).inflate(getContentView(), container, false);
+        ButterKnife.bind(this, view);
         try {
-            View view = LayoutInflater.from(getContext()).inflate(getContentView(), container, false);
-            ButterKnife.bind(this, view);
             initView(view);
             return view;
         } catch (Exception e) {

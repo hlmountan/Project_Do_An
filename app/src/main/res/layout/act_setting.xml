@@ -3,6 +3,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/backlogin"
     android:padding="@dimen/padding_default"
     android:orientation="vertical">
@@ -225,24 +226,24 @@
                 android:gravity="center"
                 android:padding="@dimen/padding_small"
                 android:visibility="gone">
-                <Button
+                <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/ic_choilieng"
+                    app:srcCompat="@drawable/ic_choilieng"
                     android:minHeight="@dimen/min_height"
                     android:minWidth="@dimen/min_height"
                     android:layout_margin="@dimen/padding_small"/>
-                <Button
+                <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/ic_appxyz"
+                    app:srcCompat="@drawable/ic_appxyz"
                     android:minHeight="@dimen/min_height"
                     android:minWidth="@dimen/min_height"
                     android:layout_margin="@dimen/padding_small"/>
-                <Button
+                <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/ic_mobile"
+                    app:srcCompat="@drawable/ic_mobile"
                     android:minHeight="@dimen/min_height"
                     android:minWidth="@dimen/min_height"
                     android:layout_margin="@dimen/padding_small"/>

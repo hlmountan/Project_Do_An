@@ -76,10 +76,15 @@ public class MainActivity extends MVPActivity<MainActContact.PresenterViewOps> i
 
     @Override
     protected void initView() {
+
+
         setupViewPagerMain();
         tab_layout.addOnTabSelectedListener(this);
         viewPager_tab_layout.addOnPageChangeListener(this);
-
+        // Tạo ra một đối tượng Intent cho một dịch vụ (PlaySongService).
+//        Intent myIntent = new Intent(MainActivity.this, NotifyService.class);
+        // Gọi phương thức startService (Truyền vào đối tượng Intent)
+//        this.startService(myIntent);
 
     }
 

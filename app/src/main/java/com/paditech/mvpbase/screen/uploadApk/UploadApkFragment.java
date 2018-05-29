@@ -18,7 +18,6 @@ import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.MimeTypeMap;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -84,11 +83,11 @@ public class UploadApkFragment extends MVPFragment<UploadApkContact.PresenterVie
     @BindView(R.id.checkbox_agreement)
     CheckBox agreement;
     @BindView(R.id.btn_add_image)
-    Button btn_add_image;
+    View btn_add_image;
     @BindView(R.id.btn_upload_local)
-    Button btn_upload_local;
+    View btn_upload_local;
     @BindView(R.id.btn_upload_driver)
-    Button btn_upload_driver;
+    View btn_upload_driver;
     @BindView(R.id.tv_step)
     TextView tvStep;
     @BindView(R.id.tv_title)

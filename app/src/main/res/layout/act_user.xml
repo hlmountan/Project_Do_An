@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/scrollView_user"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -11,18 +12,18 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <Button
+        <ImageView
             android:id="@+id/btn_return"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/ic_cancel"
+            app:srcCompat="@drawable/ic_cancel"
             android:minHeight="@dimen/min_height"
             android:minWidth="@dimen/min_height" />
-        <Button
+        <ImageView
             android:id="@+id/btn_setting"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/ic_settings"
+            app:srcCompat="@drawable/ic_settings"
             android:minHeight="@dimen/min_height"
             android:minWidth="@dimen/min_height"
             android:layout_alignParentRight="true"/>
@@ -68,14 +69,14 @@
             android:padding="@dimen/padding_default"
             android:textSize="@dimen/text_size_small" />
 
-        <Button
+        <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_margin="@dimen/margin_small"
             android:layout_marginRight="@dimen/margin_small"
-            android:background="@drawable/ic_view"
+            app:srcCompat="@drawable/ic_view"
             android:minHeight="@dimen/min_height"
             android:minWidth="@dimen/min_height" />
     </RelativeLayout>

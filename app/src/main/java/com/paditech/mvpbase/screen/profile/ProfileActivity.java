@@ -10,7 +10,6 @@ import android.support.v7.widget.LinearSnapHelper;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SnapHelper;
 import android.view.View;
-import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -41,6 +40,7 @@ import com.paditech.mvpbase.common.model.Cmt;
 import com.paditech.mvpbase.common.model.UserProfile;
 import com.paditech.mvpbase.common.mvp.activity.ActivityPresenter;
 import com.paditech.mvpbase.common.mvp.activity.MVPActivity;
+import com.paditech.mvpbase.common.service.NotifyService;
 import com.paditech.mvpbase.common.utils.ImageUtil;
 import com.paditech.mvpbase.common.view.SimpleDividerItemDecoration;
 import com.paditech.mvpbase.screen.adapter.HomeRecyclerViewAdapter;
@@ -77,9 +77,9 @@ ProfileActivity extends MVPActivity<ProfileContact.PresenterViewOps> implements 
     @BindView(R.id.progressBar)
     ProgressBar progressBar;
     @BindView(R.id.btn_setting)
-    Button setting;
+    View setting;
     @BindView(R.id.btn_join_dev)
-    Button btn_join_dev;
+    View btn_join_dev;
     @BindView(R.id.img_avar)
     ImageView avar;
     @BindView(R.id.tv_user_name)
@@ -168,6 +168,8 @@ ProfileActivity extends MVPActivity<ProfileContact.PresenterViewOps> implements 
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_logout:
+                Intent myIntent = new Intent(ProfileActivity.this, NotifyService.class);
+                this.stopService(myIntent);
                 showConfirmDialog(getString(R.string.confirm_logout), new BaseDialog.OnPositiveClickListener() {
                     @Override
                     public void onPositiveClick() {
@@ -182,6 +184,7 @@ ProfileActivity extends MVPActivity<ProfileContact.PresenterViewOps> implements 
                                 });
                         startActivity(new Intent(getActivityContext(), LoginActivity.class));
                         LoginManager.getInstance().logOut();
+
                         finish();
 
                     }

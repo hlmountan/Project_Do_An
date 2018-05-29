@@ -114,4 +114,8 @@ public class Notification {
     public void setRead(Boolean read) {
         isRead = read;
     }
+    public void setIsRead(Boolean read) {
+        isRead = read;
+    }
+
 }

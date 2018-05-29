@@ -36,6 +36,7 @@
             android:name=".screen.detail.DetailActivity"
             android:theme="@style/AppTheme.FullScreen"
             android:windowSoftInputMode="adjustPan|stateAlwaysHidden" />
+
         <activity android:name=".screen.showMoreApp.ShowMoreActicity" />
         <activity android:name=".screen.detail.ScreenShotFullScreenActivity" />
         <activity android:name=".screen.report.ReportActivity" />
@@ -48,6 +49,7 @@
         <activity android:name=".common.utils.get_image.SelectMultiActivity" />
         <activity android:name=".screen.updateApkActivity.UpdateApkActivity" />
         <activity android:name=".screen.apkManage.ApkActivity" />
+        <activity android:name=".common.view.NotificationReceiverActivity" />
 
         <meta-data
             android:name="io.fabric.ApiKey"

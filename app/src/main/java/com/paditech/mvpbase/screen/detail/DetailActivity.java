@@ -36,7 +36,6 @@ import android.view.animation.Animation;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Transformation;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -67,16 +66,16 @@ import com.paditech.mvpbase.common.utils.CommonUtil;
 import com.paditech.mvpbase.common.utils.ImageUtil;
 import com.paditech.mvpbase.common.view.FadeToolbarScrollView;
 import com.paditech.mvpbase.common.view.SimpleDividerItemDecoration;
+import com.paditech.mvpbase.screen.adapter.ChipCateAdapter;
+import com.paditech.mvpbase.screen.adapter.HomeRecyclerViewAdapter;
 import com.paditech.mvpbase.screen.adapter.RecyclerViewCmtAdapter;
 import com.paditech.mvpbase.screen.adapter.RecyclerViewScreenShortAdapter;
 import com.paditech.mvpbase.screen.adapter.RecyclerViewVersionAdapter;
+import com.paditech.mvpbase.screen.adapter.StartSnapHelper;
 import com.paditech.mvpbase.screen.cmt.CommentActivity;
 import com.paditech.mvpbase.screen.dev.DevActivity;
-import com.paditech.mvpbase.screen.adapter.HomeRecyclerViewAdapter;
-import com.paditech.mvpbase.screen.adapter.StartSnapHelper;
-import com.paditech.mvpbase.screen.adapter.ChipCateAdapter;
-import com.paditech.mvpbase.screen.report.ReportActivity;
 import com.paditech.mvpbase.screen.login.LoginActivity;
+import com.paditech.mvpbase.screen.report.ReportActivity;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -149,9 +148,9 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
     @BindView(R.id.et_cmt)
     EditText et_cmt;
     @BindView(R.id.btn_submit)
-    Button btn_submit;
+    View btn_submit;
     @BindView(R.id.btn_user_name)
-    Button btn_user_name;
+    TextView btn_user_name;
     @BindView(R.id.recycler_view_relate_app)
     RecyclerView recycler_view_relate_app;
     @BindView(R.id.tv_title)
@@ -165,7 +164,7 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
     @BindView(R.id.progressBar)
     ProgressBar progressBar;
     @BindView(R.id.btn_install_app)
-    Button btn_install_app;
+    TextView btn_install_app;
     @BindView(R.id.lc_price_history)
     LineChart chart;
     @BindView(R.id.gp_info)
@@ -182,11 +181,11 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
     @BindView(R.id.recycler_view_list_cate)
     RecyclerView recycler_view_list_cate;
     @BindView(R.id.btn_share)
-    Button btn_share;
+    View btn_share;
     @BindView(R.id.fr_chart_and_pager)
     FrameLayout fr_chart_and_pager;
     @BindView(R.id.btn_add)
-    Button btn_add;
+    View btn_add;
     @BindView(R.id.tv_title_scroll)
     TextView tv_title_scroll;
     @BindView(R.id.scrollView)
@@ -209,15 +208,15 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
     @BindView(R.id.recycler_view_cmt)
     RecyclerView recycler_view_cmt;
     @BindView(R.id.btn_report)
-    Button btn_report;
+    View btn_report;
     @BindView(R.id.tv_show_cmt)
     TextView tv_show_cmt;
     @BindView(R.id.tv_score_your)
     TextView tv_score_your;
     @BindView(R.id.btn_see_more_version)
-    Button btn_see_more_version;
+    View btn_see_more_version;
     @BindView(R.id.btn_see_more_app_relate)
-    Button btn_see_more_app_relate;
+    View btn_see_more_app_relate;
     @BindView(R.id.rlt_dev)
     RelativeLayout rlt_dev;
 
@@ -251,10 +250,13 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
 
         // use to do transition throw each screen
         getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
-        getWindow().setExitTransition(new Explode());
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().setExitTransition(new Explode());
+            avatarLayout.setTransitionName("image_avatar");
+        }
         super.onCreate(savedInstanceState);
         EventBus.getDefault().register(this);
-        avatarLayout.setTransitionName("image_avatar");
+
 
         // install app apk
         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
@@ -991,7 +993,7 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
                 long total = 0;
                 int count;
                 while ((count = input.read(data)) != -1) {
-                    // allow canceling with back button
+                    // allow canceling with back View
                     if (isCancelled()) {
                         input.close();
                         return null;
@@ -1025,7 +1027,7 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
             super.onPreExecute();
 
             // take CPU lock to prevent CPU from going off if the user
-            // presses the power button during download
+            // presses the power View during download
             PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
             mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
                     getClass().getName());

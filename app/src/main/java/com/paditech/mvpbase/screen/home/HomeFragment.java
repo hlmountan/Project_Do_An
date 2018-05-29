@@ -10,7 +10,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SnapHelper;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -51,7 +50,7 @@ public class HomeFragment extends MVPFragment<HomeContact.PresenterViewOsp> impl
     @BindView(R.id.recycler_view_game_grossing)
     RecyclerView recycler_view_game_grossing;
     @BindView(R.id.btn_see_more)
-    Button btn_see_more;
+    View btn_see_more;
     @BindView(R.id.recycler_view_slider)
     RecyclerView recycler_view_slider;
     @BindView(R.id.recycler_view_user_upload)
@@ -65,13 +64,13 @@ public class HomeFragment extends MVPFragment<HomeContact.PresenterViewOsp> impl
     @BindView(R.id.recycler_view_list_cate)
     RecyclerView recycler_view_list_cate;
     @BindView(R.id.btn_profile)
-    Button btn_profile;
+    View btn_profile;
     @BindView(R.id.view_user_upload)
     LinearLayout view_user_upload;
     @BindView(R.id.tv_dev_name)
     TextView tv_dev_name;
     @BindView(R.id.btn_sign_in)
-    Button btn_sign_in;
+    TextView btn_sign_in;
 
     private boolean mRunned;
 

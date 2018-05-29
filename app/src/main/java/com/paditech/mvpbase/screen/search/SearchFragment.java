@@ -12,7 +12,6 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 
@@ -25,9 +24,9 @@ import com.paditech.mvpbase.common.mvp.fragment.FragmentPresenter;
 import com.paditech.mvpbase.common.mvp.fragment.MVPFragment;
 import com.paditech.mvpbase.common.utils.CommonUtil;
 import com.paditech.mvpbase.common.view.LoadMoreRecyclerView;
+import com.paditech.mvpbase.screen.adapter.ChipCateAdapter;
 import com.paditech.mvpbase.screen.adapter.HomeListAppAdapter;
 import com.paditech.mvpbase.screen.adapter.ScrollTopEvent;
-import com.paditech.mvpbase.screen.adapter.ChipCateAdapter;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -49,7 +48,7 @@ public class SearchFragment extends MVPFragment<SearchContact.PresenterViewOps> 
     @BindView(R.id.search_view)
     NestedScrollView search_view;
     @BindView(R.id.btn_cancel_search)
-    Button btn_cancel_search;
+    View btn_cancel_search;
     @BindView(R.id.recycler_view_list_cate)
     RecyclerView recyclerViewCategory;
 

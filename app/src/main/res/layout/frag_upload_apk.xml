@@ -158,7 +158,7 @@
                         <ImageView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:src="@drawable/ic_apk" />
+                            app:srcCompat="@drawable/ic_apk" />
 
                         <TextView
                             android:id="@+id/tv_title"
@@ -187,21 +187,21 @@
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
 
-                        <Button
+                        <ImageView
                             android:id="@+id/btn_upload_local"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_margin="@dimen/margin_default"
-                            android:background="@drawable/ic_upload_box"
+                            app:srcCompat="@drawable/ic_upload_box"
                             android:minHeight="@dimen/min_height"
                             android:minWidth="@dimen/min_height" />
 
-                        <Button
+                        <ImageView
                             android:id="@+id/btn_upload_driver"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_margin="@dimen/margin_default"
-                            android:background="@drawable/ic_drive"
+                            app:srcCompat="@drawable/ic_drive"
                             android:minHeight="@dimen/min_height"
                             android:minWidth="@dimen/min_height" />
                     </LinearLayout>
@@ -476,7 +476,7 @@
             android:layout_margin="@dimen/margin_tiny"
             android:minHeight="@dimen/min_height"
             android:minWidth="@dimen/min_height"
-            android:src="@drawable/ic_arrow_back__24dp"
+            app:srcCompat="@drawable/ic_arrow_back__24dp"
             android:visibility="gone"
             app:backgroundTint="@color/colorPrimary"
             app:fabSize="mini" />
@@ -512,7 +512,7 @@
             android:layout_margin="@dimen/margin_tiny"
             android:minHeight="@dimen/min_height"
             android:minWidth="@dimen/min_height"
-            android:src="@drawable/ic_arrow_forward"
+            app:srcCompat="@drawable/ic_arrow_forward"
             android:visibility="gone"
             app:backgroundTint="@color/colorPrimary"
             app:fabSize="mini" />

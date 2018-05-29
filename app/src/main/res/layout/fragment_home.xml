@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <com.paditech.mvpbase.common.view.TranslationNestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/scrollView_home"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -30,13 +31,13 @@
                 android:textSize="@dimen/text_size_very_super_big"
                 android:textStyle="bold" />
 
-            <Button
+            <ImageView
                 android:id="@+id/btn_profile"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:background="@drawable/ic_profile"
+                app:srcCompat="@drawable/ic_profile"
                 android:minHeight="0dp"
                 android:minWidth="0dp" />
 
@@ -100,7 +101,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_margin="@dimen/padding_default"
                 android:layout_marginRight="@dimen/margin_small"
-                android:background="@drawable/seemore"
+                app:srcCompat="@drawable/seemore"
                 android:minHeight="0dp"
                 android:minWidth="0dp" />
 
@@ -134,13 +135,13 @@
                 android:textSize="@dimen/text_size_big"
                 android:textStyle="bold" />
 
-            <Button
+            <ImageView
                 android:id="@+id/btn_see_more"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="@dimen/margin_small"
-                android:background="@drawable/seemore"
+                app:srcCompat="@drawable/seemore"
                 android:minHeight="0dp"
                 android:minWidth="0dp" />
 

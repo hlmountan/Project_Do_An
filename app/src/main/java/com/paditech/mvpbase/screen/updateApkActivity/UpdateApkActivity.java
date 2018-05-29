@@ -3,7 +3,6 @@ package com.paditech.mvpbase.screen.updateApkActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -36,9 +35,9 @@ public class UpdateApkActivity extends MVPActivity<UpdateApkContact.PresenterVie
         UpdateApkContact.ViewOps, View.OnClickListener {
 
     @BindView(R.id.btn_apply)
-    Button apply;
+    View apply;
     @BindView(R.id.btn_cancel)
-    Button cancel;
+    View cancel;
     @BindView(R.id.img_avar)
     ImageView avar;
     @BindView(R.id.tv_apk_info)
@@ -62,17 +61,17 @@ public class UpdateApkActivity extends MVPActivity<UpdateApkContact.PresenterVie
     @BindView(R.id.tv_direction)
     TextView direction;
     @BindView(R.id.btn_public_app)
-    Button publicApp;
+    View publicApp;
     @BindView(R.id.view_apk_info)
     LinearLayout info;
     @BindView(R.id.recycler_view_list_require)
     RecyclerView listRequire;
     @BindView(R.id.btn_save)
-    Button save;
+    View save;
     @BindView(R.id.btn_update_version)
-    Button updateApp;
+    View updateApp;
     @BindView(R.id.btn_pending)
-    Button pending;
+    View pending;
 
     ChipCateAdapter mListCateAdapter;
     ChipCateAdapter mListrequireAdapter;

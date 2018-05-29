@@ -27,7 +27,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_search_grey_18dp"
+                    app:srcCompat="@drawable/ic_search_grey_18dp"
                     android:layout_alignParentLeft="true"
                     android:paddingTop="5dp"/>
                 <TextView
@@ -58,12 +58,12 @@
                     android:layout_height="wrap_content"
                     android:text=" Recentely App"
                     android:layout_margin="@dimen/margin_small"/>
-                <Button
+                <ImageView
                     android:id="@+id/btn_see_more"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
-                    android:background="@drawable/installbutton"/>
+                    app:srcCompat="@drawable/installbutton"/>
             </RelativeLayout>
 
 
@@ -255,11 +255,11 @@
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 
-    <Button
+    <ImageView
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:background="@drawable/pulse"
-        android:shadowColor="@color/blue"
+        app:srcCompat="@color/blue"
         android:backgroundTint="@color/blue"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"

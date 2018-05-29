@@ -5,7 +5,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -87,7 +86,7 @@ public class RecyclerViewReplyCmtAdapter extends RecyclerView.Adapter<RecyclerVi
             @BindView(R.id.tv_user)
             TextView tv_user;
             @BindView(R.id.btn_sent)
-            Button btn_sent;
+            View btn_sent;
             @BindView(R.id.et_dev_reply)
             EditText et_dev_reply;
 

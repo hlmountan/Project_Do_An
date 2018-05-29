@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.app.AppCompatDialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,6 +34,7 @@ public abstract class BaseDialog extends AppCompatDialogFragment {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
         View view = inflater.inflate(getContentView(), container, false);
         ButterKnife.bind(this, view);
         initView(view);
