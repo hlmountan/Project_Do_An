@@ -1,6 +1,7 @@
 package com.paditech.mvpbase.screen.report;
 
 import android.view.View;
+import android.widget.Button;
 
 import com.paditech.mvpbase.R;
 import com.paditech.mvpbase.common.mvp.activity.ActivityPresenter;
@@ -14,7 +15,7 @@ import butterknife.BindView;
 
 public class ReportActivity extends MVPActivity<ReportContact.PresenterViewOps> implements ReportContact.ViewOps, View.OnClickListener {
     @BindView(R.id.btn_submit)
-    View btn_submit;
+    Button btn_submit;
 
     @Override
     protected int getContentView() {

@@ -9,7 +9,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ImageView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.paditech.mvpbase.R;
@@ -76,8 +75,6 @@ public class MainActivity extends MVPActivity<MainActContact.PresenterViewOps> i
 
     @Override
     protected void initView() {
-
-
         setupViewPagerMain();
         tab_layout.addOnTabSelectedListener(this);
         viewPager_tab_layout.addOnPageChangeListener(this);
@@ -102,7 +99,7 @@ public class MainActivity extends MVPActivity<MainActContact.PresenterViewOps> i
             View tab = LayoutInflater.from(this).inflate(R.layout.navigation_tablayout, null);
 
             // get child TextView and ImageView from this layout for the icon and label
-            ImageView tab_icon = (ImageView) tab.findViewById(R.id.nav_icon);
+            android.support.v7.widget.AppCompatImageView tab_icon = (android.support.v7.widget.AppCompatImageView) tab.findViewById(R.id.nav_icon);
             if (i == tab_layout.getTabCount() - 1) {
                 mBadge = tab.findViewById(R.id.badge);
             }

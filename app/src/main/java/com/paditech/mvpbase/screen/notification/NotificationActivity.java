@@ -1,10 +1,9 @@
 package com.paditech.mvpbase.screen.notification;
 
-import android.os.Build;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.TextView;
+import android.widget.Button;
 
 import com.paditech.mvpbase.R;
 import com.paditech.mvpbase.common.event.NewNotificationEvent;
@@ -31,7 +30,7 @@ public class NotificationActivity extends MVPFragment<NotificationContact.Presen
     @BindView(R.id.recycler_view_notification)
     RecyclerView recycler_view_notification;
     @BindView(R.id.btn_filter)
-    TextView filter;
+    Button filter;
     NotificationRecycleViewAdapter mNotificationRecycleViewAdapter;
     List<Notification> listNotify;
 
@@ -78,8 +77,6 @@ public class NotificationActivity extends MVPFragment<NotificationContact.Presen
 
     @Override
     public void hasNew() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            ((MainActivity) Objects.requireNonNull(getActivity())).onNewNotification(new NewNotificationEvent());
-        }
+        ((MainActivity) Objects.requireNonNull(getActivity())).onNewNotification(new NewNotificationEvent());
     }
 }

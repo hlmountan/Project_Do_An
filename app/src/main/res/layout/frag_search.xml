@@ -39,11 +39,11 @@
                 android:textColor="@color/white"
                 android:textSize="@dimen/text_size_tiny" />
 
-            <ImageView
+            <Button
                 android:id="@+id/btn_notification"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                app:srcCompat="@drawable/notifi_icon"
+                android:background="@drawable/notifi_icon"
                 android:visibility="gone" />
 
             <ProgressBar
@@ -56,7 +56,7 @@
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_toLeftOf="@id/right_button"
+            android:layout_toStartOf="@id/right_button"
             android:background="@drawable/bg_edittext"
             android:paddingBottom="@dimen/margin_small"
             android:paddingLeft="@dimen/margin_tiny"
@@ -68,6 +68,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:background="@null"
+                android:drawableLeft="@drawable/ic_search_grey_18dp"
                 android:drawablePadding="@dimen/padding_super_tiny"
                 android:hint="@string/i_m_looking_for"
                 android:paddingLeft="@dimen/padding_big"
@@ -80,7 +81,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="right|center_vertical"
                 android:layout_marginRight="@dimen/padding_big"
-                app:srcCompat="@drawable/ic_002_qr_code" />
+                android:src="@drawable/ic_002_qr_code" />
         </FrameLayout>
 
     </RelativeLayout>

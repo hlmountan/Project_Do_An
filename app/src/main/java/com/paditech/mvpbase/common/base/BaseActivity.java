@@ -4,17 +4,20 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.app.AppCompatDelegate;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.paditech.mvpbase.R;
 import com.paditech.mvpbase.common.dialog.LoadingDialog;
+import com.paditech.mvpbase.common.listener.OnReloadListener;
 import com.paditech.mvpbase.common.utils.CommonUtil;
 
 import butterknife.ButterKnife;
@@ -24,9 +27,6 @@ import butterknife.ButterKnife;
  */
 
 public abstract class BaseActivity extends AppCompatActivity {
-    static {
-        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
-    }
     private static final String CONNECT_ACTION = "android.net.conn.CONNECTIVITY_CHANGE";
 
     private LoadingDialog mLoadingDialog;

@@ -9,6 +9,7 @@ import android.support.design.widget.Snackbar;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -49,19 +50,19 @@ import butterknife.BindView;
 public class LoginActivity extends MVPActivity<LoginContact.PresenterViewOps> implements LoginContact.ViewOps, View.OnClickListener, GoogleApiClient.OnConnectionFailedListener {
     private static final String TAG = "TAG";
     @BindView(R.id.btn_return)
-    View btn_return;
+    Button btn_return;
     @BindView(R.id.btn_setting)
-    View btn_setting;
+    Button btn_setting;
     @BindView(R.id.btn_login_fb)
-    View btn_login_fb;
+    Button btn_login_fb;
     @BindView(R.id.btn_login_g)
-    View btn_login_g;
+    Button btn_login_g;
     @BindView(R.id.et_user_name)
     EditText et_user_name;
     @BindView(R.id.et_pass)
     EditText et_pass;
     @BindView(R.id.btn_login)
-    View btn_login;
+    Button btn_login;
 
     public String getScreen() {
         return screen;

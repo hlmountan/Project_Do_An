@@ -3,7 +3,6 @@ package com.paditech.mvpbase;
 import android.content.Context;
 import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
-import android.support.v7.app.AppCompatDelegate;
 
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -23,8 +22,6 @@ public class BaseApplication extends MultiDexApplication {
     public void onCreate() {
         super.onCreate();
 //        Fabric.with(this, new Crashlytics());
-        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
-
         FirebaseDatabase.getInstance().setPersistenceEnabled(true);
     }
 }

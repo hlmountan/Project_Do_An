@@ -52,7 +52,7 @@
                     android:layout_alignBottom="@id/card_image"
                     android:layout_marginRight="@dimen/margin_large"
                     android:layout_alignParentRight="true"
-                    app:srcCompat="@drawable/btn_add"
+                    android:background="@drawable/btn_add"
                     android:minHeight="0dp"
                     android:minWidth="0dp"
                     android:visibility="gone"
@@ -65,7 +65,7 @@
                     android:layout_alignBottom="@id/card_image"
                     android:layout_marginRight="@dimen/margin_default"
                     android:layout_toLeftOf="@id/btn_add"
-                    app:srcCompat="@drawable/share_all"
+                    android:background="@drawable/share_all"
                     android:minHeight="0dp"
                     android:minWidth="0dp"
                     android:visibility="gone" />
@@ -116,7 +116,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignBottom="@id/card_image"
                     android:layout_alignLeft="@id/tv_title"
-                    app:srcCompat="@drawable/install_border_all"
+                    android:background="@drawable/install_border_all"
                     android:minHeight="0dp"
                     android:minWidth="0dp"
                     android:paddingBottom="@dimen/padding_super_tiny"
@@ -171,7 +171,7 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
                         android:layout_alignTop="@id/ratingbar"
-                        app:srcCompat="@drawable/ic_flag"
+                        android:background="@drawable/ic_flag"
                         android:minHeight="0dp"
                         android:minWidth="0dp" />
 
@@ -312,7 +312,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerHorizontal="true"
-                    app:srcCompat="@drawable/seemore"
+                    android:background="@drawable/seemore"
                     android:minHeight="0dp"
                     android:minWidth="0dp" />
             </RelativeLayout>
@@ -491,13 +491,13 @@
                     android:textSize="@dimen/text_size_big"
                     android:textStyle="bold" />
 
-                <ImageView
+                <Button
                     android:id="@+id/btn_see_more_version"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_marginRight="@dimen/margin_small"
-                    app:srcCompat="@drawable/seemore"
+                    android:background="@drawable/seemore"
                     android:minHeight="0dp"
                     android:minWidth="0dp" />
             </RelativeLayout>
