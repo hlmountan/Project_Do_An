@@ -29,7 +29,7 @@ public interface DetailContact {
     }
 
     interface PresenterViewOps extends ActivityPresenterViewOps {
-        void cURLFromApi(String appid, int isHistory);
+        void cURLFromApi(String appid);
 
         void getRelateApp(String url);
 
@@ -41,8 +41,10 @@ public interface DetailContact {
         void updateFollowApp(ArrayList<ArrayList<String>> listApp);
         void pushCmt(Cmt cmt,AppModel.SourceBean ownApp);
 
-        void getUserCmt(String appid,boolean isFirebase);
+        void getUserCmt(String appid);
         void notify(AppModel.SourceBean app,int status);
+
+        void getPriceHistory(String appid);
 
 
     }

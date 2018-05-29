@@ -1,6 +1,5 @@
 package com.paditech.mvpbase.common.service;
 
-import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -15,7 +14,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.paditech.mvpbase.R;
-import com.paditech.mvpbase.common.view.NotificationReceiverActivity;
+import com.paditech.mvpbase.screen.main.MainActivity;
 
 /**
  * Created by hung on 5/28/2018.
@@ -23,15 +22,6 @@ import com.paditech.mvpbase.common.view.NotificationReceiverActivity;
 
 public class NotifyService extends Service {
 
-    Activity act;
-
-    public Activity getAct() {
-        return act;
-    }
-
-    public void setAct(Activity act) {
-        this.act = act;
-    }
 
     public NotifyService() {
     }
@@ -45,45 +35,7 @@ public class NotifyService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        System.out.println(" thasjdawndjawdkmawd");
-        FirebaseDatabase.getInstance().getReference().child("notification").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).
-                addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        if (dataSnapshot.getValue() != null){
-                            // Prepare intent which is triggered if the
-                            // notification is selected
-                            for (DataSnapshot data: dataSnapshot.getChildren()) {
-                                com.paditech.mvpbase.common.model.Notification notification = data.
-                                        getValue(com.paditech.mvpbase.common.model.Notification.class);
-                                if (!notification.getRead()){
-                                    Intent intent = new Intent(act, NotificationReceiverActivity.class);
-                                    PendingIntent pIntent = PendingIntent.getActivity(act, (int) System.currentTimeMillis(), intent, 0);
 
-                                    // Build notification
-                                    // Actions are just fake
-                                    Notification noti = new Notification.Builder(act)
-                                            .setContentTitle("New comment  " + notification.getTitle())
-                                            .setContentText(notification.getContent()).setSmallIcon(R.drawable.notifi_icon)
-                                            .setContentIntent(pIntent)
-                                            .addAction(R.drawable.notifi_icon, "Call", pIntent)
-                                            .addAction(R.drawable.notifi_icon, "More", pIntent).build();
-                                    NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-                                    // hide the notification after its selected
-                                    noti.flags |= Notification.FLAG_AUTO_CANCEL;
-
-                                    notificationManager.notify(0, noti);
-                                }
-                            }
-
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
     }
 
     @Override
@@ -102,22 +54,34 @@ public class NotifyService extends Service {
                                 com.paditech.mvpbase.common.model.Notification notification = data.
                                         getValue(com.paditech.mvpbase.common.model.Notification.class);
                                 if (!notification.getRead()){
-                                    Intent intent = new Intent(act, NotificationReceiverActivity.class);
-                                    PendingIntent pIntent = PendingIntent.getActivity(act, (int) System.currentTimeMillis(), intent, 0);
+                                    Intent intent = new Intent(getBaseContext(), MainActivity.class);
+                                    intent.putExtra("NOTIFY",notification.getAppid()+"/"+notification.getNotifyId());
+                                    PendingIntent pIntent = PendingIntent.getActivity(getBaseContext(), (int) System.currentTimeMillis(), intent, 0);
 
                                     // Build notification
                                     // Actions are just fake
-                                    Notification noti = new Notification.Builder(act)
-                                            .setContentTitle("New comment  " + notification.getTitle())
-                                            .setContentText(notification.getContent()).setSmallIcon(R.drawable.notifi_icon)
-                                            .setContentIntent(pIntent)
-                                            .addAction(R.drawable.notifi_icon, "Call", pIntent)
-                                            .addAction(R.drawable.notifi_icon, "More", pIntent).build();
+                                    Notification noti;
+                                    if (notification.getStatus() == 3){
+                                        noti = new Notification.Builder(getBaseContext())
+                                                .setContentTitle("New comment  " + notification.getTitle())
+                                                .setContentText(notification.getContent()).setSmallIcon(R.drawable.notifi_icon)
+                                                .setContentIntent(pIntent)
+                                                .addAction(R.drawable.notifi_icon, "See", pIntent)
+                                                .addAction(R.drawable.notifi_icon, "Ignore", pIntent).build();
+                                    }else {
+                                         noti = new Notification.Builder(getBaseContext())
+                                                .setContentTitle("New app Publiced  " + notification.getTitle())
+                                                .setContentText(notification.getContent()).setSmallIcon(R.drawable.notifi_icon)
+                                                .setContentIntent(pIntent)
+                                                .addAction(R.drawable.notifi_icon, "See", pIntent)
+                                                .addAction(R.drawable.notifi_icon, "Ignore", pIntent).build();
+                                    }
+
                                     NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
                                     // hide the notification after its selected
                                     noti.flags |= Notification.FLAG_AUTO_CANCEL;
 
-                                    notificationManager.notify(0, noti);
+                                    notificationManager.notify((int) System.currentTimeMillis(), noti);
                                 }
                             }
 

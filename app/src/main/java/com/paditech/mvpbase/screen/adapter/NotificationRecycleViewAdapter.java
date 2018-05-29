@@ -115,6 +115,7 @@ public class NotificationRecycleViewAdapter extends RecyclerView.Adapter<Recycle
                     EventBus.getDefault().postSticky(app);
 
                     itemView.getContext().startActivity(new Intent(itemView.getContext(), DetailActivity.class));
+
                     FirebaseDatabase.getInstance().getReference().child("notification").
                             child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(listNotify.get(pos).
                             getNotifyId()).child("read").setValue(true);

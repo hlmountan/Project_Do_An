@@ -31,7 +31,7 @@ import java.util.List;
 
 public class DetailPresenter extends ActivityPresenter<DetailContact.ViewOps> implements DetailContact.PresenterViewOps {
     @Override
-    public void cURLFromApi(final String appid, int isHistory) {
+    public void cURLFromApi(final String appid) {
         APIClient.getInstance().execGet("https://appsxyz.com/api/apk/detailApp/?appid=" + appid, null, new ICallBack() {
             @Override
             public void onErrorToken() {
@@ -50,8 +50,8 @@ public class DetailPresenter extends ActivityPresenter<DetailContact.ViewOps> im
                 final AppModel.SourceBean app = new Gson().fromJson(response, AppModel.SourceBean.class);
                 if (app != null) {
                     //return something by call back to UI thread
+                    app.setUserUpload(false);
                     getView().setAppInfo(app);
-
                 } else {
                     FirebaseDatabase.getInstance().getReference().child("apk").child(appid).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
@@ -60,6 +60,7 @@ public class DetailPresenter extends ActivityPresenter<DetailContact.ViewOps> im
                                 getView().appNotAvailable();
                             else {
                                 ApkFileInfoEvent apk = dataSnapshot.getValue(ApkFileInfoEvent.class);
+                                apk.setUserUpload(true);
                                 getView().setAppInfo(new AppModel.SourceBean(apk));
                             }
                         }
@@ -74,29 +75,6 @@ public class DetailPresenter extends ActivityPresenter<DetailContact.ViewOps> im
 
             }
         });
-
-        if (isHistory == 1) {
-            APIClient.getInstance().execGet("https://appsxyz.com/api/apk/price_history/?appid=" + appid, null, new ICallBack() {
-                @Override
-                public void onErrorToken() {
-
-                }
-
-                @Override
-                public void onFailed(IOException e) {
-
-                }
-
-                @Override
-                public void onResponse(String response, boolean isSuccessful) {
-                    // do something here
-                    final AppPriceHistory appPriceHistory = new Gson().fromJson(response, AppPriceHistory.class);
-                    if (appPriceHistory != null) {
-                        getView().setAppPriceHistory(appPriceHistory.getPriceHistory());
-                    }
-                }
-            });
-        }
     }
 
     @Override
@@ -240,9 +218,7 @@ public class DetailPresenter extends ActivityPresenter<DetailContact.ViewOps> im
     }
 
     @Override
-    public void getUserCmt(final String appid, boolean isFirebase) {
-
-
+    public void getUserCmt(final String appid) {
         APIClient.getInstance().execGet("https://apprevi.com/api/apk/review-daily?appid=" + appid + "&time=7&star=5&language=en-US&page=1&size=6", null, new ICallBack() {
             //              APIClient.getInstance().execGet("https://apprevi.com/api/apk/review-daily?appid=com.instagram.android&time=7&star=5&language=en-US&page=1&size=6", null, new ICallBack() {
             @Override
@@ -405,6 +381,30 @@ public class DetailPresenter extends ActivityPresenter<DetailContact.ViewOps> im
         }
 
 
+    }
+
+    @Override
+    public void getPriceHistory(String appid) {
+        APIClient.getInstance().execGet("https://appsxyz.com/api/apk/price_history/?appid=" + appid, null, new ICallBack() {
+            @Override
+            public void onErrorToken() {
+
+            }
+
+            @Override
+            public void onFailed(IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(String response, boolean isSuccessful) {
+                // do something here
+                final AppPriceHistory appPriceHistory = new Gson().fromJson(response, AppPriceHistory.class);
+                if (appPriceHistory != null) {
+                    getView().setAppPriceHistory(appPriceHistory.getPriceHistory());
+                }
+            }
+        });
     }
 
 }

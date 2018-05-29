@@ -67,16 +67,16 @@ import com.paditech.mvpbase.common.utils.CommonUtil;
 import com.paditech.mvpbase.common.utils.ImageUtil;
 import com.paditech.mvpbase.common.view.FadeToolbarScrollView;
 import com.paditech.mvpbase.common.view.SimpleDividerItemDecoration;
+import com.paditech.mvpbase.screen.adapter.ChipCateAdapter;
+import com.paditech.mvpbase.screen.adapter.HomeRecyclerViewAdapter;
 import com.paditech.mvpbase.screen.adapter.RecyclerViewCmtAdapter;
 import com.paditech.mvpbase.screen.adapter.RecyclerViewScreenShortAdapter;
 import com.paditech.mvpbase.screen.adapter.RecyclerViewVersionAdapter;
+import com.paditech.mvpbase.screen.adapter.StartSnapHelper;
 import com.paditech.mvpbase.screen.cmt.CommentActivity;
 import com.paditech.mvpbase.screen.dev.DevActivity;
-import com.paditech.mvpbase.screen.adapter.HomeRecyclerViewAdapter;
-import com.paditech.mvpbase.screen.adapter.StartSnapHelper;
-import com.paditech.mvpbase.screen.adapter.ChipCateAdapter;
-import com.paditech.mvpbase.screen.report.ReportActivity;
 import com.paditech.mvpbase.screen.login.LoginActivity;
+import com.paditech.mvpbase.screen.report.ReportActivity;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -137,7 +137,7 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
     SnapHelper snapHelper3 = new LinearSnapHelper();
     SnapHelper snapHelperCmt = new LinearSnapHelper();
     Integer isHistory;
-    AppModel.SourceBean ownApp;
+    AppModel.SourceBean ownApp = new AppModel.SourceBean();
     long fileLength;
 
     @BindView(R.id.et_title)
@@ -259,6 +259,9 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
         // install app apk
         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builder.build());
+        if ( getIntent().getStringExtra("NOTIFY") != null){
+            setUpNotify(getIntent().getStringExtra("NOTIFY").toString());
+        }
     }
 
     @Override
@@ -388,52 +391,34 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
             }
         });
     }
+    void setUpNotify(String appid){
+        try{
+            ownApp.setAppid(appid);
+            isInstall = getPresenter().isInstall(appid);
+            getPresenter().cURLFromApi(appid);
+            if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+                getPresenter().getUserFollowApp();
+                btn_user_name.setText(R.string.anonymous);
+            }else btn_user_name.setText(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
 
+            getPresenter().getUserCmt(appid);
+
+        }catch (Exception e){
+            System.out.println(e+"errorrrrrrrrrrrr");
+        }
+
+
+
+    }
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     public void onGetAppEvent(AppModel.SourceBean app) {
         ownApp = app;
-
-        title = app.getTitle();
         textView_title.setText(app.getTitle());
         appid = app.getAppid();
-        isInstall = getPresenter().isInstall(appid);
-    // follow app
-        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
-            getPresenter().getUserFollowApp();
-        }
-
-
-        if (!getIntent().getBooleanExtra("is_cover", false))
-            ImageUtil.loadImage(DetailActivity.this, app.getCover(), imgAvatar, R.drawable.events_placeholder, R.drawable.image_placeholder_500x500);
-        // visible in cmt box
-        if (FirebaseAuth.getInstance().getCurrentUser() == null)
-            btn_user_name.setText(R.string.anonymous);
-        else btn_user_name.setText(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
-
-        //
-        if (app.isUserUpload()) {
+        setUpNotify(app.getAppid());
+        if (app.isUserUpload())
             tv_offerby.setText(app.getOfferby());
-            setUpScreenShort(app.getScreenshotUserUpload());
-            fr_chart_and_pager.setVisibility(View.GONE);
-            btn_install_app.setText(R.string.install);
-            getPresenter().getRelateApp("http://appsxyz.com/api/apk/search_related/?q=" + URLEncoder.encode(app.getTitle()) + "&page=1&size=20");
-            tv_gp_info.setText(getText(R.string.no_info));
-            tv_description.setText(getText(R.string.no_info));
-        } else {
-            if ((app.getAll_price() == null) || (app.getAll_price().size() != 2)) {
-
-                isHistory = 0;
-                getPresenter().cURLFromApi(app.getAppid(), 0);
-            } else {
-                isHistory = 1;
-
-                fr_chart_and_pager.setVisibility(View.VISIBLE);
-                getPresenter().cURLFromApi(app.getAppid(), 1);
-            }
-        }
-
-        getPresenter().getUserCmt(appid,false);
-
+    // follow app
     }
 
 
@@ -565,34 +550,19 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-
                 try {
+                    // same info
                     if (!getIntent().getBooleanExtra("is_cover", false))
-                        ImageUtil.loadImage(DetailActivity.this, app.getCover(), imgAvatar, R.drawable.events_placeholder, R.drawable.image_placeholder_500x500);
-
-                    if (isHistory != 0)
-                        btn_install_app.setText("$" + app.getPrice());
-                    else {
-                        if (isInstall) {
-                            btn_install_app.setText(R.string.open_app);
-                        } else
-                            btn_install_app.setText("" + getResources().getString(R.string.install));
-                        if (!app.isUserUpload())
-                            setUrlInstall(app);
-                    }
-                    if (!app.isUserUpload())
-                        setUpCateAdapter(app.getTag());
-                    fileLength = app.getSize()*1000;
-                    if (app.getTitle() != null) tv_title_scroll.setText(app.getTitle());
-
+                        ImageUtil.loadImage(DetailActivity.this, app.getCover(), imgAvatar,
+                                R.drawable.events_placeholder, R.drawable.image_placeholder_500x500);
                     textView_title.setText(app.getTitle());
+                    if (app.getTitle() != null) tv_title_scroll.setText(app.getTitle());
+                    fileLength = app.getSize()*1000;
                     tv_score.setText(String.valueOf(app.getScore()));
                     tv_numberrate.setText(NumberFormat.getInstance().format(app.getInstalls()) + " Rating");
                     tv_offerby.setText(app.getOfferby());
                     tv_category.setText(app.getCategory());
                     ratingbar.setRating(app.getScore());
-
-
                     tv_version.setText("Version: " + app.getVersion());
                     String des = app.getDescription();
                     linesCount(des);
@@ -600,31 +570,55 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
                     if (app.getOfferby().length() > 13){
                         dev = app.getOfferby().substring(0,13);
                     }else{
-                         dev = app.getOfferby();
+                        dev = app.getOfferby();
                     }
+                    tv_gp_info.setText(dev + "..\n" + NumberFormat.getInstance().format(app.getSize()/1000000)+
+                            " MB" + "\n" + app.getCategory() + "\n" + app.getRequire() + "\n" + app.getContentrating());
 
-                    getPresenter().getRelateApp("http://appsxyz.com/api/apk/search_related/?q=" + URLEncoder.encode(app.getTitle()) + "&page=1&size=20");
-
-                    tv_gp_info.setText(dev + "..\n" + NumberFormat.getInstance().format(app.getSize()/1000000)+ " MB" + "\n" + app.getCategory() + "\n" + app.getRequire() + "\n" + app.getContentrating());
-
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                        tv_description.setText(Html.fromHtml(des, Html.FROM_HTML_MODE_COMPACT));
-                    } else {
-                        tv_description.setText(Html.fromHtml(des));
-                    }
-                    //set up screenshot data
-                    screenShot = app.getScreenShot();
-                    if (app.getScreenShot() != null) {
-                        for (ArrayList<String> a : app.getScreenShot()) {
-                            ;
-                            mList.add(a.get(2));
+                    //diffrent info
+                    if (app.isUserUpload()){
+                        tv_offerby.setText(app.getOfferby());
+                        setUpScreenShort(app.getScreenshotUserUpload());
+                        btn_install_app.setText(R.string.install);
+                         tv_gp_info.setText(getText(R.string.no_info));
+                        tv_description.setText(getText(R.string.no_info));
+                    }else{
+                        //set up screenshot data
+                        screenShot = app.getScreenShot();
+                        if (app.getScreenShot() != null) {
+                            for (ArrayList<String> a : app.getScreenShot()) {
+                                mList.add(a.get(2));
+                            }
+                            setUpScreenShort(mList);
                         }
-                        setUpScreenShort(mList);
+                        // des
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                            tv_description.setText(Html.fromHtml(des, Html.FROM_HTML_MODE_COMPACT));
+                        } else {
+                            tv_description.setText(Html.fromHtml(des));
+                        }
+                        //other
+                        setUpCateAdapter(app.getTag());
+                        if (app.getAll_price().get(0) != -1){
+                            isHistory = 1;
+                            btn_install_app.setText("$" + app.getPrice());
+                            getPresenter().getPriceHistory(app.getAppid());
+                        } else if (isInstall) {
+                            btn_install_app.setText(R.string.open_app);
+                        } else{
+                            btn_install_app.setText("" + getResources().getString(R.string.install));
+                            setUrlInstall(app);
+                        }
+
                     }
+
+
 
 
                     //set title for download api
                     title = app.getAppid().replace(" ", "_").replace(".", "_");
+
+                    getPresenter().getRelateApp("http://appsxyz.com/api/apk/search_related/?q=" + URLEncoder.encode(app.getTitle()) + "&page=1&size=20");
                 } catch (Exception e) {
                     System.out.println(e);
                 }
@@ -674,7 +668,6 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
             }
         });
     }
-
 
     @Override
     public void setDevApp() {
@@ -1164,4 +1157,5 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
         InputMethodManager inputMethodManager = (InputMethodManager) this.getSystemService(Activity.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
+
 }

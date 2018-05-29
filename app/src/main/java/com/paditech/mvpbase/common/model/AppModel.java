@@ -117,6 +117,26 @@ public class AppModel {
         public void setScreenshotUserUpload(ArrayList<String> screenshotUserUpload) {
             this.screenshotUserUpload = screenshotUserUpload;
         }
+        @SerializedName("drop_percent")
+        private float drop_percent;
+        @SerializedName("drop_value")
+        private float drop_value;
+
+        public float getDrop_percent() {
+            return drop_percent;
+        }
+
+        public void setDrop_percent(float drop_percent) {
+            this.drop_percent = drop_percent;
+        }
+
+        public float getDrop_value() {
+            return drop_value;
+        }
+
+        public void setDrop_value(float drop_value) {
+            this.drop_value = drop_value;
+        }
 
         @SerializedName("description")
         private String description;

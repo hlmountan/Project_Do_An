@@ -50,6 +50,8 @@
         <activity android:name=".screen.updateApkActivity.UpdateApkActivity" />
         <activity android:name=".screen.apkManage.ApkActivity" />
         <activity android:name=".common.view.NotificationReceiverActivity" />
+        <service android:name=".common.service.NotifyService"
+            android:exported="true"/>
 
         <meta-data
             android:name="io.fabric.ApiKey"
