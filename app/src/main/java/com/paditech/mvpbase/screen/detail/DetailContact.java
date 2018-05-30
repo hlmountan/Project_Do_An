@@ -1,6 +1,7 @@
 package com.paditech.mvpbase.screen.detail;
 
 import com.paditech.mvpbase.common.model.AppModel;
+import com.paditech.mvpbase.common.model.AppVersion;
 import com.paditech.mvpbase.common.model.Cmt;
 import com.paditech.mvpbase.common.mvp.activity.ActivityPresenterViewOps;
 import com.paditech.mvpbase.common.mvp.activity.ActivityViewOps;
@@ -25,6 +26,7 @@ public interface DetailContact {
         void setUrlDownload(String url);
         void setFollowApp(ArrayList<ArrayList<String>> listApp);
         void setCmt(List<Cmt> cmt);
+        void setListVersion(List<AppVersion> versions);
 
     }
 
@@ -46,6 +48,7 @@ public interface DetailContact {
 
         void getPriceHistory(String appid);
 
+        void getlistversion(String appid);
 
     }
 }

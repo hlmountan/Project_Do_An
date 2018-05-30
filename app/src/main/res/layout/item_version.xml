@@ -21,7 +21,8 @@
             android:text="580.0 MB"
             android:textSize="@dimen/text_size_super_so_tiny"
             android:layout_below="@id/tv_version"
-            android:textColor="@color/orange"/>
+            android:textColor="@color/orange"
+            android:layout_marginTop="@dimen/margin_super_tiny"/>
 
         <TextView
             android:id="@+id/tv_content"
@@ -42,5 +43,14 @@
             android:layout_marginBottom="@dimen/margin_super_tiny"
             android:layout_alignParentRight="true"
             android:textColor="@color/blue"/>
+        <TextView
+            android:id="@+id/tv_download_number"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/tv_android"
+            android:layout_marginRight="@dimen/margin_large"
+            android:textSize="@dimen/text_size_tiny"
+            android:layout_marginTop="@dimen/margin_super_tiny"/>
 =
 </RelativeLayout>

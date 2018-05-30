@@ -19,7 +19,6 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.net.URLEncoder;
 import java.util.List;
 
 import butterknife.BindView;
@@ -56,8 +55,7 @@ public class DevActivity extends MVPActivity<DevContact.PresenterViewOps> implem
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     public void setUpInfo(AppModel.SourceBean app) {
         if (!app.isUserUpload())
-            getPresenter().getServerDev("http://appsxyz.com/api/apk/search_related/?q=" +
-                    URLEncoder.encode("Free Fire") + "&page=1&size=20");
+            getPresenter().getServerDev(app.getDevId());
         else getPresenter().getFirebaseDev(app.getDevId());
     }
 
@@ -79,8 +77,8 @@ public class DevActivity extends MVPActivity<DevContact.PresenterViewOps> implem
         SimpleDividerItemDecoration simpleDividerItemDecoration = new SimpleDividerItemDecoration(this, ContextCompat.getColor(this, R.color.gray_line), 120, 20);
         simpleDividerItemDecoration.setHasLastLine(false);
         snapHelper.attachToRecyclerView(recycler_view_all);
-        mHomeListAppAdapter.setItemId(R.layout.item_related_app);
-        recycler_view_all.setLayoutManager(new GridLayoutManager(this, 3, LinearLayoutManager.HORIZONTAL, false));
+        mHomeListAppAdapter.setItemId(R.layout.item_app_horizontal_white_bg);
+        recycler_view_all.setLayoutManager(new GridLayoutManager(this, 6, LinearLayoutManager.HORIZONTAL, false));
         recycler_view_all.setAdapter(mHomeListAppAdapter);
         recycler_view_all.addItemDecoration(simpleDividerItemDecoration);
 

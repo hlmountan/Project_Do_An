@@ -60,6 +60,7 @@ import com.paditech.mvpbase.R;
 import com.paditech.mvpbase.common.base.BaseDialog;
 import com.paditech.mvpbase.common.dialog.MessageDialog;
 import com.paditech.mvpbase.common.model.AppModel;
+import com.paditech.mvpbase.common.model.AppVersion;
 import com.paditech.mvpbase.common.model.Cmt;
 import com.paditech.mvpbase.common.mvp.activity.ActivityPresenter;
 import com.paditech.mvpbase.common.mvp.activity.MVPActivity;
@@ -109,7 +110,7 @@ import butterknife.BindView;
 public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> implements DetailContact.ViewOps,
         View.OnClickListener, FadeToolbarScrollView.ObservableScrollViewCallbacks, RatingBar.OnRatingBarChangeListener,
         View.OnFocusChangeListener {
-    boolean isInstall= false;
+    boolean isInstall = false;
     int follow;
     List<Entry> entries = new ArrayList<Entry>();
     private ArrayList<ArrayList<String>> screenShot = null;
@@ -140,6 +141,8 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
     AppModel.SourceBean ownApp = new AppModel.SourceBean();
     long fileLength;
 
+    @BindView(R.id.tv_mark)
+    TextView tv_mark;
     @BindView(R.id.et_title)
     TextView et_title;
     @BindView(R.id.view_rating)
@@ -259,7 +262,7 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
         // install app apk
         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builder.build());
-        if ( getIntent().getStringExtra("NOTIFY") != null){
+        if (getIntent().getStringExtra("NOTIFY") != null) {
             setUpNotify(getIntent().getStringExtra("NOTIFY").toString());
         }
     }
@@ -277,7 +280,6 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
 
     @Override
     protected void onRestart() {
-        progressBar_chart.setVisibility(View.GONE);
         super.onRestart();
     }
 
@@ -325,8 +327,6 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
         ratingbar_your.setOnRatingBarChangeListener(this);
 
         snapHelper.attachToRecyclerView(recycler_view_versions);
-        mListVersionAdapter.setItemNumber(10);
-        mListVersionAdapter.setItemId(R.layout.item_version);
         recycler_view_versions.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         recycler_view_versions.setAdapter(mListVersionAdapter);
 
@@ -391,25 +391,28 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
             }
         });
     }
-    void setUpNotify(String appid){
-        try{
+
+    void setUpNotify(String appid) {
+        try {
             ownApp.setAppid(appid);
             isInstall = getPresenter().isInstall(appid);
             getPresenter().cURLFromApi(appid);
+            getPresenter().getlistversion(appid);
             if (FirebaseAuth.getInstance().getCurrentUser() != null) {
                 getPresenter().getUserFollowApp();
                 btn_user_name.setText(R.string.anonymous);
-            }else btn_user_name.setText(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
+            } else
+                btn_user_name.setText(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
 
             getPresenter().getUserCmt(appid);
 
-        }catch (Exception e){
-            System.out.println(e+"errorrrrrrrrrrrr");
+        } catch (Exception e) {
+            System.out.println(e + "errorrrrrrrrrrrr");
         }
 
 
-
     }
+
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     public void onGetAppEvent(AppModel.SourceBean app) {
         ownApp = app;
@@ -418,7 +421,7 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
         setUpNotify(app.getAppid());
         if (app.isUserUpload())
             tv_offerby.setText(app.getOfferby());
-    // follow app
+        // follow app
     }
 
 
@@ -557,32 +560,34 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
                                 R.drawable.events_placeholder, R.drawable.image_placeholder_500x500);
                     textView_title.setText(app.getTitle());
                     if (app.getTitle() != null) tv_title_scroll.setText(app.getTitle());
-                    fileLength = app.getSize()*1000;
+                    fileLength = app.getSize() * 1000;
                     tv_score.setText(String.valueOf(app.getScore()));
                     tv_numberrate.setText(NumberFormat.getInstance().format(app.getInstalls()) + " Rating");
                     tv_offerby.setText(app.getOfferby());
                     tv_category.setText(app.getCategory());
                     ratingbar.setRating(app.getScore());
-                    tv_version.setText("Version: " + app.getVersion());
+                    tv_version.setText("Version: " + String.valueOf(app.getVersion()));
                     String des = app.getDescription();
                     linesCount(des);
                     String dev;
-                    if (app.getOfferby().length() > 13){
-                        dev = app.getOfferby().substring(0,13);
-                    }else{
+                    if (app.getOfferby().length() > 13) {
+                        dev = app.getOfferby().substring(0, 13);
+                    } else {
                         dev = app.getOfferby();
                     }
-                    tv_gp_info.setText(dev + "..\n" + NumberFormat.getInstance().format(app.getSize()/1000000)+
-                            " MB" + "\n" + app.getCategory() + "\n" + app.getRequire() + "\n" + app.getContentrating());
+                    tv_gp_info.setText(dev + "..\n" + String.valueOf(NumberFormat.getInstance().
+                            format(app.getSize() / 1000000)) +
+                            " MB" + "\n" + String.valueOf(app.getCategory()) + "\n" + String.valueOf(app.getRequire())
+                            + "\n" + String.valueOf(app.getContentrating()));
 
                     //diffrent info
-                    if (app.isUserUpload()){
+                    if (app.isUserUpload()) {
                         tv_offerby.setText(app.getOfferby());
                         setUpScreenShort(app.getScreenshotUserUpload());
                         btn_install_app.setText(R.string.install);
-                         tv_gp_info.setText(getText(R.string.no_info));
+                        tv_gp_info.setText(getText(R.string.no_info));
                         tv_description.setText(getText(R.string.no_info));
-                    }else{
+                    } else {
                         //set up screenshot data
                         screenShot = app.getScreenShot();
                         if (app.getScreenShot() != null) {
@@ -598,21 +603,20 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
                             tv_description.setText(Html.fromHtml(des));
                         }
                         //other
-                        setUpCateAdapter(app.getTag());
-                        if (app.getAll_price().get(0) != -1){
+                        if (app.getTag() != null)
+                            setUpCateAdapter(app.getTag());
+                        if (app.getAll_price().get(0) != -1) {
                             isHistory = 1;
-                            btn_install_app.setText("$" + app.getPrice());
+                            btn_install_app.setText("$" + app.getAll_price().get(0));
                             getPresenter().getPriceHistory(app.getAppid());
                         } else if (isInstall) {
                             btn_install_app.setText(R.string.open_app);
-                        } else{
+                        } else {
                             btn_install_app.setText("" + getResources().getString(R.string.install));
                             setUrlInstall(app);
                         }
 
                     }
-
-
 
 
                     //set title for download api
@@ -635,6 +639,7 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
                 setPriceHistory(priceHistory);
 //                System.out.println(this.priceHistory.size()+"size");
                 lineChartData();
+                fr_chart_and_pager.setVisibility(View.VISIBLE);
                 chart.setVisibility(View.VISIBLE);
                 progressBar_chart.setVisibility(View.GONE);
             }
@@ -706,7 +711,22 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
         recycler_view_cmt.setVisibility(View.VISIBLE);
 
 
+    }
 
+    @Override
+    public void setListVersion(final List<AppVersion> versions) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (versions != null) {
+                    mListVersionAdapter.setmList1(versions);
+                }else {
+                    tv_mark.setVisibility(View.GONE);
+                    btn_see_more_version.setVisibility(View.GONE);
+                    recycler_view_versions.setVisibility(View.GONE);
+                }
+            }
+        });
     }
 
     @Override
@@ -721,12 +741,12 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
 
          */
 
-        if (follow == 100 && watch == 1 ){
+        if (follow == 100 && watch == 1) {
             //need add notify
-            getPresenter().notify(ownApp,1);
-        }else if (follow == 200 && watch == 0){
+            getPresenter().notify(ownApp, 1);
+        } else if (follow == 200 && watch == 0) {
             //need  remove from follow
-            getPresenter().notify(ownApp,0);
+            getPresenter().notify(ownApp, 0);
         }
 
 
@@ -844,24 +864,24 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
                 if (FirebaseAuth.getInstance().getCurrentUser() != null) {
                     // check user install app hay chua
 //                    if (isInstall){
-                        if (ratingbar_your.getRating() != 0 && !et_cmt.getText().toString().equals("")&&!et_title.getText().toString().equals("")) {
-                            // push cmt
-                            Cmt cmt = new Cmt();
-                            cmt.setAppid(appid);
-                            cmt.setAuthorName(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
-                            cmt.setUid(FirebaseAuth.getInstance().getCurrentUser().getUid());
-                            cmt.setComment(et_cmt.getText().toString());
-                            cmt.setStarRating(ratingbar_your.getRating());
-                            cmt.setTime(System.currentTimeMillis()/1000);
-                            cmt.setTitleComment(et_title.getText().toString());
-                            cmt.setAvatar(FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl().toString());
-                            getPresenter().pushCmt(cmt,ownApp);
+                    if (ratingbar_your.getRating() != 0 && !et_cmt.getText().toString().equals("") && !et_title.getText().toString().equals("")) {
+                        // push cmt
+                        Cmt cmt = new Cmt();
+                        cmt.setAppid(appid);
+                        cmt.setAuthorName(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
+                        cmt.setUid(FirebaseAuth.getInstance().getCurrentUser().getUid());
+                        cmt.setComment(et_cmt.getText().toString());
+                        cmt.setStarRating(ratingbar_your.getRating());
+                        cmt.setTime(System.currentTimeMillis() / 1000);
+                        cmt.setTitleComment(et_title.getText().toString());
+                        cmt.setAvatar(FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl().toString());
+                        getPresenter().pushCmt(cmt, ownApp);
 
-                            showAlertDialog(getString(R.string.cmt_success));
-                            view_rating.setVisibility(View.GONE);
-                            tv_rating_success.setVisibility(View.VISIBLE);
+                        showAlertDialog(getString(R.string.cmt_success));
+                        view_rating.setVisibility(View.GONE);
+                        tv_rating_success.setVisibility(View.VISIBLE);
 
-                        } else showAlertDialog(getString(R.string.empty_context_cmt));
+                    } else showAlertDialog(getString(R.string.empty_context_cmt));
 //                    }else showAlertDialog(getString(R.string.install_condition));
 
 
@@ -1054,7 +1074,7 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
 
     private void setUrlInstall(AppModel.SourceBean app) {
 
-        if ((app != null) && (app.getPrice() == 0)) {
+        if ((app != null)) {
             Timestamp timestamp = new Timestamp(System.currentTimeMillis());
             String salt = "axq appnaz.com";
             String hasd = salt + timestamp.getTime();

@@ -52,15 +52,29 @@ public class MainActivity extends MVPActivity<MainActContact.PresenterViewOps> i
     public void onCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
         super.onCreate(savedInstanceState, persistentState);
         EventBus.getDefault().register(this);
-        if ( getIntent().getStringExtra("NOTIFY") != null){
+//        if ( getIntent().getStringExtra("NOTIFY") != null){
+//            String[] parts = getIntent().getStringExtra("NOTIFY").toString().split("/");
+//            FirebaseDatabase.getInstance().getReference().child("notification").
+//                    child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(parts[1]).child("read").setValue(true);
+//            Intent intent = new Intent(this, DetailActivity.class);
+//            intent.putExtra("NOTIFY",parts[0]);
+//            startActivity(intent);
+//        }
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        if ( intent.getStringExtra("NOTIFY") != null){
             String[] parts = getIntent().getStringExtra("NOTIFY").toString().split("/");
             FirebaseDatabase.getInstance().getReference().child("notification").
                     child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(parts[1]).child("read").setValue(true);
-            Intent intent = new Intent(this, DetailActivity.class);
+            Intent intent1 = new Intent(this, DetailActivity.class);
             intent.putExtra("NOTIFY",parts[0]);
-            startActivity(intent);
+            startActivity(intent1);
         }
     }
+
 
     @Override
     protected void onDestroy() {

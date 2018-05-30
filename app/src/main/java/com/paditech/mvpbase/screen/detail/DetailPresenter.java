@@ -9,9 +9,11 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.paditech.mvpbase.common.event.ApkFileInfoEvent;
 import com.paditech.mvpbase.common.model.AppModel;
 import com.paditech.mvpbase.common.model.AppPriceHistory;
+import com.paditech.mvpbase.common.model.AppVersion;
 import com.paditech.mvpbase.common.model.Appsxyz;
 import com.paditech.mvpbase.common.model.Cmt;
 import com.paditech.mvpbase.common.model.CmtGp;
@@ -47,10 +49,18 @@ public class DetailPresenter extends ActivityPresenter<DetailContact.ViewOps> im
             public void onResponse(String response, boolean isSuccessful) {
                 // do something here
                 System.out.println(response.indexOf("all_price"));
+                response = response.replace("null","\"\"");
+                response = response.replace("\"price\":\"\",","");
                 final AppModel.SourceBean app = new Gson().fromJson(response, AppModel.SourceBean.class);
                 if (app != null) {
                     //return something by call back to UI thread
                     app.setUserUpload(false);
+                    if (app.getAll_price() == null){
+                        List<Float> all = new ArrayList<>();
+                        all.add((float) -1);
+                        all.add((float) -1);
+                    }
+
                     getView().setAppInfo(app);
                 } else {
                     FirebaseDatabase.getInstance().getReference().child("apk").child(appid).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -403,6 +413,30 @@ public class DetailPresenter extends ActivityPresenter<DetailContact.ViewOps> im
                 if (appPriceHistory != null) {
                     getView().setAppPriceHistory(appPriceHistory.getPriceHistory());
                 }
+            }
+        });
+    }
+
+    @Override
+    public void getlistversion(String appid) {
+        APIClient.getInstance().execGet("http://167.99.150.193/elasticsearch/get_file?appid=" + appid, null, new ICallBack() {
+            @Override
+            public void onErrorToken() {
+
+            }
+
+            @Override
+            public void onFailed(IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(String response, boolean isSuccessful) {
+                 List<AppVersion> allVersion  = new  Gson().fromJson(response, new TypeToken<List<AppVersion>>(){}.getType());
+
+                 if (allVersion != null){
+                    getView().setListVersion(allVersion);
+                 }else getView().setListVersion(null);
             }
         });
     }
