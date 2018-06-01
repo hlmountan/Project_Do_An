@@ -555,6 +555,7 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
             public void run() {
                 try {
                     // same info
+                    ownApp = app;
                     if (!getIntent().getBooleanExtra("is_cover", false))
                         ImageUtil.loadImage(DetailActivity.this, app.getCover(), imgAvatar,
                                 R.drawable.events_placeholder, R.drawable.image_placeholder_500x500);
@@ -563,7 +564,7 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
                     fileLength = app.getSize() * 1000;
                     tv_score.setText(String.valueOf(app.getScore()));
                     tv_numberrate.setText(NumberFormat.getInstance().format(app.getInstalls()) + " Rating");
-                    tv_offerby.setText(app.getOfferby());
+
                     tv_category.setText(app.getCategory());
                     ratingbar.setRating(app.getScore());
                     tv_version.setText("Version: " + String.valueOf(app.getVersion()));
@@ -582,13 +583,13 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
 
                     //diffrent info
                     if (app.isUserUpload()) {
-                        tv_offerby.setText(app.getOfferby());
                         setUpScreenShort(app.getScreenshotUserUpload());
                         btn_install_app.setText(R.string.install);
                         tv_gp_info.setText(getText(R.string.no_info));
                         tv_description.setText(getText(R.string.no_info));
                     } else {
                         //set up screenshot data
+                        tv_offerby.setText(app.getOfferby());
                         screenShot = app.getScreenShot();
                         if (app.getScreenShot() != null) {
                             for (ArrayList<String> a : app.getScreenShot()) {
@@ -622,7 +623,8 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
                     //set title for download api
                     title = app.getAppid().replace(" ", "_").replace(".", "_");
 
-                    getPresenter().getRelateApp("http://appsxyz.com/api/apk/search_related/?q=" + URLEncoder.encode(app.getTitle()) + "&page=1&size=20");
+                    getPresenter().getRelateApp("http://appsxyz.com/api/apk/search_related/?q=" +
+                            URLEncoder.encode(app.getTitle()) + "&page=1&size=20&appid="+app.getAppid());
                 } catch (Exception e) {
                     System.out.println(e);
                 }
@@ -749,7 +751,6 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
             getPresenter().notify(ownApp, 0);
         }
 
-
     }
 
     @Override
@@ -844,14 +845,14 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
                 break;
             case R.id.tv_offerby:
                 Intent intent1 = new Intent(this, DevActivity.class);
-//                intent1.putExtra("DEVNAME", title);
+                intent1.putExtra("DEVID", ownApp.getDevId());
                 this.startActivity(intent1);
-                EventBus.getDefault().postSticky(ownApp);
+//                EventBus.getDefault().postSticky(ownApp);
                 break;
             case R.id.rlt_dev:
                 Intent intent2 = new Intent(this, DevActivity.class);
-//                intent2.putExtra("DEVNAME", title);
-                EventBus.getDefault().postSticky(ownApp);
+                intent2.putExtra("DEVID", ownApp.getDevId());
+//                EventBus.getDefault().postSticky(ownApp);
                 this.startActivity(intent2);
 
                 break;

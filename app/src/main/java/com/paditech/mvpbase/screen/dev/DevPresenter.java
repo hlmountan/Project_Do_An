@@ -23,7 +23,7 @@ import java.util.List;
 public class DevPresenter extends ActivityPresenter<DevContact.ViewOps> implements DevContact.PresenterViewOps {
     @Override
     public void getServerDev(String devId) {
-        APIClient.getInstance().execGet("https://apprevi.com/api/apk/dev?dev_id="+devId+"&size=500&page=1", null, new ICallBack() {
+        APIClient.getInstance().execGet("https://apprevi.com/api/apk/dev?dev_id="+devId+"&size=50&page=1", null, new ICallBack() {
             @Override
             public void onErrorToken() {
 
@@ -38,6 +38,10 @@ public class DevPresenter extends ActivityPresenter<DevContact.ViewOps> implemen
             public void onResponse(String response, boolean isSuccessful) {
                 int index = response.indexOf("all_price");
                 response = response.replaceAll("\"all_price\":\"\",","");
+                response = response.replaceAll("score","bug1");
+                response = response.replaceAll("installs","bug2");
+                response = response.replaceAll("price","bug3");
+
                 final ListAppFromDev result = new Gson().fromJson(response, ListAppFromDev.class);
                 if (result != null) {
                     getView().setRelateApp(result.getAppModels());

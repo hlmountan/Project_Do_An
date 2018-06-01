@@ -48,7 +48,7 @@ public class DetailPresenter extends ActivityPresenter<DetailContact.ViewOps> im
             @Override
             public void onResponse(String response, boolean isSuccessful) {
                 // do something here
-                System.out.println(response.indexOf("all_price"));
+                response = response.replace("\"all_price:[0,null],","");
                 response = response.replace("null","\"\"");
                 response = response.replace("\"price\":\"\",","");
                 final AppModel.SourceBean app = new Gson().fromJson(response, AppModel.SourceBean.class);

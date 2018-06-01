@@ -9,16 +9,19 @@
         android:id="@+id/tv_dev_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="@dimen/text_size_very_super_big"
+        android:textSize="@dimen/text_size_super_big"
         android:text="Spring Tech Co. Ltd."
-        android:textColor="@color/black"
         android:textStyle="bold"
-        android:layout_marginBottom="@dimen/margin_default"/>
+        android:layout_marginBottom="@dimen/margin_default"
+        android:textAlignment="center"
+
+        />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:gravity="center">
+        android:gravity="center"
+        android:visibility="gone">
         <Button
             android:id="@+id/btn_follow"
             android:layout_width="wrap_content"
@@ -62,13 +65,24 @@
         android:textStyle="bold"
         android:textSize="@dimen/text_size_default"
         android:text="@string/all_app_game"
-        android:textColor="@color/black"
+        android:textColor="@color/blue"
         android:layout_marginTop="@dimen/margin_small"
         android:layout_marginBottom="@dimen/margin_small"/>
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_view_all"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/white"></android.support.v7.widget.RecyclerView>
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"/>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_view_all"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"></android.support.v7.widget.RecyclerView>
+    </FrameLayout>
 
 </LinearLayout>

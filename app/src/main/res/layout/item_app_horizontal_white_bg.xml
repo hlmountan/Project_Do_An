@@ -23,7 +23,7 @@
         android:layout_marginLeft="@dimen/margin_small"
         android:layout_toRightOf="@id/img_avar"
         android:layout_toLeftOf="@+id/btn_install_app"
-        android:layout_marginRight="@dimen/margin_tiny"
+        android:layout_marginRight="@dimen/margin_small"
         android:singleLine="true"
         android:text="Game Sale"
         android:textColor="@color/black" />
