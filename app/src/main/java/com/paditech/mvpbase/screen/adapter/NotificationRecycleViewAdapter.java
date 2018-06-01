@@ -49,7 +49,7 @@ public class NotificationRecycleViewAdapter extends RecyclerView.Adapter<Recycle
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         NotificationRecycleViewAdapter.RecyclerHolder recyclerHolder = (NotificationRecycleViewAdapter.RecyclerHolder) holder;
-        recyclerHolder.setData(listNotify.size()-position-1);
+        recyclerHolder.setData(listNotify.size() - position - 1);
     }
 
     @Override
@@ -113,6 +113,9 @@ public class NotificationRecycleViewAdapter extends RecyclerView.Adapter<Recycle
                     app.setAppid(listNotify.get(pos).getAppid());
                     app.setCover(listNotify.get(pos).getAppAvar());
                     EventBus.getDefault().postSticky(app);
+                    Notification notification = new Notification();
+                    notification.setNotifyId(listNotify.get(pos).getNotifyId());
+                    EventBus.getDefault().postSticky(notification);
 
                     itemView.getContext().startActivity(new Intent(itemView.getContext(), DetailActivity.class));
 

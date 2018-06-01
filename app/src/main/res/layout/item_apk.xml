@@ -7,16 +7,16 @@
     <ImageView
         android:id="@+id/img_avar"
         android:layout_width="@dimen/cate_ima_size"
-        android:layout_height="@dimen/cate_ima_size"
-        />
+        android:layout_height="@dimen/cate_ima_size" />
 
     <TextView
         android:id="@+id/tv_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/margin_tiny"
+        android:layout_marginRight="@dimen/height_edit_text"
         android:layout_toRightOf="@id/img_avar"
-        android:text="Lovely Penguin"
+        android:singleLine="true"
         android:textColor="@color/black" />
 
     <TextView
@@ -30,7 +30,7 @@
         android:textSize="@dimen/text_size_tiny" />
 
     <Button
-        android:id="@+id/btn_update"
+        android:id="@+id/btn_uninstall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
@@ -42,6 +42,7 @@
         android:paddingLeft="@dimen/padding_default"
         android:paddingRight="@dimen/padding_default"
         android:paddingTop="@dimen/padding_super_so_tiny"
-        android:text="@string/updae"
+        android:text="@string/uninstall"
+        android:textAllCaps="false"
         android:textColor="@color/blue" />
 </RelativeLayout>

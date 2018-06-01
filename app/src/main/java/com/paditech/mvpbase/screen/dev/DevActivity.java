@@ -61,10 +61,10 @@ public class DevActivity extends MVPActivity<DevContact.PresenterViewOps> implem
         recycler_view_all.addItemDecoration(simpleDividerItemDecoration);
 
         if (getIntent().getStringExtra("DEVID") != null)
-            getPresenter().getServerDev(getIntent().getStringExtra("DEVID"));
+            getPresenter().getServerDev(getIntent().getStringExtra("DEVID").replace(" ","+"));
         else getPresenter().getFirebaseDev(getIntent().getStringExtra("DEVID"));
 
-        tv_dev_namel.setText(getIntent().getStringExtra("DEVID").replace("+"," "));
+        tv_dev_namel.setText(getIntent().getStringExtra("DEVID"));
     }
 
     @Override

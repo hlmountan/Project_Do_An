@@ -187,7 +187,7 @@
     <string name="allow">Allow</string>
     <string name="deny">Deny</string>
 
-
+    <string name="uninstall">Uninstall</string>
     <string name="register_mes">Time to Explore</string>
     <string name="mess_no_connect">Không có kết nối mạng.</string>
     <string name="notice">Thông báo</string>

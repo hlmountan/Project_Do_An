@@ -71,5 +71,6 @@ public class CommentActivity extends MVPActivity<CommentContact.PresenterViewOps
     public void setCmt(List<Cmt> cmtList) {
         if (cmtList != null)
             mRecyclerViewCmtAdapter.setCmt(cmtList);
+
     }
 }

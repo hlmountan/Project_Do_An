@@ -11,16 +11,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.FirebaseDatabase;
 import com.paditech.mvpbase.R;
 import com.paditech.mvpbase.common.base.BaseDialog;
 import com.paditech.mvpbase.common.event.NewNotificationEvent;
 import com.paditech.mvpbase.common.mvp.activity.ActivityPresenter;
 import com.paditech.mvpbase.common.mvp.activity.MVPActivity;
-import com.paditech.mvpbase.common.service.NotifyService;
 import com.paditech.mvpbase.screen.adapter.MainViewPagerAdapter;
 import com.paditech.mvpbase.screen.adapter.ScrollTopEvent;
-import com.paditech.mvpbase.screen.detail.DetailActivity;
 import com.paditech.mvpbase.screen.login.LoginActivity;
 
 import org.greenrobot.eventbus.EventBus;
@@ -52,28 +49,10 @@ public class MainActivity extends MVPActivity<MainActContact.PresenterViewOps> i
     public void onCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
         super.onCreate(savedInstanceState, persistentState);
         EventBus.getDefault().register(this);
-//        if ( getIntent().getStringExtra("NOTIFY") != null){
-//            String[] parts = getIntent().getStringExtra("NOTIFY").toString().split("/");
-//            FirebaseDatabase.getInstance().getReference().child("notification").
-//                    child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(parts[1]).child("read").setValue(true);
-//            Intent intent = new Intent(this, DetailActivity.class);
-//            intent.putExtra("NOTIFY",parts[0]);
-//            startActivity(intent);
-//        }
+
     }
 
-    @Override
-    protected void onNewIntent(Intent intent) {
-        super.onNewIntent(intent);
-        if ( intent.getStringExtra("NOTIFY") != null){
-            String[] parts = getIntent().getStringExtra("NOTIFY").toString().split("/");
-            FirebaseDatabase.getInstance().getReference().child("notification").
-                    child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(parts[1]).child("read").setValue(true);
-            Intent intent1 = new Intent(this, DetailActivity.class);
-            intent.putExtra("NOTIFY",parts[0]);
-            startActivity(intent1);
-        }
-    }
+
 
 
     @Override
@@ -103,10 +82,7 @@ public class MainActivity extends MVPActivity<MainActContact.PresenterViewOps> i
         setupViewPagerMain();
         tab_layout.addOnTabSelectedListener(this);
         viewPager_tab_layout.addOnPageChangeListener(this);
-//         Tạo ra một đối tượng Intent cho một dịch vụ (PlaySongService).
-        Intent myIntent = new Intent(MainActivity.this, NotifyService.class);
-//         Gọi phương thức startService (Truyền vào đối tượng Intent)
-        this.startService(myIntent);
+
 
     }
 

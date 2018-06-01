@@ -48,7 +48,7 @@ public class DetailPresenter extends ActivityPresenter<DetailContact.ViewOps> im
             @Override
             public void onResponse(String response, boolean isSuccessful) {
                 // do something here
-                response = response.replace("\"all_price:[0,null],","");
+                response = response.replace(",null],",",0],");
                 response = response.replace("null","\"\"");
                 response = response.replace("\"price\":\"\",","");
                 final AppModel.SourceBean app = new Gson().fromJson(response, AppModel.SourceBean.class);
@@ -63,7 +63,7 @@ public class DetailPresenter extends ActivityPresenter<DetailContact.ViewOps> im
 
                     getView().setAppInfo(app);
                 } else {
-                    FirebaseDatabase.getInstance().getReference().child("apk").child(appid).addListenerForSingleValueEvent(new ValueEventListener() {
+                    FirebaseDatabase.getInstance().getReference().child("apk").child(appid.replace(".","_")).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             if (dataSnapshot.getValue() == null)
@@ -362,6 +362,8 @@ public class DetailPresenter extends ActivityPresenter<DetailContact.ViewOps> im
 
 
             }
+            getView().showFollow(1);
+
         } else {
             // remove follow
             FirebaseDatabase.getInstance().getReference().child("apk").child(app.getAppid().
@@ -379,6 +381,7 @@ public class DetailPresenter extends ActivityPresenter<DetailContact.ViewOps> im
                         }
                         FirebaseDatabase.getInstance().getReference().child("apk").child(app.getAppid().
                                 replace(".", "_")).child("notification").setValue(notify);
+                        getView().showFollow(0);
 
                     }
                 }

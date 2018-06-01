@@ -27,6 +27,7 @@ public interface DetailContact {
         void setFollowApp(ArrayList<ArrayList<String>> listApp);
         void setCmt(List<Cmt> cmt);
         void setListVersion(List<AppVersion> versions);
+        void showFollow(int status);
 
     }
 

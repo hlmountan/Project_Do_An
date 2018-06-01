@@ -39,7 +39,6 @@ public class NotificationActivity extends MVPFragment<NotificationContact.Presen
     }
 
 
-
     @Override
     protected int getContentView() {
         return R.layout.act_notification;
@@ -69,7 +68,7 @@ public class NotificationActivity extends MVPFragment<NotificationContact.Presen
 
     @Override
     public void setListNotify(List<Notification> listNotify) {
-        if (listNotify != null && mNotificationRecycleViewAdapter != null )
+        if (listNotify != null && mNotificationRecycleViewAdapter != null)
             mNotificationRecycleViewAdapter.setListNotify(listNotify);
         this.listNotify = listNotify;
 
@@ -77,6 +76,7 @@ public class NotificationActivity extends MVPFragment<NotificationContact.Presen
 
     @Override
     public void hasNew() {
-        ((MainActivity) Objects.requireNonNull(getActivity())).onNewNotification(new NewNotificationEvent());
+        if (getActivity() != null)
+            ((MainActivity) Objects.requireNonNull(getActivity())).onNewNotification(new NewNotificationEvent());
     }
 }

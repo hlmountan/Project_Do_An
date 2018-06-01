@@ -1,14 +1,16 @@
 package com.paditech.mvpbase.screen.setting;
 
-import android.support.v4.content.ContextCompat;
+import android.content.Intent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.paditech.mvpbase.R;
 import com.paditech.mvpbase.common.mvp.activity.ActivityPresenter;
 import com.paditech.mvpbase.common.mvp.activity.MVPActivity;
+import com.paditech.mvpbase.common.service.NotifyService;
 
 import butterknife.BindView;
 
@@ -84,7 +86,15 @@ public class SettingActivity extends MVPActivity<SettingContact.PresenterViewOps
                 if (tv_notifi_state.getText().equals(getString(R.string.allow))) {
                     tv_notifi_state.setText(R.string.deny);
                     tv_notify_option.setVisibility(View.GONE);
+                    this.stopService(new Intent(this, NotifyService.class));
+
                 } else {
+                    if (FirebaseAuth.getInstance().getCurrentUser() != null){
+                        // Tạo ra một đối tượng Intent cho một dịch vụ (PlaySongService).
+                        Intent myIntent = new Intent(this, NotifyService.class);
+//         Gọi phương thức startService (Truyền vào đối tượng Intent)
+                        this.startService(myIntent);
+                    }
                     tv_notifi_state.setText(R.string.allow);
                     tv_notify_option.setVisibility(View.VISIBLE);
                 }
