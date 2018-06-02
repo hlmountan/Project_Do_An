@@ -36,11 +36,6 @@ public class DevPresenter extends ActivityPresenter<DevContact.ViewOps> implemen
 
             @Override
             public void onResponse(String response, boolean isSuccessful) {
-                int index = response.indexOf("all_price");
-                response = response.replaceAll("\"all_price\":\"\",","");
-                response = response.replaceAll("score","bug1");
-                response = response.replaceAll("installs","bug2");
-                response = response.replaceAll("price","bug3");
 
                 final ListAppFromDev result = new Gson().fromJson(response, ListAppFromDev.class);
                 if (result != null) {

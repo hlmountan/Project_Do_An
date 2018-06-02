@@ -24,20 +24,14 @@ import butterknife.ButterKnife;
 
 public abstract class BaseActivity extends AppCompatActivity {
     private static final String CONNECT_ACTION = "android.net.conn.CONNECTIVITY_CHANGE";
-public  static boolean  STATUS_ACT = false;
+public  static String  STATUS_ACT = "";
     private LoadingDialog mLoadingDialog;
     private Snackbar mSnackbarNoConnect;
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        STATUS_ACT = true;
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        STATUS_ACT = false;
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        STATUS_ACT = intent.getStringExtra("TAG");
     }
 
     @Override

@@ -50,7 +50,9 @@ public class DetailPresenter extends ActivityPresenter<DetailContact.ViewOps> im
                 // do something here
                 response = response.replace(",null],",",0],");
                 response = response.replace("null","\"\"");
+                response = response.replace("\"size\":null,","\"size\":0,");
                 response = response.replace("\"price\":\"\",","");
+                response = response.replace("\"size\":\"\",","\"size\":0,");
                 final AppModel.SourceBean app = new Gson().fromJson(response, AppModel.SourceBean.class);
                 if (app != null) {
                     //return something by call back to UI thread

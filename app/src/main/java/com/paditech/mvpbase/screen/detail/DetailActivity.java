@@ -62,6 +62,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.paditech.mvpbase.R;
 import com.paditech.mvpbase.common.base.BaseDialog;
 import com.paditech.mvpbase.common.dialog.MessageDialog;
+import com.paditech.mvpbase.common.event.ChipCateTagEvent;
 import com.paditech.mvpbase.common.model.AppModel;
 import com.paditech.mvpbase.common.model.AppVersion;
 import com.paditech.mvpbase.common.model.Cmt;
@@ -105,6 +106,7 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 import butterknife.BindView;
 
@@ -133,7 +135,7 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
     ChipCateAdapter mListCateAdapte;
     private ArrayList<String> mList = new ArrayList<>();
     String title;
-    String appid ;
+    String appid;
     ImageView imgCover;
     boolean showdes = false;
     public int des_lines;
@@ -147,6 +149,10 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
     AppModel.SourceBean ownApp = new AppModel.SourceBean();
     long fileLength;
 
+    @BindView(R.id.tv_cate_index)
+    TextView cate_index;
+    @BindView(R.id.view_cate)
+    LinearLayout view_cate;
     @BindView(R.id.tv_mark)
     TextView tv_mark;
     @BindView(R.id.et_title)
@@ -231,6 +237,8 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
     RelativeLayout rlt_dev;
     @BindView(R.id.tv_dev)
     TextView tv_dev;
+    @BindView(R.id.tv_sale_percent)
+    TextView tv_sale_percent;
 
     RecyclerViewScreenShortAdapter mRecyclerViewScreenShortAdapter;
     RecyclerViewCmtAdapter mRecyclerViewCmtAdapter;
@@ -327,7 +335,7 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
         // set on click show form report an app
         btn_report.setOnClickListener(this);
 
-
+        view_cate.setOnClickListener(this);
         rlt_dev.setOnClickListener(this);
         et_cmt.setOnFocusChangeListener(this);
         btn_see_more_app_relate.setOnClickListener(this);
@@ -351,6 +359,7 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
         recycler_view_cmt.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         recycler_view_cmt.setAdapter(mRecyclerViewCmtAdapter);
 
+        cate_index.setText("#" + ThreadLocalRandom.current().nextInt(1, 29));
     }
 
     private void downloadApkFile(String url) {
@@ -432,7 +441,7 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     public void onGetAppEvent(AppModel.SourceBean app) {
-        if (StringUtil.isEmpty(appid)){
+        if (StringUtil.isEmpty(appid)) {
             ownApp = app;
             textView_title.setText(app.getTitle());
             appid = app.getAppid();
@@ -633,6 +642,11 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
                             isHistory = 1;
                             btn_install_app.setText("$" + app.getAll_price().get(0));
                             getPresenter().getPriceHistory(app.getAppid());
+                            if (app.getDrop_percent() > 0){
+                                tv_sale_percent.setVisibility(View.VISIBLE);
+                                tv_sale_percent.setText(String.valueOf(app.getDrop_percent())+ "%");
+                            }
+
                         } else if (isInstall) {
                             btn_install_app.setText(R.string.open_app);
                         } else {
@@ -766,7 +780,7 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        if (getIntent().getStringExtra("NOTIFY") != null )
+        if (getIntent().getStringExtra("NOTIFY") != null)
             this.startActivity(new Intent(this, MainActivity.class));
         finishAfterTransition();
     }
@@ -851,10 +865,10 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
                     watch = 0;
                 }
                 getPresenter().updateFollowApp(listApp);
-                if ( watch == 1) {
+                if (watch == 1) {
                     //need add notify
                     getPresenter().notify(ownApp, 1);
-                } else if ( watch == 0) {
+                } else if (watch == 0) {
                     //need  remove from follow
                     getPresenter().notify(ownApp, 0);
                 }
@@ -862,7 +876,9 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
             case R.id.btn_share:
                 Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
                 sharingIntent.setType("text/plain");
-                String shareBody = "Your body here";
+                String shareBody = "I do install this app. It's very nice.Try it\n " +
+                        "https://appsxyz.com/googleplay/" + ownApp.getAppid();
+
                 String shareSub = "Your subject here";
                 sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, shareSub);
                 sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
@@ -929,7 +945,13 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
                     }, null);
                 }
                 break;
-
+            case R.id.view_cate:
+                ChipCateTagEvent tag = new ChipCateTagEvent(ownApp.getCategory());
+//                EventBus.getDefault().postSticky(tag);
+                Intent intentx = new Intent(getActivityContext(), MainActivity.class);
+                intentx.putExtra("TAG",ownApp.getCategory());
+                startActivity(intentx);
+                break;
         }
     }
 
@@ -1177,6 +1199,13 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
             @Override
             public void selectCate(String string) {
                 //do somethings here
+                System.out.println("ádnaklnlxkăd");
+                ChipCateTagEvent tag = new ChipCateTagEvent(string);
+//                EventBus.getDefault().postSticky(tag);
+                Intent intent = new Intent(getActivityContext(), MainActivity.class);
+                intent.putExtra("TAG",string);
+                startActivity(intent);
+
 
             }
         });
@@ -1211,34 +1240,28 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
         inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
-    public void startApplication(String packageName)
-    {
-        try
-        {
+    public void startApplication(String packageName) {
+        try {
             Intent intent = new Intent("android.intent.action.MAIN");
             intent.addCategory("android.intent.category.LAUNCHER");
 
             intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
             List<ResolveInfo> resolveInfoList = getPackageManager().queryIntentActivities(intent, 0);
 
-            for(ResolveInfo info : resolveInfoList)
-                if(info.activityInfo.packageName.equalsIgnoreCase(packageName))
-                {
+            for (ResolveInfo info : resolveInfoList)
+                if (info.activityInfo.packageName.equalsIgnoreCase(packageName)) {
                     launchComponent(info.activityInfo.packageName, info.activityInfo.name);
                     return;
                 }
 
             // No match, so application is not installed
             showInMarket(packageName);
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             showInMarket(packageName);
         }
     }
 
-    private void launchComponent(String packageName, String name)
-    {
+    private void launchComponent(String packageName, String name) {
         Intent intent = new Intent("android.intent.action.MAIN");
         intent.addCategory("android.intent.category.LAUNCHER");
         intent.setComponent(new ComponentName(packageName, name));
@@ -1247,8 +1270,7 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
         startActivity(intent);
     }
 
-    private void showInMarket(String packageName)
-    {
+    private void showInMarket(String packageName) {
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + packageName));
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);

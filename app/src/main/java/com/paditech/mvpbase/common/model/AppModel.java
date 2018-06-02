@@ -32,6 +32,11 @@ public class AppModel {
         this.source = source;
 
     }
+    public AppModel(ListAppFromDev.appLessInfo app) {
+        SourceBean source = new SourceBean(app);
+        this.source = source;
+
+    }
 
     public AppModel(SourceBean source) {
         this.source = source;
@@ -41,6 +46,12 @@ public class AppModel {
     }
 
     public static class SourceBean {
+        public SourceBean(ListAppFromDev.appLessInfo app) {
+            this.appid = app.getAppid();
+            this.title = app.getTitle();
+            this.cover = app.getCover();
+        }
+
         @SerializedName("drop_percent")
         private float drop_percent;
         @SerializedName("drop_value")

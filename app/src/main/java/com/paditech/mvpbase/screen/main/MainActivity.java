@@ -24,8 +24,6 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.util.ArrayList;
-
 import butterknife.BindView;
 
 public class MainActivity extends MVPActivity<MainActContact.PresenterViewOps> implements MainActContact.ViewOps,
@@ -61,10 +59,7 @@ public class MainActivity extends MVPActivity<MainActContact.PresenterViewOps> i
         EventBus.getDefault().unregister(this);
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void searchTag(ArrayList<String> tag) {
 
-    }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onNewNotification(NewNotificationEvent event) {
@@ -82,6 +77,11 @@ public class MainActivity extends MVPActivity<MainActContact.PresenterViewOps> i
         setupViewPagerMain();
         tab_layout.addOnTabSelectedListener(this);
         viewPager_tab_layout.addOnPageChangeListener(this);
+
+        if (getIntent().getStringExtra("TAG") != null){
+            setVPitem(1);
+
+        }
 
 
     }
@@ -174,5 +174,12 @@ public class MainActivity extends MVPActivity<MainActContact.PresenterViewOps> i
 
     public void setVPitem(int pos) {
         viewPager_tab_layout.setCurrentItem(pos);
+    }
+    public String getTag(){
+        if (getIntent().getStringExtra("TAG") != null){
+            return getIntent().getStringExtra("TAG");
+
+        }
+        return "";
     }
 }

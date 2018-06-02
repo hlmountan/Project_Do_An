@@ -29,6 +29,7 @@
     <string name="pick_image">Chọn từ thư viện</string>
     <string name="capture_image">Chụp ảnh</string>
     <!--Direction-->
+    <string name="user_comment">All Comment</string>
     <string name="or">OR</string>
     <string name="with">WITH</string>
     <string name="enter_email">Enter your email</string>

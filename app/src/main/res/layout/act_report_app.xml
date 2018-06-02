@@ -4,6 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="@dimen/padding_default"
+    android:background="@color/white"
     >
 
     <TextView
@@ -60,11 +61,15 @@
         android:layout_height="wrap_content"
         android:minHeight="0dp"
         android:minWidth="0dp"
-        android:background="@drawable/border_gray_ligh_background"
+        android:background="@drawable/bg_white_rouned_border"
         android:text="Submit"
         android:textColor="@color/blue"
         android:layout_gravity="center"
-        android:padding="@dimen/padding_super_so_tiny"
-        android:layout_marginTop="@dimen/margin_small"/>
+        android:layout_marginTop="@dimen/margin_small"
+        android:paddingLeft="@dimen/padding_small"
+        android:paddingRight="@dimen/padding_small"
+        android:paddingTop="@dimen/padding_super_so_tiny"
+        android:paddingBottom="@dimen/padding_super_so_tiny"
+        android:textAllCaps="false"/>
 
 </LinearLayout>
