@@ -36,6 +36,7 @@ public class AppPriceHistory {
         System.out.println(this.dataUs);
         String data = dataUs.replace("\\","");
          data = data.replace("\"","");
+        data = data.replace("&quote;","");
         Gson gson = new Gson();
         Type listType = new TypeToken<ArrayList<ArrayList<String>>>(){}.getType();
         priceHistory = gson.fromJson(data,listType);

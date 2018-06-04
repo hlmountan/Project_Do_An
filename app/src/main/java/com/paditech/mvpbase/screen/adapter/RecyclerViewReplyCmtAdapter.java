@@ -101,10 +101,10 @@ public class RecyclerViewReplyCmtAdapter extends RecyclerView.Adapter<RecyclerVi
             public void setData(int pos){
                 if (cmt != null){
                     tv_user.setText(cmt.get(pos).getAuthorName());
-                    tv_title.setText(cmt.get(pos).getTitle());
-                    tv_cmt_content.setText(cmt.get(pos).getContent());
-                    tv_date.setText(convertTime(cmt.get(pos).getDate()));
-                    ratingbar.setRating(cmt.get(pos).getRate());
+                    tv_title.setText(cmt.get(pos).getTitleComment());
+                    tv_cmt_content.setText(cmt.get(pos).getComment());
+                    tv_date.setText(convertTime(cmt.get(pos).getTime()));
+                    ratingbar.setRating(cmt.get(pos).getStarRating());
                      }
             }
             String convertTime(Long timestaim){

@@ -10,7 +10,6 @@ import android.widget.ImageView;
 
 import com.paditech.mvpbase.R;
 import com.paditech.mvpbase.common.model.AppModel;
-import com.paditech.mvpbase.common.utils.CommonUtil;
 import com.paditech.mvpbase.common.utils.ImageUtil;
 import com.paditech.mvpbase.screen.detail.ScreenShotFullScreenActivity;
 
@@ -86,7 +85,7 @@ public class RecyclerViewSliderHome extends RecyclerView.Adapter<RecyclerView.Vi
         }
 
         private void setData(int pos) {
-            img_screen_short.setMaxWidth(CommonUtil.getWidthScreen(act));
+
             switch (pos){
                 case 0:
                     ImageUtil.loadImageRounded(itemView.getContext(),"https://image.winudf.com/v2/image/Y29tLmdhbWVsb2Z0LmFuZHJvaWQuQU5NUC5HbG9mdE1WSE1fYmFubmVyXzE1MjUyMzIyMzFfMDY3/banner.jpg?w=850&fakeurl=1&type=.jpg",img_screen_short,50);

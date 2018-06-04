@@ -1,7 +1,5 @@
 package com.paditech.mvpbase.screen.apkManage;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.os.Bundle;
 import android.os.Environment;
@@ -14,19 +12,13 @@ import android.support.v7.widget.LinearSnapHelper;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SnapHelper;
 import android.view.View;
-import android.widget.Button;
 
-import com.google.firebase.auth.FirebaseAuth;
 import com.paditech.mvpbase.R;
-import com.paditech.mvpbase.common.model.AppModel;
 import com.paditech.mvpbase.common.mvp.activity.ActivityPresenter;
 import com.paditech.mvpbase.common.mvp.activity.MVPActivity;
 import com.paditech.mvpbase.common.view.SimpleDividerItemDecoration;
 import com.paditech.mvpbase.screen.adapter.RecyclerViewApkAdapter;
-import com.paditech.mvpbase.screen.home.HomeRecyclerViewAdapter;
-import com.paditech.mvpbase.screen.main.ScrollTopEvent;
-import com.paditech.mvpbase.screen.profile.ProfileActivity;
-import com.paditech.mvpbase.screen.user.UserActivity;
+import com.paditech.mvpbase.screen.adapter.ScrollTopEvent;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -47,13 +39,9 @@ public class ApkActivity extends MVPActivity<ApkContact.PresenterViewOps> implem
     NestedScrollView apk_scroll;
     @BindView(R.id.recycler_view_apk)
     RecyclerView recycler_view_apk;
-    @BindView(R.id.recycler_view_like_app)
-    RecyclerView recycler_view_like_app;
 
     SnapHelper snapHelperCmt = new LinearSnapHelper();
-    SnapHelper snapHelperLike = new LinearSnapHelper();
     RecyclerViewApkAdapter mRecyclerViewApkAdapter;
-    HomeRecyclerViewAdapter mLikeAppAdapter;
 
 
     @Override
@@ -70,7 +58,7 @@ public class ApkActivity extends MVPActivity<ApkContact.PresenterViewOps> implem
         mRecyclerViewApkAdapter = new RecyclerViewApkAdapter();
         mRecyclerViewApkAdapter.setAct(this);
         snapHelperCmt.attachToRecyclerView(recycler_view_apk);
-        recycler_view_apk.setLayoutManager(new GridLayoutManager(this, 5, LinearLayoutManager.HORIZONTAL, false));
+        recycler_view_apk.setLayoutManager(new GridLayoutManager(this, 7, LinearLayoutManager.HORIZONTAL, false));
         recycler_view_apk.addItemDecoration(simpleDividerItemDecoration);
         recycler_view_apk.setAdapter(mRecyclerViewApkAdapter);
 
@@ -80,12 +68,7 @@ public class ApkActivity extends MVPActivity<ApkContact.PresenterViewOps> implem
         SimpleDividerItemDecoration decoration = new SimpleDividerItemDecoration(this, ContextCompat.getColor(this, R.color.gray_line), 120, 20);
         decoration.setHasLastLine(false);
 
-        mLikeAppAdapter = new HomeRecyclerViewAdapter(this);
-        mLikeAppAdapter.setItemId(R.layout.item_app_horizontal_white_bg);
-        snapHelperLike.attachToRecyclerView(recycler_view_like_app);
-        recycler_view_like_app.setLayoutManager(new GridLayoutManager(this, 2, LinearLayoutManager.HORIZONTAL, false));
-        recycler_view_like_app.addItemDecoration(decoration);
-        recycler_view_like_app.setAdapter(mLikeAppAdapter);
+
     }
 
 
@@ -123,16 +106,7 @@ public class ApkActivity extends MVPActivity<ApkContact.PresenterViewOps> implem
         mRecyclerViewApkAdapter.setPackages(packages);
     }
 
-    @Override
-    public void loadLikeApp(final List<AppModel> app) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                mLikeAppAdapter.setmList1(app);
-            }
-        });
 
-    }
 
     private void externalApk() {
 //        String path = Environment.getExternalStorageDirectory().toString()+"/com.paditech.mvpbase";

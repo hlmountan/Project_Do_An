@@ -35,6 +35,7 @@ public interface ActivityViewOps extends BaseViewOps {
     void showAlertDialog(boolean hasTitle, String msg, BaseDialog.OnPositiveClickListener cancelListener);
 
     void showAlertDialog(String msg, BaseDialog.OnPositiveClickListener cancelListener);
+    void showJoinDevDialog();
 
     void showConfirmDialog(boolean hasTitle, String msg, BaseDialog.OnPositiveClickListener positiveListener, BaseDialog.OnNegativeClickListener negativeListener);
 

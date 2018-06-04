@@ -23,7 +23,7 @@
         android:layout_marginLeft="@dimen/margin_small"
         android:layout_toRightOf="@id/img_avar"
         android:layout_toLeftOf="@+id/btn_install_app"
-        android:layout_marginRight="@dimen/margin_tiny"
+        android:layout_marginRight="@dimen/margin_small"
         android:singleLine="true"
         android:text="Game Sale"
         android:textColor="@color/black" />
@@ -41,8 +41,9 @@
         android:paddingLeft="@dimen/padding_default"
         android:paddingRight="@dimen/padding_default"
         android:paddingTop="@dimen/padding_super_tiny"
-        android:text="nhận"
+        android:text="@string/watch"
         android:textColor="@color/blue"
-        android:textSize="@dimen/text_size_tiny" />
+        android:textSize="@dimen/text_size_tiny"
+        android:clickable="false"/>
 
 </RelativeLayout>

@@ -32,12 +32,58 @@ public class AppModel {
         this.source = source;
 
     }
+    public AppModel(ListAppFromDev.appLessInfo app) {
+        SourceBean source = new SourceBean(app);
+        this.source = source;
+
+    }
+
+    public AppModel(SourceBean source) {
+        this.source = source;
+    }
 
     public AppModel() {
     }
 
     public static class SourceBean {
+        public SourceBean(ListAppFromDev.appLessInfo app) {
+            this.appid = app.getAppid();
+            this.title = app.getTitle();
+            this.cover = app.getCover();
+        }
+
+        @SerializedName("drop_percent")
+        private float drop_percent;
+        @SerializedName("drop_value")
+        private float drop_value;
+
+        @SerializedName("dev_id")
         private String devId;
+        @SerializedName("description")
+        private String description;
+        @SerializedName("contentrating")
+        private String contentrating;
+        @SerializedName("thumbnails")
+        private String thumbnails;
+        @SerializedName("category")
+        private String category;
+
+        @SerializedName("size")
+        private int size;
+        @SerializedName("version")
+        private String version;
+
+        @SerializedName("offerby")
+        private String offerby;
+
+        @SerializedName("appid")
+        private String appid;
+
+        private float price;
+        @SerializedName("rate_total")
+        private int rate;
+        @SerializedName("score")
+        private float score;
 
         public String getDevId() {
             return devId;
@@ -118,10 +164,24 @@ public class AppModel {
             this.screenshotUserUpload = screenshotUserUpload;
         }
 
-        @SerializedName("description")
-        private String description;
-        @SerializedName("contentrating")
-        private String contentrating;
+
+        public float getDrop_percent() {
+            return drop_percent;
+        }
+
+        public void setDrop_percent(float drop_percent) {
+            this.drop_percent = drop_percent;
+        }
+
+        public float getDrop_value() {
+            return drop_value;
+        }
+
+        public void setDrop_value(float drop_value) {
+            this.drop_value = drop_value;
+        }
+
+
 
 
         public String getContentrating() {
@@ -172,13 +232,7 @@ public class AppModel {
             this.cover = cover;
         }
 
-        @SerializedName("thumbnails")
-        private String thumbnails;
-        @SerializedName("category")
-        private String category;
 
-        @SerializedName("size")
-        private int size;
 
         public int getSize() {
             return size;
@@ -196,20 +250,7 @@ public class AppModel {
             this.category = category;
         }
 
-        @SerializedName("version")
-        private String version;
 
-        @SerializedName("offerby")
-        private String offerby;
-
-        @SerializedName("appid")
-        private String appid;
-        @SerializedName("price")
-        private float price;
-        @SerializedName("rate_total")
-        private int rate;
-        @SerializedName("score")
-        private float score;
 
         public String getRequire() {
             return require;

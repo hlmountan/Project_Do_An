@@ -25,9 +25,10 @@ import com.paditech.mvpbase.common.mvp.fragment.FragmentPresenter;
 import com.paditech.mvpbase.common.mvp.fragment.MVPFragment;
 import com.paditech.mvpbase.common.utils.CommonUtil;
 import com.paditech.mvpbase.common.view.LoadMoreRecyclerView;
-import com.paditech.mvpbase.screen.home.HomeListAppAdapter;
-import com.paditech.mvpbase.screen.main.ScrollTopEvent;
-import com.paditech.mvpbase.screen.main.adapter.ChipCateAdapter;
+import com.paditech.mvpbase.screen.adapter.ChipCateAdapter;
+import com.paditech.mvpbase.screen.adapter.HomeListAppAdapter;
+import com.paditech.mvpbase.screen.adapter.ScrollTopEvent;
+import com.paditech.mvpbase.screen.main.MainActivity;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -137,6 +138,7 @@ public class SearchFragment extends MVPFragment<SearchContact.PresenterViewOps> 
                 }
             }
         });
+        edit_text_search.setText(((MainActivity) getActivityReference()).getTag());
 
     }
 
@@ -168,7 +170,6 @@ public class SearchFragment extends MVPFragment<SearchContact.PresenterViewOps> 
     public void setTag(ChipCateTagEvent tag) {
         edit_text_search.setText(tag.getTag());
     }
-
 
 
     @Override

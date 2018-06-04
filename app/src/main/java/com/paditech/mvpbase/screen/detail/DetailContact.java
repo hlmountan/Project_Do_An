@@ -1,6 +1,7 @@
 package com.paditech.mvpbase.screen.detail;
 
 import com.paditech.mvpbase.common.model.AppModel;
+import com.paditech.mvpbase.common.model.AppVersion;
 import com.paditech.mvpbase.common.model.Cmt;
 import com.paditech.mvpbase.common.mvp.activity.ActivityPresenterViewOps;
 import com.paditech.mvpbase.common.mvp.activity.ActivityViewOps;
@@ -20,16 +21,18 @@ public interface DetailContact {
 
         void setRelateApp(List<AppModel> app);
 
-
+        void appNotAvailable();
         void setDevApp();
         void setUrlDownload(String url);
         void setFollowApp(ArrayList<ArrayList<String>> listApp);
         void setCmt(List<Cmt> cmt);
+        void setListVersion(List<AppVersion> versions);
+        void showFollow(int status);
 
     }
 
     interface PresenterViewOps extends ActivityPresenterViewOps {
-        void cURLFromApi(String appid, int isHistory);
+        void cURLFromApi(String appid);
 
         void getRelateApp(String url);
 
@@ -41,9 +44,12 @@ public interface DetailContact {
         void updateFollowApp(ArrayList<ArrayList<String>> listApp);
         void pushCmt(Cmt cmt,AppModel.SourceBean ownApp);
 
-        void getUserCmt(String appid,boolean isFirebase);
+        void getUserCmt(String appid);
         void notify(AppModel.SourceBean app,int status);
 
+        void getPriceHistory(String appid);
+
+        void getlistversion(String appid);
 
     }
 }

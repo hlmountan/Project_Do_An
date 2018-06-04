@@ -1,5 +1,6 @@
 package com.paditech.mvpbase.screen.updateApkActivity;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -7,7 +8,6 @@ import com.google.firebase.database.ValueEventListener;
 import com.paditech.mvpbase.common.event.ApkFileInfoEvent;
 import com.paditech.mvpbase.common.model.AppModel;
 import com.paditech.mvpbase.common.model.Notification;
-import com.paditech.mvpbase.common.model.UserProfile;
 import com.paditech.mvpbase.common.mvp.activity.ActivityPresenter;
 
 import java.util.ArrayList;
@@ -61,41 +61,34 @@ public class UpdateApkPresenter extends ActivityPresenter<UpdateApkContact.ViewO
         2: app public
         3: new comment
          */
-        final com.paditech.mvpbase.common.model.Notification notify = new com.paditech.mvpbase.common.model.Notification(
-                2, app.getTitle(), "This app is now available for you to download",
-                System.currentTimeMillis()/1000,app.getAppid(),false,app.getTitle(),app.getCover()
-                );
+        // add notify
+        final Notification notify = new Notification(2, app.getTitle(),
+                "This app is now available for you to download",
+                System.currentTimeMillis() / 1000, app.getAppid(), false, app.getTitle(), app.getCover());
+        // add notify cho user
+         String key = FirebaseDatabase.getInstance().getReference().child("notification").
+                child(FirebaseAuth.getInstance().getCurrentUser().getUid()).push().getKey();
+         notify.setNotifyId(key);
+         FirebaseDatabase.getInstance().getReference().child("notification").
+                 child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(key).setValue(notify);
 
-        FirebaseDatabase.getInstance().getReference().child("apk").child(app.getAppid()).addListenerForSingleValueEvent(new ValueEventListener() {
+         // add notify for user follow
+        FirebaseDatabase.getInstance().getReference().child("apk").child(app.getAppid().
+                replace(".","_")).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.getValue() != null){
                     ApkFileInfoEvent apk = dataSnapshot.getValue(ApkFileInfoEvent.class);
-                    // co ai follow k ?
-
+                    // app co thang nao follow hay k
                     if (apk.getNotification() != null){
-                        for (final ArrayList<String> usernoti:apk.getNotification()) {
-                            FirebaseDatabase.getInstance().getReference().child("user").child(usernoti.get(0)).addListenerForSingleValueEvent(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(DataSnapshot dataSnapshot) {
-                                    if (dataSnapshot.getValue() != null){
-                                        UserProfile userProfile = dataSnapshot.getValue(UserProfile.class);
-                                        ArrayList<Notification> notifications = new ArrayList<>();
-                                        // co notify chua ?
-                                        if (userProfile.getNotify() != null){
-                                            notifications = userProfile.getNotify();
-                                            notifications.add(notify);
-                                        }else notifications.add(notify);
-                                        FirebaseDatabase.getInstance().getReference().child("user").
-                                                child(usernoti.get(0)).child("notify").setValue(notifications);
-                                    }
-                                }
+                        for (final ArrayList<String> usernoti: apk.getNotification()) {
+                            //push notify for each user
+                            String key = FirebaseDatabase.getInstance().getReference().child("notification").
+                                    child(usernoti.get(0)).push().getKey();
+                            notify.setNotifyId(key);
+                            FirebaseDatabase.getInstance().getReference().child("notification").child(usernoti.get(0)).
+                                    child(key).setValue(notify);
 
-                                @Override
-                                public void onCancelled(DatabaseError databaseError) {
-
-                                }
-                            });
                         }
                     }
                 }
@@ -106,7 +99,6 @@ public class UpdateApkPresenter extends ActivityPresenter<UpdateApkContact.ViewO
 
             }
         });
-
 
     }
 }

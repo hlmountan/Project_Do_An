@@ -33,7 +33,10 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/margin_small"
             android:rating="0.0"
-            android:stepSize=".5" />
+            android:stepSize=".5"
+            android:clickable="false"
+            android:isIndicator="true"
+            />
 
         <TextView
             android:id="@+id/tv_score_your"
@@ -42,7 +45,7 @@
             android:layout_below="@id/ratingbar_your"
             android:layout_centerHorizontal="true"
             android:gravity="center"
-            android:hint=" Your score"
+            android:hint="@string/user_comment"
             android:textSize="@dimen/text_size_very_super_big"
             android:textStyle="bold" />
         <TextView

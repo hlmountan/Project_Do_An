@@ -62,34 +62,55 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/bg_shadow"
-            android:gravity="center"
             android:orientation="vertical"
             android:padding="@dimen/padding_default"
             android:visibility="gone">
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/apk_name"
+                android:padding="@dimen/padding_small"
+                android:textColor="@color/blue"
+                />
             <EditText
                 android:id="@+id/et_title"
-                android:layout_width="wrap_content"
+                android:layout_gravity="center"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/title"
                 android:padding="@dimen/padding_small"
                 android:textAlignment="center"
-                android:background="@drawable/border_edittex"
                 android:layout_marginBottom="@dimen/margin_small"/>
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/des"
+                android:padding="@dimen/padding_small"
+                android:textColor="@color/blue"
+                />
             <EditText
                 android:id="@+id/et_des"
-                android:layout_width="wrap_content"
+                android:layout_gravity="center"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/des"
                 android:padding="@dimen/padding_small"
                 android:textAlignment="center"
-                android:background="@drawable/border_edittex"
                 android:layout_marginBottom="@dimen/margin_small"/>
 
             <TextView
-                android:id="@+id/tv_cate"
                 android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/apk_cate"
+                android:padding="@dimen/padding_small"
+                android:textColor="@color/blue"
+                />
+
+            <TextView
+                android:id="@+id/tv_cate"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:padding="@dimen/padding_small"
@@ -110,27 +131,48 @@
                     android:layout_centerHorizontal="true" />
             </RelativeLayout>
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/apk_policy"
+                android:padding="@dimen/padding_small"
+                android:textColor="@color/blue"
+                />
             <EditText
                 android:id="@+id/et_policy"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/your_policy"
                 android:padding="@dimen/padding_small"
                 android:textAlignment="center"
-                android:background="@drawable/border_edittex"
-                android:layout_marginBottom="@dimen/margin_small" />
+                android:layout_marginBottom="@dimen/margin_small"
+                android:layout_gravity="center"/>
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/apk_require_age"
+                android:padding="@dimen/padding_small"
+                android:textColor="@color/blue"
+                />
             <EditText
                 android:id="@+id/et_age"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/age"
                 android:inputType="number"
                 android:padding="@dimen/padding_small"
                 android:textAlignment="center"
-                android:background="@drawable/border_edittex"
-                android:layout_marginBottom="@dimen/margin_small"/>
+                android:layout_marginBottom="@dimen/margin_small"
+                android:layout_gravity="center"/>
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/apk_require_android"
+                android:padding="@dimen/padding_small"
+                android:textColor="@color/blue"
+                />
             <TextView
                 android:id="@+id/tv_require"
                 android:layout_width="wrap_content"
@@ -164,7 +206,9 @@
                 android:minWidth="@dimen/min_height"
                 android:padding="@dimen/padding_default"
                 android:text="@string/save"
-                android:textColor="@color/blue" />
+                android:textColor="@color/blue"
+                android:layout_margin="@dimen/margin_super_tiny"
+                />
 
 
         </LinearLayout>
@@ -202,8 +246,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginBottom="@dimen/margin_default"
-            android:layout_marginTop="@dimen/margin_large"
             android:background="@drawable/bg_shadow"
             android:minHeight="@dimen/min_height"
             android:minWidth="@dimen/min_height"
@@ -246,9 +288,10 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="@dimen/line_size"
-            android:layout_below="@id/relate_frame"
-            android:layout_margin="@dimen/margin_small"
-            android:background="@color/gray_line" />
+            android:layout_marginRight="@dimen/margin_small"
+            android:layout_marginLeft="@dimen/margin_small"
+            android:background="@color/gray_line"
+            android:layout_marginTop="@dimen/margin_super_so_large"/>
 
         <TextView
             android:layout_width="wrap_content"

@@ -15,9 +15,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
@@ -25,11 +23,11 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.paditech.mvpbase.R;
+import com.paditech.mvpbase.common.base.BaseDialog;
 import com.paditech.mvpbase.common.event.ApkFileInfoEvent;
 import com.paditech.mvpbase.common.mvp.fragment.FragmentPresenter;
 import com.paditech.mvpbase.common.mvp.fragment.MVPFragment;
@@ -40,6 +38,8 @@ import com.paditech.mvpbase.common.utils.get_image.GetImageManager;
 import com.paditech.mvpbase.common.view.ValueProgressBar;
 import com.paditech.mvpbase.screen.adapter.RecyclerViewListScreenshortUploadAdapter;
 import com.paditech.mvpbase.screen.apkFile.AllApkFileActivity;
+import com.paditech.mvpbase.screen.login.LoginActivity;
+import com.paditech.mvpbase.screen.profile.ProfileActivity;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -52,15 +52,14 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
-import butterknife.Unbinder;
 
 /**
  * Created by hung on 5/9/2018.
  */
 
-public class UploadApkFragment extends MVPFragment<UploadApkContact.PresenterViewOps> implements UploadApkContact.ViewOps, View.OnClickListener, View.OnFocusChangeListener {
+public class UploadApkFragment extends MVPFragment<UploadApkContact.PresenterViewOps> implements
+        UploadApkContact.ViewOps, View.OnClickListener, View.OnFocusChangeListener {
     final int APKFILE = 1;
     final int LISTSCREESHOT = 3;
     final int AVARTAR = 2;
@@ -92,7 +91,6 @@ public class UploadApkFragment extends MVPFragment<UploadApkContact.PresenterVie
     Button btn_upload_driver;
     @BindView(R.id.tv_step)
     TextView tvStep;
-
     @BindView(R.id.tv_title)
     TextView titleApk;
     @BindView(R.id.tv_size)
@@ -103,8 +101,6 @@ public class UploadApkFragment extends MVPFragment<UploadApkContact.PresenterVie
     LinearLayout ln_apk_file;
     @BindView(R.id.tv_percen)
     TextView tv_percen;
-    @BindView(R.id.progressBar)
-    ProgressBar progressBar;
     @BindView(R.id.et_title)
     EditText et_title;
     @BindView(R.id.tv_user)
@@ -130,13 +126,15 @@ public class UploadApkFragment extends MVPFragment<UploadApkContact.PresenterVie
     @BindView(R.id.progress_bar_screen)
     ValueProgressBar progressBarScreen;
 
+    Boolean apkState = false;
     int step = 1;
     String path = "";
+    Boolean isDev = false;
     RecyclerViewListScreenshortUploadAdapter listScreenshortUploadAdapter;
-
     GetImageManager getImageManager;
-
     private ApkFileInfoEvent apkFile = new ApkFileInfoEvent();
+
+
 
     public String getPath() {
         return path;
@@ -176,6 +174,14 @@ public class UploadApkFragment extends MVPFragment<UploadApkContact.PresenterVie
         EventBus.getDefault().unregister(this);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (FirebaseAuth.getInstance().getCurrentUser() != null)
+            tv_user.setText(getString(R.string.hi) + FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
+        else tv_user.setText(getString(R.string.hi));
+    }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onGetApkFile(ApkFileInfoEvent apk) {
         setApkinfo(apk);
@@ -188,9 +194,15 @@ public class UploadApkFragment extends MVPFragment<UploadApkContact.PresenterVie
 
     @Override
     protected void initView(View view) {
+
+        getPresenter().checkDev();
         CommonUtil.dismissSoftKeyboard(view, getActivityReference());
         getImageManager = new GetImageManager(this);
-        tv_user.setText(getString(R.string.hi) + FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
+
+        if (FirebaseAuth.getInstance().getCurrentUser() != null)
+            tv_user.setText(getString(R.string.hi) + FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
+        else tv_user.setText(getString(R.string.hi));
+
         listScreenshortUploadAdapter = new RecyclerViewListScreenshortUploadAdapter(act);
         recycler_view_img_screenshot.setLayoutManager(new GridLayoutManager(act, 3, LinearLayoutManager.VERTICAL, false));
         recycler_view_img_screenshot.setAdapter(listScreenshortUploadAdapter);
@@ -220,32 +232,45 @@ public class UploadApkFragment extends MVPFragment<UploadApkContact.PresenterVie
                 changeStep();
                 break;
             case R.id.btn_next:
-                switch (step) {
-                    case 2:
-                        if (StringUtil.isEmpty(et_title.getText().toString().trim())) {
-                            showToast(getString(R.string.please_enter_title));
-                            return;
+                if (isDev) {
+                    if (agreement.isChecked()) {
+                        switch (step) {
+                            case 2:
+                                if (StringUtil.isEmpty(et_title.getText().toString().trim())) {
+                                    showToast(getString(R.string.please_enter_title));
+                                    return;
+                                }
+                                if (StringUtil.isEmpty(path)) {
+                                    showToast(getString(R.string.please_choose_apk));
+                                    return;
+                                }
+                                break;
+                            case 3:
+                                if (StringUtil.isEmpty(apkFile.getAvar())) {
+                                    showToast(getString(R.string.please_choose_avatar));
+                                    return;
+                                }
+                                break;
+                            case 4:
+                                if (apkFile.getScreenshot() == null || apkFile.getScreenshot().isEmpty()) {
+                                    showToast(getString(R.string.please_choose_screenshot));
+                                    return;
+                                }
+                                break;
                         }
-                        if (StringUtil.isEmpty(path)) {
-                            showToast(getString(R.string.please_choose_apk));
-                            return;
+                        step++;
+                        changeStep();
+                    }
+                } else {
+                    showConfirmDialog(getString(R.string.not_dev), new BaseDialog.OnPositiveClickListener() {
+                        @Override
+                        public void onPositiveClick() {
+                            if (FirebaseAuth.getInstance().getCurrentUser() != null)
+                                startActivity(new Intent(getActivityContext(), ProfileActivity.class));
+                            else startActivity(new Intent(getActivityContext(), LoginActivity.class));
                         }
-                        break;
-                    case 3:
-                        if (StringUtil.isEmpty(apkFile.getAvar())) {
-                            showToast(getString(R.string.please_choose_avatar));
-                            return;
-                        }
-                        break;
-                    case 4:
-                        if (apkFile.getScreenshot() == null || apkFile.getScreenshot().isEmpty()) {
-                            showToast(getString(R.string.please_choose_screenshot));
-                            return;
-                        }
-                        break;
+                    }, null);
                 }
-                step++;
-                changeStep();
                 break;
             case R.id.btn_upload_local:
                 startActivity(new Intent(act, AllApkFileActivity.class));
@@ -265,13 +290,7 @@ public class UploadApkFragment extends MVPFragment<UploadApkContact.PresenterVie
                 getImageManager.setSelectType(GetImageManager.SelectType.MULTIPLE);
                 getImageManager.onAddImage();
                 break;
-            case R.id.checkbox_agreement:
-                if (agreement.isChecked()) {
-                    changeStep();
-                } else {
-                    btn_next.setVisibility(View.GONE);
-                    state.setVisibility(View.GONE);
-                }
+
         }
     }
 
@@ -309,7 +328,6 @@ public class UploadApkFragment extends MVPFragment<UploadApkContact.PresenterVie
                 break;
             case 3:
                 tvStep.setText(R.string.step_3);
-                progressBar.setVisibility(View.VISIBLE);
                 step3.setVisibility(View.VISIBLE);
                 break;
             case 4:
@@ -317,11 +335,21 @@ public class UploadApkFragment extends MVPFragment<UploadApkContact.PresenterVie
                 step4.setVisibility(View.VISIBLE);
                 break;
             case 5:
-                getPresenter().createNewApk(apkFile);
-                tvStep.setText(R.string.step_5);
-                ln_final.setVisibility(View.VISIBLE);
-                btn_next.setVisibility(View.GONE);
-                btnPrevious.setVisibility(View.GONE);
+                if (apkState){
+                    apkFile.setTitle(et_title.getText().toString());
+                    getPresenter().createNewApk(apkFile);
+                    tvStep.setText(R.string.step_5);
+                    ln_final.setVisibility(View.VISIBLE);
+                    btn_next.setVisibility(View.GONE);
+                    btnPrevious.setVisibility(View.GONE);
+                }else showAlertDialog(getString(R.string.exis_apk), new BaseDialog.OnPositiveClickListener() {
+                    @Override
+                    public void onPositiveClick() {
+                        resetToStep1();
+                    }
+                });
+
+
                 break;
         }
     }
@@ -339,9 +367,8 @@ public class UploadApkFragment extends MVPFragment<UploadApkContact.PresenterVie
         step = 1;
         changeStep();
         agreement.setChecked(false);
-        btn_next.setVisibility(View.GONE);
+        agreement.setVisibility(View.VISIBLE);
         ln_final.setVisibility(View.GONE);
-        step1.setVisibility(View.VISIBLE);
         ln_apk_file.setVisibility(View.GONE);
         path = "";
         et_title.setText("");
@@ -363,18 +390,28 @@ public class UploadApkFragment extends MVPFragment<UploadApkContact.PresenterVie
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
             case APKFILE:
-                File file = new File(converUri(data));
-                int file_size = Integer.parseInt(String.valueOf(file.length() / 1024));
-                String name = file.getName();
-                String date = String.valueOf(file.lastModified());
-                name = name.replace("_", ".");
-                name = name.replace(".apk", "");
-                apkFile.setTitle(name);
-                apkFile.setSize(String.valueOf(file_size / 1024));
-                apkFile.setDateModify(date);
-                apkFile.setPath(converUri(data));
-                apkFile.setUid(FirebaseAuth.getInstance().getCurrentUser().getUid());
-                setApkinfo(apkFile);
+                try {
+                    File file = new File(converUri(data));
+                    int file_size = Integer.parseInt(String.valueOf(file.length() / 1024));
+                    String name = file.getName();
+                    if (name.indexOf("apk") > 0) {
+                        String date = String.valueOf(file.lastModified());
+                        name = name.replace("_", ".");
+                        name = name.replace(".apk", "");
+                        apkFile.setAppid(getPresenter().getAppId(apkFile.getPath()));
+                        apkFile.setTitle(name);
+                        apkFile.setSize(String.valueOf(file_size / 1024));
+                        apkFile.setDateModify(date);
+                        apkFile.setPath(converUri(data));
+                        apkFile.setUid(FirebaseAuth.getInstance().getCurrentUser().getUid());
+                        setApkinfo(apkFile);
+                        getPresenter().checkApk(apkFile.getAppid());
+                    } else showToast(getString(R.string.error_file_type));
+
+                } catch (Exception e) {
+                    showToast(getString(R.string.error_file_type));
+                }
+
                 break;
             case AVARTAR:
                 try {
@@ -433,6 +470,7 @@ public class UploadApkFragment extends MVPFragment<UploadApkContact.PresenterVie
         lastModify.setText(mDataFormat.format(mDate));
         setPath(apk.getPath());
         apkFile = apk;
+        apkFile.setTitle(et_title.getText().toString());
     }
 
     public void hideKeyboard(View view) {
@@ -490,7 +528,7 @@ public class UploadApkFragment extends MVPFragment<UploadApkContact.PresenterVie
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                tvProgressApk.setText(getString(R.string.avatar_uploading_d, percent));
+                tvProgressApk.setText(getString(R.string.apk_uploading_d, percent));
                 progressBarApk.setProgress(percent);
             }
         });
@@ -510,6 +548,16 @@ public class UploadApkFragment extends MVPFragment<UploadApkContact.PresenterVie
                 btnReset.setVisibility(View.VISIBLE);
             }
         });
+    }
+
+    @Override
+    public void isDev(Boolean check) {
+        this.isDev = check;
+    }
+
+    @Override
+    public void setApkState(Boolean state) {
+        this.apkState = state;
     }
 
 

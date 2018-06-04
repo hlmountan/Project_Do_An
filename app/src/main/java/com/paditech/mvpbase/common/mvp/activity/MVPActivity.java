@@ -12,6 +12,7 @@ import android.widget.Toast;
 import com.paditech.mvpbase.R;
 import com.paditech.mvpbase.common.base.BaseActivity;
 import com.paditech.mvpbase.common.base.BaseDialog;
+import com.paditech.mvpbase.common.dialog.JoinDeveloperDialogue;
 import com.paditech.mvpbase.common.dialog.MessageDialog;
 import com.paditech.mvpbase.common.mvp.PresenterFactory;
 
@@ -19,10 +20,12 @@ import com.paditech.mvpbase.common.mvp.PresenterFactory;
  * Created by Nha Nha on 6/27/2017.
  */
 
-public abstract class MVPActivity<P extends ActivityPresenterViewOps> extends BaseActivity implements ActivityViewOps {
+public abstract class MVPActivity<P extends ActivityPresenterViewOps> extends
+        BaseActivity implements ActivityViewOps {
     private static String PRESENTER_ID;
 
     private MessageDialog mDialog;
+    private JoinDeveloperDialogue joinDeveloperDialogue;
 
     public P mPresenter;
 
@@ -92,6 +95,17 @@ public abstract class MVPActivity<P extends ActivityPresenterViewOps> extends Ba
         hideLoadingDialog();
     }
 
+    @Override
+    public void showJoinDevDialog() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (joinDeveloperDialogue != null) joinDeveloperDialogue.dismiss();
+                joinDeveloperDialogue = JoinDeveloperDialogue.newInstance();
+                joinDeveloperDialogue.show(getSupportFragmentManager(), joinDeveloperDialogue.getClass().getSimpleName());
+            }
+        });
+    }
     @Override
     public void showAlertDialog(final String msg) {
         runOnUiThread(new Runnable() {

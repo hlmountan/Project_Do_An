@@ -43,6 +43,8 @@
         android:paddingTop="@dimen/padding_super_tiny"
         android:text="nhận"
         android:textColor="@color/blue"
-        android:textSize="@dimen/text_size_tiny" />
+        android:textSize="@dimen/text_size_tiny"
+        android:clickable="false"
+        />
 
 </RelativeLayout>

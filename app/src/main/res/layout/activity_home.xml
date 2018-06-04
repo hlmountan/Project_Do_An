@@ -9,7 +9,7 @@
     android:focusable="true"
     android:focusableInTouchMode="true"
     android:orientation="vertical"
-    tools:context="com.paditech.mvpbase.screen.main.HomeActivity">
+    tools:context="com.paditech.mvpbase.screen.main.MainActivity">
 
 
     <FrameLayout
@@ -25,17 +25,6 @@
             android:background="@color/white_transfer" />
     </FrameLayout>
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/btn_assivetouch"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_gravity="bottom|center_horizontal"
-        android:layout_marginBottom="@dimen/margin_small"
-        android:alpha="0.85"
-        android:backgroundTint="@color/blue"
-        android:src="@drawable/pulse"
-        android:visibility="gone"
-        app:borderWidth="0dp" />
 
     <View
         android:layout_width="match_parent"

@@ -99,11 +99,11 @@ public class RecyclerViewCmtAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         public void setData(int pos){
             if (cmt != null){
                 tv_user.setText(cmt.get(pos).getAuthorName());
-                tv_title.setText(cmt.get(pos).getTitle());
-                tv_cmt_content.setText(cmt.get(pos).getContent());
-                tv_date.setText(convertTime(cmt.get(pos).getDate()));
-                ratingbar.setRating(cmt.get(pos).getRate());
-                ImageUtil.loadImageRounded(itemView.getContext(),cmt.get(pos).getAvar(),img_avar,R.drawable.events_placeholder,R.drawable.image_placeholder_500x500,20);
+                tv_title.setText(cmt.get(pos).getTitleComment());
+                tv_cmt_content.setText(cmt.get(pos).getComment());
+                tv_date.setText(convertTime(cmt.get(pos).getTime()));
+                ratingbar.setRating(cmt.get(pos).getStarRating());
+                ImageUtil.loadImageRounded(itemView.getContext(),cmt.get(pos).getAvatar(),img_avar,R.drawable.events_placeholder,R.drawable.image_placeholder_500x500,20);
             }
         }
         String convertTime(Long timestaim){

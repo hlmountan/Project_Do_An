@@ -19,6 +19,15 @@ public class Notification {
     String appTitle;
     String appAvar;
     boolean ownApp = false;
+    String notifyId;
+
+    public String getNotifyId() {
+        return notifyId;
+    }
+
+    public void setNotifyId(String notifyId) {
+        this.notifyId = notifyId;
+    }
 
     public boolean isOwnApp() {
         return ownApp;
@@ -105,4 +114,8 @@ public class Notification {
     public void setRead(Boolean read) {
         isRead = read;
     }
+    public void setIsRead(Boolean read) {
+        isRead = read;
+    }
+
 }

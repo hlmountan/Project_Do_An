@@ -4,10 +4,12 @@ package com.paditech.mvpbase.screen.detail;
 import android.Manifest;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.graphics.Color;
 import android.graphics.DashPathEffect;
 import android.net.Uri;
@@ -56,27 +58,33 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
 import com.paditech.mvpbase.R;
 import com.paditech.mvpbase.common.base.BaseDialog;
 import com.paditech.mvpbase.common.dialog.MessageDialog;
+import com.paditech.mvpbase.common.event.ChipCateTagEvent;
 import com.paditech.mvpbase.common.model.AppModel;
+import com.paditech.mvpbase.common.model.AppVersion;
 import com.paditech.mvpbase.common.model.Cmt;
+import com.paditech.mvpbase.common.model.Notification;
 import com.paditech.mvpbase.common.mvp.activity.ActivityPresenter;
 import com.paditech.mvpbase.common.mvp.activity.MVPActivity;
 import com.paditech.mvpbase.common.utils.CommonUtil;
 import com.paditech.mvpbase.common.utils.ImageUtil;
+import com.paditech.mvpbase.common.utils.StringUtil;
 import com.paditech.mvpbase.common.view.FadeToolbarScrollView;
 import com.paditech.mvpbase.common.view.SimpleDividerItemDecoration;
+import com.paditech.mvpbase.screen.adapter.ChipCateAdapter;
+import com.paditech.mvpbase.screen.adapter.HomeRecyclerViewAdapter;
 import com.paditech.mvpbase.screen.adapter.RecyclerViewCmtAdapter;
 import com.paditech.mvpbase.screen.adapter.RecyclerViewScreenShortAdapter;
 import com.paditech.mvpbase.screen.adapter.RecyclerViewVersionAdapter;
+import com.paditech.mvpbase.screen.adapter.StartSnapHelper;
 import com.paditech.mvpbase.screen.cmt.CommentActivity;
 import com.paditech.mvpbase.screen.dev.DevActivity;
-import com.paditech.mvpbase.screen.home.HomeRecyclerViewAdapter;
-import com.paditech.mvpbase.screen.home.StartSnapHelper;
-import com.paditech.mvpbase.screen.main.adapter.ChipCateAdapter;
+import com.paditech.mvpbase.screen.login.LoginActivity;
+import com.paditech.mvpbase.screen.main.MainActivity;
 import com.paditech.mvpbase.screen.report.ReportActivity;
-import com.paditech.mvpbase.screen.user.UserActivity;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -98,6 +106,7 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 import butterknife.BindView;
 
@@ -109,7 +118,7 @@ import butterknife.BindView;
 public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> implements DetailContact.ViewOps,
         View.OnClickListener, FadeToolbarScrollView.ObservableScrollViewCallbacks, RatingBar.OnRatingBarChangeListener,
         View.OnFocusChangeListener {
-    boolean isInstall= false;
+    boolean isInstall = false;
     int follow;
     List<Entry> entries = new ArrayList<Entry>();
     private ArrayList<ArrayList<String>> screenShot = null;
@@ -137,9 +146,15 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
     SnapHelper snapHelper3 = new LinearSnapHelper();
     SnapHelper snapHelperCmt = new LinearSnapHelper();
     Integer isHistory;
-    AppModel.SourceBean ownApp;
+    AppModel.SourceBean ownApp = new AppModel.SourceBean();
     long fileLength;
 
+    @BindView(R.id.tv_cate_index)
+    TextView cate_index;
+    @BindView(R.id.view_cate)
+    LinearLayout view_cate;
+    @BindView(R.id.tv_mark)
+    TextView tv_mark;
     @BindView(R.id.et_title)
     TextView et_title;
     @BindView(R.id.view_rating)
@@ -220,6 +235,10 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
     Button btn_see_more_app_relate;
     @BindView(R.id.rlt_dev)
     RelativeLayout rlt_dev;
+    @BindView(R.id.tv_dev)
+    TextView tv_dev;
+    @BindView(R.id.tv_sale_percent)
+    TextView tv_sale_percent;
 
     RecyclerViewScreenShortAdapter mRecyclerViewScreenShortAdapter;
     RecyclerViewCmtAdapter mRecyclerViewCmtAdapter;
@@ -259,6 +278,16 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
         // install app apk
         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builder.build());
+
+        if (getIntent().getStringExtra("NOTIFY") != null) {
+            String[] parts = getIntent().getStringExtra("NOTIFY").toString().split("/");
+            FirebaseDatabase.getInstance().getReference().child("notification").
+                    child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(parts[1]).child("read").setValue(true);
+            setUpNotify(parts[0]);
+            Notification noti = new Notification();
+            noti.setNotifyId(parts[1]);
+            EventBus.getDefault().postSticky(noti);
+        }
     }
 
     @Override
@@ -274,7 +303,6 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
 
     @Override
     protected void onRestart() {
-        progressBar_chart.setVisibility(View.GONE);
         super.onRestart();
     }
 
@@ -307,7 +335,7 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
         // set on click show form report an app
         btn_report.setOnClickListener(this);
 
-
+        view_cate.setOnClickListener(this);
         rlt_dev.setOnClickListener(this);
         et_cmt.setOnFocusChangeListener(this);
         btn_see_more_app_relate.setOnClickListener(this);
@@ -322,8 +350,6 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
         ratingbar_your.setOnRatingBarChangeListener(this);
 
         snapHelper.attachToRecyclerView(recycler_view_versions);
-        mListVersionAdapter.setItemNumber(10);
-        mListVersionAdapter.setItemId(R.layout.item_version);
         recycler_view_versions.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         recycler_view_versions.setAdapter(mListVersionAdapter);
 
@@ -333,6 +359,7 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
         recycler_view_cmt.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         recycler_view_cmt.setAdapter(mRecyclerViewCmtAdapter);
 
+        cate_index.setText("#" + ThreadLocalRandom.current().nextInt(1, 29));
     }
 
     private void downloadApkFile(String url) {
@@ -389,50 +416,41 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
         });
     }
 
+    void setUpNotify(String appid) {
+        try {
+            ownApp.setAppid(appid);
+            isInstall = getPresenter().isInstall(appid);
+            getPresenter().cURLFromApi(appid);
+            getPresenter().getlistversion(appid);
+            if (FirebaseAuth.getInstance().getCurrentUser() == null)
+                btn_user_name.setText(R.string.anonymous);
+            else {
+                getPresenter().getUserFollowApp();
+                btn_user_name.setText(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
+            }
+
+
+            getPresenter().getUserCmt(appid);
+
+        } catch (Exception e) {
+            System.out.println(e + "errorrrrrrrrrrrr");
+        }
+
+
+    }
+
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     public void onGetAppEvent(AppModel.SourceBean app) {
-        ownApp = app;
-
-        title = app.getTitle();
-        textView_title.setText(app.getTitle());
-        appid = app.getAppid();
-        isInstall = getPresenter().isInstall(appid);
-    // follow app
-        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
-            getPresenter().getUserFollowApp();
-        }
-
-
-        if (!getIntent().getBooleanExtra("is_cover", false))
-            ImageUtil.loadImage(DetailActivity.this, app.getCover(), imgAvatar, R.drawable.events_placeholder, R.drawable.image_placeholder_500x500);
-        // visible in cmt box
-        if (FirebaseAuth.getInstance().getCurrentUser() == null)
-            btn_user_name.setText(R.string.anonymous);
-        else btn_user_name.setText(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
-
-        //
-        if (app.isUserUpload()) {
-            tv_offerby.setText(app.getOfferby());
-            setUpScreenShort(app.getScreenshotUserUpload());
-            fr_chart_and_pager.setVisibility(View.GONE);
-            btn_install_app.setText(R.string.install);
-            getPresenter().getUserCmt(appid,app.isFirebaseCmt());
-        } else {
-            if ((app.getAll_price() == null) || (app.getAll_price().size() != 2)) {
-
-                isHistory = 0;
-                getPresenter().cURLFromApi(app.getAppid(), 0);
-            } else {
-                isHistory = 1;
-
-                fr_chart_and_pager.setVisibility(View.VISIBLE);
-                getPresenter().cURLFromApi(app.getAppid(), 1);
+        if (StringUtil.isEmpty(appid)) {
+            ownApp = app;
+            textView_title.setText(app.getTitle());
+            appid = app.getAppid();
+            setUpNotify(app.getAppid());
+            if (app.isUserUpload()) {
+                tv_offerby.setText(app.getOfferby());
+                tv_dev.setText((app.getOfferby()));
             }
-            getPresenter().getUserCmt(appid.replace("-","."),app.isFirebaseCmt());
         }
-
-
-        getPresenter().getRelateApp("http://appsxyz.com/api/apk/search_related/?q=" + URLEncoder.encode(app.getTitle()) + "&page=1&size=20");
 
     }
 
@@ -566,59 +584,84 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
             @Override
             public void run() {
                 try {
-                    if (isHistory != 0)
-                        btn_install_app.setText("$" + app.getPrice());
-                    else {
-                        if (isInstall) {
-                            btn_install_app.setText(R.string.open_app);
-                        } else
-                            btn_install_app.setText("" + getResources().getString(R.string.install));
-                        setUrlInstall(app);
-                    }
-
-                    setUpCateAdapter(app.getTag());
-                    fileLength = app.getSize()*1000;
+                    // same info
+                    ownApp = app;
+                    if (!getIntent().getBooleanExtra("is_cover", false))
+                        ImageUtil.loadImage(DetailActivity.this, app.getCover(), imgAvatar,
+                                R.drawable.events_placeholder, R.drawable.image_placeholder_500x500);
+                    textView_title.setText(app.getTitle());
                     if (app.getTitle() != null) tv_title_scroll.setText(app.getTitle());
-
-
+                    fileLength = app.getSize() * 1000;
                     tv_score.setText(String.valueOf(app.getScore()));
                     tv_numberrate.setText(NumberFormat.getInstance().format(app.getInstalls()) + " Rating");
-                    tv_offerby.setText(app.getOfferby());
+
                     tv_category.setText(app.getCategory());
                     ratingbar.setRating(app.getScore());
-
-
-                    tv_version.setText("Version: " + app.getVersion());
+                    tv_version.setText("Version: " + String.valueOf(app.getVersion()));
                     String des = app.getDescription();
                     linesCount(des);
                     String dev;
-                    if (app.getOfferby().length() > 13){
-                        dev = app.getOfferby().substring(0,13);
-                    }else{
-                         dev = app.getOfferby();
-                    }
-
-
-                    tv_gp_info.setText(dev + "..\n" + NumberFormat.getInstance().format(app.getSize()/1000000)+ " MB" + "\n" + app.getCategory() + "\n" + app.getRequire() + "\n" + app.getContentrating());
-
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                        tv_description.setText(Html.fromHtml(des, Html.FROM_HTML_MODE_COMPACT));
+                    if (app.getOfferby().length() > 13) {
+                        dev = app.getOfferby().substring(0, 13);
                     } else {
-                        tv_description.setText(Html.fromHtml(des));
+                        dev = app.getOfferby();
                     }
-                    //set up screenshot data
-                    screenShot = app.getScreenShot();
-                    if (app.getScreenShot() != null) {
-                        for (ArrayList<String> a : app.getScreenShot()) {
-                            ;
-                            mList.add(a.get(2));
+                    tv_gp_info.setText(dev + "..\n" + String.valueOf(NumberFormat.getInstance().
+                            format(app.getSize() / 1000000)) +
+                            " MB" + "\n" + String.valueOf(app.getCategory()) + "\n" + String.valueOf(app.getRequire())
+                            + "\n" + String.valueOf(app.getContentrating()));
+
+                    //diffrent info
+                    if (app.isUserUpload()) {
+                        setUpScreenShort(app.getScreenshotUserUpload());
+                        btn_install_app.setText(R.string.install);
+                        tv_gp_info.setText(getText(R.string.no_info));
+                        tv_description.setText(getText(R.string.no_info));
+                    } else {
+
+                        tv_offerby.setText(app.getOfferby());
+                        tv_dev.setText(app.getOfferby());
+                        //set up screenshot data
+                        screenShot = app.getScreenShot();
+                        if (app.getScreenShot() != null) {
+                            for (ArrayList<String> a : app.getScreenShot()) {
+                                mList.add(a.get(2));
+                            }
+                            setUpScreenShort(mList);
                         }
-                        setUpScreenShort(mList);
+                        // des
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                            tv_description.setText(Html.fromHtml(des, Html.FROM_HTML_MODE_COMPACT));
+                        } else {
+                            tv_description.setText(Html.fromHtml(des));
+                        }
+                        //other
+                        if (app.getTag() != null)
+                            setUpCateAdapter(app.getTag());
+                        if (app.getAll_price().get(0) != -1) {
+                            isHistory = 1;
+                            btn_install_app.setText("$" + app.getAll_price().get(0));
+                            getPresenter().getPriceHistory(app.getAppid());
+                            if (app.getDrop_percent() > 0){
+                                tv_sale_percent.setVisibility(View.VISIBLE);
+                                tv_sale_percent.setText(String.valueOf(app.getDrop_percent())+ "%");
+                            }
+
+                        } else if (isInstall) {
+                            btn_install_app.setText(R.string.open_app);
+                        } else {
+                            btn_install_app.setText("" + getResources().getString(R.string.install));
+                            setUrlInstall(app);
+                        }
+
                     }
 
 
                     //set title for download api
                     title = app.getAppid().replace(" ", "_").replace(".", "_");
+
+                    getPresenter().getRelateApp("http://appsxyz.com/api/apk/search_related/?q=" +
+                            URLEncoder.encode(app.getTitle()) + "&page=1&size=20&appid=" + app.getAppid());
                 } catch (Exception e) {
                     System.out.println(e);
                 }
@@ -635,6 +678,7 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
                 setPriceHistory(priceHistory);
 //                System.out.println(this.priceHistory.size()+"size");
                 lineChartData();
+                fr_chart_and_pager.setVisibility(View.VISIBLE);
                 chart.setVisibility(View.VISIBLE);
                 progressBar_chart.setVisibility(View.GONE);
             }
@@ -654,6 +698,20 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
 
     }
 
+    @Override
+    public void appNotAvailable() {
+        showConfirmDialog(getString(R.string.error_app_unavaiable), new BaseDialog.OnPositiveClickListener() {
+            @Override
+            public void onPositiveClick() {
+                finish();
+            }
+        }, new BaseDialog.OnNegativeClickListener() {
+            @Override
+            public void onNegativeClick() {
+                finish();
+            }
+        });
+    }
 
     @Override
     public void setDevApp() {
@@ -689,32 +747,42 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
     public void setCmt(final List<Cmt> cmts) {
 
         mRecyclerViewCmtAdapter.setCmt(cmts);
-
+        recycler_view_cmt.setVisibility(View.VISIBLE);
 
 
     }
 
     @Override
+    public void setListVersion(final List<AppVersion> versions) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (versions != null) {
+                    mListVersionAdapter.setmList1(versions);
+                } else {
+                    tv_mark.setVisibility(View.GONE);
+                    btn_see_more_version.setVisibility(View.GONE);
+                    recycler_view_versions.setVisibility(View.GONE);
+                }
+            }
+        });
+    }
+
+    @Override
+    public void showFollow(int status) {
+
+        btn_add.setVisibility(View.VISIBLE);
+        if (status == 1)
+            btn_add.setBackgroundResource(R.drawable.ic_check);
+        else btn_add.setBackgroundResource(R.drawable.btn_add);
+    }
+
+    @Override
     public void onBackPressed() {
         super.onBackPressed();
-        getPresenter().updateFollowApp(listApp);
-        /*
-        100:  begining unfollow
-        200:  beginning follow
-        1: follow
-        0: unfollow
-
-         */
-
-        if (follow == 100 && watch == 1 ){
-            //need add notify
-            getPresenter().notify(ownApp,1);
-        }else if (follow == 200 && watch == 0){
-            //need  remove from follow
-            getPresenter().notify(ownApp,0);
-        }
-
-
+        if (getIntent().getStringExtra("NOTIFY") != null)
+            this.startActivity(new Intent(this, MainActivity.class));
+        finishAfterTransition();
     }
 
     @Override
@@ -752,36 +820,42 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
                 break;
             case R.id.btn_install_app:
                 // check xem app co gia hay free
-                if (isHistory == 0) {
-                    // heck xm trong may da co apk cua ap chua
-//                    if (getPresenter().checkIsApk(appid)){
-//                        //co roi thi chi install
-//                    }else{
-                    // chua co thi tai va install
-                    System.out.println(urlInstall);
-                    downloadApkFile(this.urlInstall);
-//                    }
-
-                } else {
-                    Log.e("", "You need buy App first");
+//                if (isHistory == 0) {
+//                    System.out.println(urlInstall);
+//                    downloadApkFile(this.urlInstall);
+//                } else {
+//                    Log.e("", "You need buy App first");
+//                }
+//                final String appPackageName = getPackageName(); // getPackageName() from Context or Activity object
+                if (!btn_install_app.getText().toString().equals(getString(R.string.open_app)))
+                    try {
+                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + ownApp.getAppid())));
+                    } catch (android.content.ActivityNotFoundException anfe) {
+                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + ownApp.getAppid())));
+                    }
+                else {
+                    startApplication(ownApp.getAppid());
                 }
                 break;
             case R.id.btn_add:
+                btn_add.setVisibility(View.GONE);
+                /*
+                100:  begining unfollow
+                200:  beginning follow
+                1: follow
+                0: unfollow
 
+                 */
                 if (watch == 0) {
 
-                    btn_add.setBackgroundResource(R.drawable.ic_check);
                     ArrayList<String> follow = new ArrayList<>();
                     follow.add(ownApp.getAppid());
                     follow.add(ownApp.getCover());
                     follow.add(ownApp.getTitle());
                     follow.add(String.valueOf(ownApp.isUserUpload()));
-
                     listApp.add(follow);
-
                     watch = 1;
                 } else {
-                    btn_add.setBackgroundResource(R.drawable.btn_add);
                     for (ArrayList<String> a : listApp) {
                         if (a.get(0).equals(ownApp.getAppid())) {
                             listApp.remove(a);
@@ -790,61 +864,73 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
                     }
                     watch = 0;
                 }
-
+                getPresenter().updateFollowApp(listApp);
+                if (watch == 1) {
+                    //need add notify
+                    getPresenter().notify(ownApp, 1);
+                } else if (watch == 0) {
+                    //need  remove from follow
+                    getPresenter().notify(ownApp, 0);
+                }
                 break;
             case R.id.btn_share:
                 Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
                 sharingIntent.setType("text/plain");
-                String shareBody = "Your body here";
+                String shareBody = "I do install this app. It's very nice.Try it\n " +
+                        "https://appsxyz.com/googleplay/" + ownApp.getAppid();
+
                 String shareSub = "Your subject here";
                 sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, shareSub);
                 sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
                 startActivity(Intent.createChooser(sharingIntent, "Share using"));
                 break;
             case R.id.tv_score:
-                recycler_view_cmt.getParent().requestChildFocus(recycler_view_cmt, recycler_view_cmt);
+//                recycler_view_cmt.getParent().requestChildFocus(recycler_view_cmt, recycler_view_cmt);
                 break;
             case R.id.btn_report:
                 final Intent intent = new Intent(this, ReportActivity.class);
                 this.startActivity(intent);
                 break;
             case R.id.tv_offerby:
-                System.out.println(title + " asdwcsf ");
                 Intent intent1 = new Intent(this, DevActivity.class);
-//                intent1.putExtra("DEVNAME", title);
+                intent1.putExtra("DEVID", ownApp.getOfferby());
                 this.startActivity(intent1);
+//                EventBus.getDefault().postSticky(ownApp);
                 break;
             case R.id.rlt_dev:
                 Intent intent2 = new Intent(this, DevActivity.class);
-//                intent2.putExtra("DEVNAME", title);
+                intent2.putExtra("DEVID", ownApp.getOfferby());
+//                EventBus.getDefault().postSticky(ownApp);
                 this.startActivity(intent2);
+
                 break;
 
             case R.id.tv_show_cmt:
                 this.startActivity(new Intent(this, CommentActivity.class));
+                EventBus.getDefault().postSticky(ownApp);
                 break;
             case R.id.btn_submit:
                 if (FirebaseAuth.getInstance().getCurrentUser() != null) {
                     // check user install app hay chua
 //                    if (isInstall){
-                        if (ratingbar_your.getRating() != 0 && !et_cmt.getText().toString().equals("")&&!et_title.getText().toString().equals("")) {
-                            // push cmt
-                            Cmt cmt = new Cmt();
-                            cmt.setAppid(appid);
-                            cmt.setAuthorName(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
-                            cmt.setUid(FirebaseAuth.getInstance().getCurrentUser().getUid());
-                            cmt.setContent(et_cmt.getText().toString());
-                            cmt.setRate(ratingbar_your.getRating());
-                            cmt.setDate(System.currentTimeMillis()/1000);
-                            cmt.setTitle(et_title.getText().toString());
-                            cmt.setAvar(FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl().toString());
-                            getPresenter().pushCmt(cmt,ownApp);
+                    if (ratingbar_your.getRating() != 0 && !et_cmt.getText().toString().equals("") && !et_title.getText().toString().equals("")) {
+                        // push cmt
+                        Cmt cmt = new Cmt();
+                        cmt.setAppid(appid);
+                        cmt.setAuthorName(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
+                        cmt.setUid(FirebaseAuth.getInstance().getCurrentUser().getUid());
+                        cmt.setComment(et_cmt.getText().toString());
+                        cmt.setStarRating(ratingbar_your.getRating());
+                        cmt.setTime(System.currentTimeMillis() / 1000);
+                        cmt.setTitleComment(et_title.getText().toString());
+                        cmt.setAvatar(FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl().toString());
+                        getPresenter().pushCmt(cmt, ownApp);
 
-                            showAlertDialog(getString(R.string.cmt_success));
-                            view_rating.setVisibility(View.GONE);
-                            tv_rating_success.setVisibility(View.VISIBLE);
+                        showAlertDialog(getString(R.string.cmt_success));
+                        view_rating.setVisibility(View.GONE);
+                        tv_rating_success.setVisibility(View.VISIBLE);
 
-                        } else showAlertDialog(getString(R.string.empty_context_cmt));
+                    } else showAlertDialog(getString(R.string.empty_context_cmt));
 //                    }else showAlertDialog(getString(R.string.install_condition));
 
 
@@ -852,14 +938,20 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
                     showConfirmDialog(getString(R.string.cmt_login_alert), new BaseDialog.OnPositiveClickListener() {
                         @Override
                         public void onPositiveClick() {
-                            Intent i = new Intent(btn_submit.getContext(), UserActivity.class);
+                            Intent i = new Intent(btn_submit.getContext(), LoginActivity.class);
                             i.putExtra("SCREEN", "DETAIL");
                             btn_submit.getContext().startActivity(i);
                         }
                     }, null);
                 }
                 break;
-
+            case R.id.view_cate:
+                ChipCateTagEvent tag = new ChipCateTagEvent(ownApp.getCategory());
+//                EventBus.getDefault().postSticky(tag);
+                Intent intentx = new Intent(getActivityContext(), MainActivity.class);
+                intentx.putExtra("TAG",ownApp.getCategory());
+                startActivity(intentx);
+                break;
         }
     }
 
@@ -1037,7 +1129,7 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
 
     private void setUrlInstall(AppModel.SourceBean app) {
 
-        if ((app != null) && (app.getPrice() == 0)) {
+        if ((app != null)) {
             Timestamp timestamp = new Timestamp(System.currentTimeMillis());
             String salt = "axq appnaz.com";
             String hasd = salt + timestamp.getTime();
@@ -1107,6 +1199,13 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
             @Override
             public void selectCate(String string) {
                 //do somethings here
+                System.out.println("ádnaklnlxkăd");
+                ChipCateTagEvent tag = new ChipCateTagEvent(string);
+//                EventBus.getDefault().postSticky(tag);
+                Intent intent = new Intent(getActivityContext(), MainActivity.class);
+                intent.putExtra("TAG",string);
+                startActivity(intent);
+
 
             }
         });
@@ -1139,5 +1238,41 @@ public class DetailActivity extends MVPActivity<DetailContact.PresenterViewOps> 
     void hideKeyboard(View view) {
         InputMethodManager inputMethodManager = (InputMethodManager) this.getSystemService(Activity.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+
+    public void startApplication(String packageName) {
+        try {
+            Intent intent = new Intent("android.intent.action.MAIN");
+            intent.addCategory("android.intent.category.LAUNCHER");
+
+            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+            List<ResolveInfo> resolveInfoList = getPackageManager().queryIntentActivities(intent, 0);
+
+            for (ResolveInfo info : resolveInfoList)
+                if (info.activityInfo.packageName.equalsIgnoreCase(packageName)) {
+                    launchComponent(info.activityInfo.packageName, info.activityInfo.name);
+                    return;
+                }
+
+            // No match, so application is not installed
+            showInMarket(packageName);
+        } catch (Exception e) {
+            showInMarket(packageName);
+        }
+    }
+
+    private void launchComponent(String packageName, String name) {
+        Intent intent = new Intent("android.intent.action.MAIN");
+        intent.addCategory("android.intent.category.LAUNCHER");
+        intent.setComponent(new ComponentName(packageName, name));
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+        startActivity(intent);
+    }
+
+    private void showInMarket(String packageName) {
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + packageName));
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
     }
 }

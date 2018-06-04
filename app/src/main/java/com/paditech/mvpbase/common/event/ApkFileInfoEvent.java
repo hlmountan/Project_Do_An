@@ -17,6 +17,8 @@ public class ApkFileInfoEvent {
 
      */
     public static final int STATUS_PENDING = 1;
+    public static final int STATUS_PUBLIC = 0;
+    public static final int STATUS_MISSING_INFO = 2;
 
     int status;
     String title;
@@ -38,7 +40,15 @@ public class ApkFileInfoEvent {
     ArrayList<ArrayList<String>> notification;
     ArrayList<ArrayList<String>> update;
     String cate;
+    boolean isUserUpload;
 
+    public boolean isUserUpload() {
+        return isUserUpload;
+    }
+
+    public void setUserUpload(boolean userUpload) {
+        isUserUpload = userUpload;
+    }
 
     public String getAvar() {
         return avar;

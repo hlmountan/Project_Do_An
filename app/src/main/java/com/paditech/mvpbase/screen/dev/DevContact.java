@@ -15,7 +15,8 @@ public interface  DevContact {
         void setRelateApp(List<AppModel> app);
     }
     interface PresenterViewOps extends ActivityPresenterViewOps{
-        void cURLApi(String appid);
+        void getServerDev(String url);
+        void getFirebaseDev(String uid);
 
     }
 }

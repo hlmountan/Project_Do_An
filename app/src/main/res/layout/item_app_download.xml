@@ -22,7 +22,6 @@
             android:layout_height="@dimen/app_img_size"
             android:cropToPadding="true"
             android:scaleType="centerCrop"
-            android:src="@drawable/avartar"
             android:layout_marginTop="@dimen/margin_super_tiny"
 
             />

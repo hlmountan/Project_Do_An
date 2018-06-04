@@ -233,12 +233,6 @@
                     android:textSize="@dimen/text_size_tiny"
                     android:textStyle="italic" />
 
-                <ProgressBar
-                    android:id="@+id/progressBar"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:visibility="gone" />
 
                 <TextView
                     android:id="@+id/tv_percen"
@@ -346,7 +340,7 @@
             android:layout_centerInParent="true"
             android:gravity="center"
             android:orientation="vertical"
-            android:visibility="visible">
+            android:visibility="gone">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -489,6 +483,7 @@
 
         <Button
             android:id="@+id/tv_state"
+            android:layout_gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/margin_small"
