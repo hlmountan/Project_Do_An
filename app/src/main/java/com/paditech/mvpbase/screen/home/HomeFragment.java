@@ -207,7 +207,7 @@ public class HomeFragment extends MVPFragment<HomeContact.PresenterViewOsp> impl
 //        recycler_view_grossing.setNestedScrollingEnabled(false);
 
 
-        mHomeRecyclerViewAdapterUserUpload.setItemId(R.layout.item_app);
+        mHomeRecyclerViewAdapterUserUpload.setItemId(R.layout.item_app_user);
         recycler_view_user_upload.setLayoutManager(new LinearLayoutManager(act, LinearLayoutManager.HORIZONTAL, false));
         recycler_view_user_upload.setAdapter(mHomeRecyclerViewAdapterUserUpload);
 

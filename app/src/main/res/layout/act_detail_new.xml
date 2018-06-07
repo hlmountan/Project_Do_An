@@ -418,12 +418,11 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_default"
-                    android:background="@drawable/border_cmt"
+                    android:background="@drawable/bg_shadow"
                     android:clickable="true"
                     android:focusableInTouchMode="true"
                     android:orientation="vertical"
-                    android:padding="@dimen/padding_default">
+                    android:padding="@dimen/padding_super_big">
 
                     <Button
                         android:id="@+id/btn_user_name"
@@ -441,29 +440,57 @@
 
                         />
 
-                    <EditText
-                        android:id="@+id/et_title"
+                    <android.support.design.widget.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/margin_small"
-                        android:hint="@string/title" />
+                        android:layout_marginTop="@dimen/padding_default">
 
-                    <EditText
-                        android:id="@+id/et_cmt"
+                        <EditText
+                            android:id="@+id/et_title"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/margin_small"
+                            android:background="@null"
+                            android:hint="@string/title"
+                            android:maxLines="1"
+                            android:paddingTop="@dimen/margin_small"
+                            android:singleLine="true"
+                            android:textColorHint="@color/gray_light"
+                            android:textSize="@dimen/text_size_small" />
+                    </android.support.design.widget.TextInputLayout>
+
+                    <View
                         android:layout_width="match_parent"
-                        android:layout_height="@dimen/height_edit_text"
-                        android:background="@android:color/transparent"
-                        android:hint="@string/cmt_hint" />
+                        android:layout_height="@dimen/line_size"
+                        android:background="@color/gray_line" />
+
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/padding_default">
+
+                        <EditText
+                            android:id="@+id/et_cmt"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/height_edit_text"
+                            android:background="@android:color/transparent"
+                            android:gravity="left"
+                            android:hint="@string/cmt_hint"
+                            android:paddingTop="@dimen/margin_small"
+                            android:textColorHint="@color/gray_light"
+                            android:textSize="@dimen/text_size_small" />
+                    </android.support.design.widget.TextInputLayout>
 
                     <Button
                         android:id="@+id/btn_submit"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="right"
-                        android:layout_marginRight="@dimen/margin_default"
                         android:background="@android:color/transparent"
                         android:minHeight="@dimen/min_height"
                         android:minWidth="@dimen/min_height"
+                        android:paddingLeft="@dimen/padding_default"
+                        android:paddingRight="@dimen/padding_default"
                         android:text="@string/submit"
                         android:textAllCaps="false"
                         android:textColor="@color/blue" />
