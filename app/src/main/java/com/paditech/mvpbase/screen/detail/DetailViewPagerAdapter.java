@@ -5,6 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.github.chrisbanes.photoview.PhotoView;
 import com.paditech.mvpbase.R;
 import com.paditech.mvpbase.common.utils.ImageUtil;
 
@@ -16,7 +17,7 @@ import java.util.ArrayList;
 
 public class DetailViewPagerAdapter extends PagerAdapter {
 
-    ArrayList<String > mList;
+    ArrayList<String> mList;
 
     public ArrayList<String> getmList() {
         return mList;
@@ -37,7 +38,6 @@ public class DetailViewPagerAdapter extends PagerAdapter {
     }
 
 
-
     @Override
 
     public int getCount() {
@@ -54,10 +54,9 @@ public class DetailViewPagerAdapter extends PagerAdapter {
 
     @Override
     public Object instantiateItem(final ViewGroup container, final int position) {
-        final ImageView mImageView = new ImageView(container.getContext());
-        mImageView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-        mImageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
-        ImageUtil.loadImage(container.getContext(), mList.get(position), mImageView, R.drawable.events_placeholder,R.drawable.image_placeholder_500x500);
+        final PhotoView mImageView = new PhotoView(container.getContext());
+        ImageUtil.loadImage(container.getContext(), mList.get(position), mImageView,
+                R.drawable.events_placeholder, R.drawable.image_placeholder_500x500);
         container.addView(mImageView);
 
         return mImageView;

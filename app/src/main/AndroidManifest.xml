@@ -38,7 +38,9 @@
             android:windowSoftInputMode="adjustPan|stateAlwaysHidden" />
 
         <activity android:name=".screen.showMoreApp.ShowMoreActicity" />
-        <activity android:name=".screen.detail.ScreenShotFullScreenActivity" />
+        <activity
+            android:name=".screen.detail.ScreenShotFullScreenActivity"
+            android:theme="@style/AppTheme.FullScreen" />
         <activity android:name=".screen.report.ReportActivity" />
         <activity android:name=".screen.dev.DevActivity" />
         <activity android:name=".screen.cmt.CommentActivity" />
@@ -50,8 +52,10 @@
         <activity android:name=".screen.updateApkActivity.UpdateApkActivity" />
         <activity android:name=".screen.apkManage.ApkActivity" />
         <activity android:name=".common.view.NotificationReceiverActivity" />
-        <service android:name=".common.service.NotifyService"
-            android:exported="true"/>
+
+        <service
+            android:name=".common.service.NotifyService"
+            android:exported="true" />
 
         <meta-data
             android:name="io.fabric.ApiKey"

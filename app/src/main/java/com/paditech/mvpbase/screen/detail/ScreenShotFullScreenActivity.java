@@ -33,8 +33,7 @@ public class ScreenShotFullScreenActivity extends BaseActivity implements View.O
     ViewPager viewPager;
     @BindView(R.id.indicator)
     CircleIndicator circleIndicator;
-    @BindView(R.id.frame_screen_short)
-    FrameLayout frameLayout;
+
     @Override
     protected int getContentView() {
         return R.layout.act_screen_short;
@@ -64,7 +63,6 @@ public class ScreenShotFullScreenActivity extends BaseActivity implements View.O
         detailViewPagerAdapter.setmList(app);
         viewPager.setAdapter(detailViewPagerAdapter);
         circleIndicator.setViewPager(viewPager);
-        circleIndicator.setBackgroundColor(ContextCompat.getColor(this,R.color.gray_middle));
     }
 
     @Override
